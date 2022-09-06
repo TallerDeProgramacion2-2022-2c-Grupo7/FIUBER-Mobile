@@ -1,16 +1,12 @@
 module.exports = {
   root: true,
-  extends: '@react-native-community',
+  extends: ['@react-native-community', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
-  overrides: [
-    {
-      files: ['*.ts', '*.tsx'],
-      rules: {
-        '@typescript-eslint/no-shadow': ['error'],
-        'no-shadow': 'off',
-        'no-undef': 'off',
-      },
-    },
-  ],
+  plugins: ['@typescript-eslint', 'simple-import-sort'],
+  ignorePatterns: ['NDK'],
+  rules: {
+    'react-native/no-inline-styles': 0,
+    'react-hooks/exhaustive-deps': 0,
+    'simple-import-sort/imports': 'error',
+  },
 };
