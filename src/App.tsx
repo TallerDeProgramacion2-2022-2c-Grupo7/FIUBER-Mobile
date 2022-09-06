@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {type PropsWithChildren} from 'react';
+import React, { type PropsWithChildren } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -18,7 +18,6 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-
 import {
   Colors,
   DebugInstructions,
@@ -31,7 +30,7 @@ const Section: React.FC<
   PropsWithChildren<{
     title: string;
   }>
-> = ({children, title}) => {
+> = ({ children, title }) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
