@@ -1,4 +1,4 @@
-package com.fiuber;
+package com.fiuba.fiuber;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
