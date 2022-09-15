@@ -1,4 +1,4 @@
-package com.fiuber.newarchitecture.components;
+package com.fiuba.fiuber.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

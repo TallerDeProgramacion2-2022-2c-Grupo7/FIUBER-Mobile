@@ -1,4 +1,4 @@
-package com.fiuber.newarchitecture.modules;
+package com.fiuba.fiuber.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

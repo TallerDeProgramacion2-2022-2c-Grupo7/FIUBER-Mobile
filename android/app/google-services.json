@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "595724404035",
+    "project_id": "fiuber",
+    "storage_bucket": "fiuber.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595724404035:android:ceb272b096ef7c72119bf6",
+        "android_client_info": {
+          "package_name": "com.fiuba.fiuber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595724404035-a714nnjkmgd0uagns8hkdv9nabh0tta7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV4zqNtPv2joFnoGxTEFMrRhoBLp9Es3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595724404035-a714nnjkmgd0uagns8hkdv9nabh0tta7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

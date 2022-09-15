@@ -1,4 +1,4 @@
-package com.fiuber.newarchitecture;
+package com.fiuba.fiuber.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.fiuber.BuildConfig;
-import com.fiuber.newarchitecture.components.MainComponentsRegistry;
-import com.fiuber.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.fiuba.fiuber.BuildConfig;
+import com.fiuba.fiuber.newarchitecture.components.MainComponentsRegistry;
+import com.fiuba.fiuber.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
