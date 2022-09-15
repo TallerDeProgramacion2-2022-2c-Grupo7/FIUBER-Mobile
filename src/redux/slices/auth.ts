@@ -28,6 +28,7 @@ export const signup = createAsyncThunk<any, AuthLoginParams>(
   async ({ email, password, onError }, {}) => {
     try {
       await auth().createUserWithEmailAndPassword(email, password);
+
       return auth().currentUser?.toJSON();
     } catch (error: any) {
       onError(error.message);
@@ -35,6 +36,10 @@ export const signup = createAsyncThunk<any, AuthLoginParams>(
     }
   }
 );
+
+export const logout = createAsyncThunk('auth/logout', async () => {
+  await auth().signOut();
+});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -51,16 +56,28 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, action) => {
-      console.log('login.fullfiled');
       state.logedIn = true;
       state.user = action.payload;
       state.error = undefined;
     });
     builder.addCase(login.rejected, (state, action) => {
-      console.log('login.rejected', action.error.message);
       state.logedIn = false;
       state.user = null;
       state.error = action.error.message;
+    });
+    builder.addCase(signup.fulfilled, (state, action) => {
+      state.logedIn = true;
+      state.user = action.payload;
+      state.error = undefined;
+    });
+    builder.addCase(signup.rejected, (state, action) => {
+      state.logedIn = false;
+      state.user = null;
+      state.error = action.error.message;
+    });
+    builder.addCase(logout.fulfilled, state => {
+      state.logedIn = false;
+      state.user = null;
     });
   },
 });
