@@ -2,17 +2,10 @@ name: Deploy FIUBER mobile app
 on:
   push:
     tags:
-      - "v*"
+      - "*.*.*"
 jobs:
-  install-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          yarn install
-  build-android:
-    needs: install-and-test
+  apk:
+    name: Build APK
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v3
@@ -23,20 +16,49 @@ jobs:
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
         with:
           fallback: 1.0.0
-      - name: Install npm dependencies
+      - name: Install yarn dependencies
         run: |
-          npm install
+          yarn install
       - name: Build Android Release
         run: |
           cd android && ./gradlew assembleRelease
+      - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: apk
+          path: app/build/outputs/apk/release/app-release.apk
+  release:
+    name: Release APK
+    needs: apk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
       - name: 'Get Previous tag'
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
-      - name: Make Github Release
-        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ steps.previoustag.outputs.tag }}"
-          prerelease: false
-          title: "CI Build ${{ steps.previoustag.outputs.tag }}"
-          files: "*.apk"
+          fallback: 1.0.0
+      - name: Download APK from build
+        uses: actions/download-artifact@v1
+        with:
+          name: apk
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.previoustag.outputs.tag }}
+          release_name: ${{ github.event.repository.name }} v${{ steps.previoustag.outputs.tag }}
+      - name: Upload Release APK
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: apk/app-debug.apk
+          asset_name: ${{ github.event.repository.name }}.apk
+          asset_content_type: application/zip
