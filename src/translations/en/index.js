@@ -17,6 +17,9 @@ const translations = {
     title: 'Home',
     email: 'Email',
   },
+  validations: {
+    passIncorrect: 'Wrong Password',
+  },
 };
 
 export default translations;
