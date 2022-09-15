@@ -12,7 +12,7 @@ import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
 
-function Home({ navigation }: Props) {
+function Home({}: Props) {
   const { t } = useTranslation();
   const { user } = useSelector((state: ReduxState) => state.auth);
 

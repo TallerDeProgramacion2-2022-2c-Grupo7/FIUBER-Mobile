@@ -1,22 +1,18 @@
-import auth from '@react-native-firebase/auth';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
-import { useDispatch } from 'react-redux';
 
 import Button from '../../components/Button';
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import { Container } from '../../layouts';
-import { setUser } from '../../redux/slices/auth';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.WELCOME>;
 
 function Welcome({ navigation }: Props) {
   const { t } = useTranslation();
-  const dipatch = useDispatch();
 
   const onPressCreate = () => navigation.navigate(ROUTES.SIGNUP_SCREEN);
 

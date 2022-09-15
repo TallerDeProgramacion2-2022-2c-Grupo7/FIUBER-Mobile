@@ -1,7 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, Keyboard, View } from 'react-native';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
@@ -13,7 +13,7 @@ import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
-import { login, signup } from '../../redux/slices/auth';
+import { signup } from '../../redux/slices/auth';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.SIGNUP_SCREEN>;
@@ -43,10 +43,15 @@ function SignUp({ navigation }: Props) {
     setLoginError(error);
   };
 
-  const handleSubmit = async (email: string, password: string) => {
+  const handleSubmit = async (
+    submittedEmail: string,
+    submittedPassword: string
+  ) => {
     setLoading(true);
     setDisableInput(true);
-    await dispatch(signup({ email, password, onError }));
+    await dispatch(
+      signup({ email: submittedEmail, password: submittedPassword, onError })
+    );
   };
 
   useEffect(() => {

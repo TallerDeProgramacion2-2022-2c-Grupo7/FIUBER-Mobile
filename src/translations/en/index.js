@@ -16,7 +16,7 @@ const translations = {
   home: {
     title: 'Home',
     email: 'Email',
-  }
+  },
 };
 
 export default translations;

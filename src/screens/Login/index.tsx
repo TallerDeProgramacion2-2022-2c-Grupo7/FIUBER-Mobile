@@ -1,7 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, Keyboard, View } from 'react-native';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
@@ -43,10 +43,15 @@ function Login({ navigation }: Props) {
     setLoginError(error);
   };
 
-  const handleSubmit = async (email: string, password: string) => {
+  const handleSubmit = async (
+    submittedEmail: string,
+    submittedPassword: string
+  ) => {
     setLoading(true);
     setDisableInput(true);
-    await dispatch(login({ email, password, onError }));
+    await dispatch(
+      login({ email: submittedEmail, password: submittedPassword, onError })
+    );
   };
 
   useEffect(() => {

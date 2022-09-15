@@ -11,7 +11,7 @@ const INITIAL_STATE: AuthState = {
 
 export const login = createAsyncThunk<any, AuthLoginParams>(
   'auth/login',
-  async ({ email, password, onError }, { dispatch, getState }) => {
+  async ({ email, password, onError }, {}) => {
     try {
       await auth().signInWithEmailAndPassword(email, password);
 
@@ -25,7 +25,7 @@ export const login = createAsyncThunk<any, AuthLoginParams>(
 
 export const signup = createAsyncThunk<any, AuthLoginParams>(
   'auth/signup',
-  async ({ email, password, onError }, { dispatch, getState }) => {
+  async ({ email, password, onError }, {}) => {
     try {
       await auth().createUserWithEmailAndPassword(email, password);
       return auth().currentUser?.toJSON();
