@@ -64,7 +64,7 @@ function SignUp({ navigation }: Props) {
     <Container>
       <KeyboardScrollView contentStyle={styles.container}>
         <View>
-          <Text style={styles.title}>{t('login.unlock')}</Text>
+          <Text style={styles.title}>{t('signup.title')}</Text>
         </View>
         <View style={[styles.emailInputContainer]}>
           <TextInput
@@ -84,13 +84,13 @@ function SignUp({ navigation }: Props) {
         />
         <Button
           disabled={!isValidPassword(password)}
-          text={t('login.submit')}
+          text={t('signup.submit')}
           onPress={() => handleSubmit(email, password)}
           loading={loading}
           buttonStyle={styles.buttonMargin}
         />
         <Button
-          text={t('login.moreOptions')}
+          text={t('signup.moreOptions')}
           onLongPress={() => console.log('long press')}
           onPress={() => console.log('press')}
           iconStyle={styles.moreOptionsIcon}

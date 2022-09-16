@@ -9,6 +9,11 @@ const translations = {
     unlock: 'Unlock',
     moreOptions: 'More options',
   },
+  signup: {
+    submit: 'Create',
+    title: 'Create Account',
+    moreOptions: 'More options',
+  },
   common: {
     enterPassword: 'Enter password',
     enterEmail: 'Enter email',
