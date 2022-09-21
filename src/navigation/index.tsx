@@ -1,4 +1,5 @@
 import {
+  DefaultTheme,
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
@@ -20,14 +21,20 @@ const Navigator = () => {
   const navigationRef = useNavigationContainerRef(); // You can also use a regular ref with `React.useRef()`
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={navigationRef}
+      theme={{
+        ...DefaultTheme,
+        colors: { ...DefaultTheme.colors, background: 'transparent' },
+      }}>
       <Stack.Navigator
         initialRouteName={initialRoute}
         screenOptions={{
           headerShown: false,
-          cardStyle: { backgroundColor: Colors.White.Primary },
           gestureEnabled: true,
           gestureDirection: 'horizontal',
+          detachPreviousScreen: true,
+          presentation: 'transparentModal',
         }}>
         <Stack.Screen name={ROUTES.WELCOME} component={Welcome} />
         <Stack.Screen name={ROUTES.LOGIN_SCREEN} component={LoginScreen} />
