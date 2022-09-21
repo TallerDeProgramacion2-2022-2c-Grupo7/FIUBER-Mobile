@@ -10,7 +10,14 @@ import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
 import { logout } from '../../redux/slices/auth';
+
+import {StyleSheet} from 'react-native';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+
 import styles from './styles';
+
+
+
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
 
@@ -19,21 +26,19 @@ function Home({ navigation }: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: ReduxState) => state.auth);
 
-  const title = t('home.title');
-  const email = t('home.email');
-
-  const handleLogout = async () => {
-    navigation.navigate(ROUTES.WELCOME);
-    await dispatch(logout());
-  };
-
   return (
     <Container>
-      <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.text}>{`${email}: ${user?.email} `}</Text>
-        <Button onPress={handleLogout} text="Logout" />
-      </View>
+		<MapView
+
+		  style={styles.map}
+
+		  initialRegion={{
+		    latitude: 37.78825,
+		    longitude: -122.4324,
+		    latitudeDelta: 0.0922,
+		    longitudeDelta: 0.0421,
+		  }}
+		/>
     </Container>
   );
 }
