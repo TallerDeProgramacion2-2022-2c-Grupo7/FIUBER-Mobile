@@ -20,4 +20,4 @@ jobs:
       run: yarn install
     
     - name: Runt Lint
-      run: yarn lint
+      run: yarn lint --fix
