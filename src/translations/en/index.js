@@ -8,6 +8,10 @@ const translations = {
     submit: 'Login',
     unlock: 'Unlock',
     moreOptions: 'More options',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    email: 'Email',
+    password: 'Password',
   },
   signup: {
     submit: 'Create',
@@ -17,6 +21,15 @@ const translations = {
   common: {
     enterPassword: 'Enter password',
     enterEmail: 'Enter email',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    email: 'Email',
+    phone: 'Phone',
+    isDriver: 'I am Driver',
+    brand: 'Brand',
+    model: 'Model',
+    plate: 'Plate',
+    color: 'Color',
   },
   home: {
     title: 'Home',
@@ -24,6 +37,11 @@ const translations = {
   },
   validations: {
     passIncorrect: 'Wrong Password',
+  },
+  setProfile: {
+    title: 'Create Your Profile',
+    submit: 'Create',
+    continue: 'Continue',
   },
 };
 

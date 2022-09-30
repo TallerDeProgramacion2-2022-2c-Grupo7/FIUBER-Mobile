@@ -128,7 +128,7 @@ function SetProfile({ navigation }: Props) {
         </View>
         <Button
           disabled={!isValidProfile(generateProfile())}
-          text={t('profile.submit')}
+          text={isDriver ? t('profile.continue') : t('profile.submit')}
           onPress={handleSubmit}
           loading={loading}
           buttonStyle={styles.buttonMargin}
