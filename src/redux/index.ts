@@ -10,6 +10,7 @@ import {
 } from 'redux-persist';
 
 import authReducer from './slices/auth';
+import profileReducer from './slices/profile';
 
 // const authPersistConfig = {
 //   key: 'auth',
@@ -18,6 +19,7 @@ import authReducer from './slices/auth';
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  profile: profileReducer,
 });
 
 export const store = configureStore({

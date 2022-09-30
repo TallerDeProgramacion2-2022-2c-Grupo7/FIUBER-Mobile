@@ -6,7 +6,7 @@ import { AuthLoginParams, AuthState } from '../../interfaces/redux';
 const INITIAL_STATE: AuthState = {
   logedIn: false,
   user: null,
-  error: undefined,
+  error: null,
 };
 
 export const login = createAsyncThunk<any, AuthLoginParams>(
@@ -58,22 +58,22 @@ const authSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.logedIn = true;
       state.user = action.payload;
-      state.error = undefined;
+      state.error = null;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.logedIn = false;
       state.user = null;
-      state.error = action.error.message;
+      state.error = action.error.message || null;
     });
     builder.addCase(signup.fulfilled, (state, action) => {
       state.logedIn = true;
       state.user = action.payload;
-      state.error = undefined;
+      state.error = null;
     });
     builder.addCase(signup.rejected, (state, action) => {
       state.logedIn = false;
       state.user = null;
-      state.error = action.error.message;
+      state.error = action.error.message || null;
     });
     builder.addCase(logout.fulfilled, state => {
       state.logedIn = false;
