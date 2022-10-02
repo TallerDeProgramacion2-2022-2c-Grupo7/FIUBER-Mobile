@@ -11,6 +11,7 @@ import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch } from '../../interfaces/redux';
 import { Container } from '../../layouts';
 import { setUser } from '../../redux/slices/auth';
+import { getMyProfile } from '../../redux/slices/profile';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.WELCOME>;
@@ -25,8 +26,10 @@ function Welcome({ navigation }: Props) {
 
   useEffect(() => {
     const checkUser = async () => {
-      if (auth().currentUser) {
-        await dispatch(setUser(auth().currentUser?.toJSON()));
+      const currentUser = auth().currentUser;
+      if (currentUser) {
+        await dispatch(setUser(currentUser.toJSON()));
+        await dispatch(getMyProfile({ uid: currentUser.uid }));
         navigation.navigate(ROUTES.HOME_SCREEN);
       }
     };

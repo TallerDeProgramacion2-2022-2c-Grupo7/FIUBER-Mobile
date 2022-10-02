@@ -11,6 +11,8 @@ import { Colors } from '../constants/theme';
 import { RootStackParamList } from '../interfaces/navigation';
 import HomeScreen from '../screens/Home';
 import LoginScreen from '../screens/Login';
+import SetProfile from '../screens/SetProfile';
+import SetDriverProfile from '../screens/SetProfile/driver';
 import SignUpScreen from '../screens/SignUp';
 import Welcome from '../screens/Welcome';
 
@@ -40,6 +42,11 @@ const Navigator = () => {
         <Stack.Screen name={ROUTES.LOGIN_SCREEN} component={LoginScreen} />
         <Stack.Screen name={ROUTES.SIGNUP_SCREEN} component={SignUpScreen} />
         <Stack.Screen name={ROUTES.HOME_SCREEN} component={HomeScreen} />
+        <Stack.Screen name={ROUTES.SET_PROFILE_SCREEN} component={SetProfile} />
+        <Stack.Screen
+          name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
+          component={SetDriverProfile}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
