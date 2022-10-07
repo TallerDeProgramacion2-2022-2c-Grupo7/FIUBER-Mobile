@@ -6,7 +6,6 @@ import { Colors } from '../../constants/theme';
 import { fontMaker } from '../../utils/fonts';
 
 export default StyleSheet.create({
-
   map: {
     ...StyleSheet.absoluteFillObject,
     position: 'absolute',
@@ -14,6 +13,7 @@ export default StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    zIndex: -1,
   },
 
   container: {
