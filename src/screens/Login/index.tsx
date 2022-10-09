@@ -14,6 +14,7 @@ import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
 import { login } from '../../redux/slices/auth';
+import { getMyProfile } from '../../redux/slices/profile';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.LOGIN_SCREEN>;
@@ -29,7 +30,7 @@ export const isValidPassword = (password: string) => {
 function Login({ navigation }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { logedIn } = useSelector((state: ReduxState) => state.auth);
+  const { logedIn, user } = useSelector((state: ReduxState) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,8 +56,12 @@ function Login({ navigation }: Props) {
   };
 
   useEffect(() => {
-    if (logedIn) {
+    const goHome = async () => {
+      user && (await dispatch(getMyProfile({ uid: user?.uid })));
       navigation.navigate(ROUTES.HOME_SCREEN);
+    };
+    if (logedIn) {
+      goHome();
     }
   }, [logedIn]);
 

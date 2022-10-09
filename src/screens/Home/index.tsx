@@ -1,21 +1,22 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import Config from 'react-native-config';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { LatLng } from 'react-native-maps';
+import { useSelector } from 'react-redux';
 
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
-import { AppDispatch, ReduxState } from '../../interfaces/redux';
+import { ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
-import styles from './styles';
+import Map from './components/map';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
+const { MAPS_API_KEY } = Config;
 
 function Home({ navigation }: Props) {
-  const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
   const { logedIn } = useSelector((state: ReduxState) => state.auth);
+  const [destination, setDestination] = useState<LatLng | null>(null);
   const { obtained: profileObtained } = useSelector(
     (state: ReduxState) => state.profile
   );
@@ -32,15 +33,23 @@ function Home({ navigation }: Props) {
 
   return (
     <Container>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+      <GooglePlacesAutocomplete
+        GooglePlacesDetailsQuery={{ fields: 'geometry' }}
+        fetchDetails={true} // you need this to fetch the details object onPress
+        placeholder="Search"
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          if (details?.geometry?.location) {
+            const { lat, lng } = details.geometry.location;
+            setDestination({ latitude: lat, longitude: lng });
+          }
+        }}
+        query={{
+          key: MAPS_API_KEY,
+          language: 'en',
         }}
       />
+      <Map destination={destination} />
     </Container>
   );
 }

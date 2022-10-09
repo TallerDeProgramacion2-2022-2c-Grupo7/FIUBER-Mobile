@@ -39,7 +39,6 @@ export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
 
     const profile = { ...publicProfile.data(), ...privateProfiles.data() };
 
-    console.log('GETTED PROFILE', profile);
     return profile;
   }
 );
@@ -64,7 +63,6 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
       ...updatedPrivateProfiles.data(),
     };
 
-    console.log('SETTED PROFILE', updatedProfile);
     return { updatedProfile };
   }
 );
@@ -91,7 +89,6 @@ const profileSlice = createSlice({
       state.error = null;
     });
     builder.addCase(update.rejected, (state, action) => {
-      console.log('UPDATE PROFILE ERROR', action.error);
       state.error = action.error.message || null;
       state.obtained = false;
       state.profile = null;
