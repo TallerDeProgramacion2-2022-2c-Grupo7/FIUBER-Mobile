@@ -7,10 +7,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 import { ROUTES } from '../constants/routes';
-import { Colors } from '../constants/theme';
 import { RootStackParamList } from '../interfaces/navigation';
 import HomeScreen from '../screens/Home';
 import LoginScreen from '../screens/Login';
+import PhoneVerification from '../screens/PhoneVerification';
 import SetProfile from '../screens/SetProfile';
 import SetDriverProfile from '../screens/SetProfile/driver';
 import SignUpScreen from '../screens/SignUp';
@@ -18,7 +18,7 @@ import Welcome from '../screens/Welcome';
 
 const Navigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
-  const initialRoute = ROUTES.WELCOME;
+  const initialRoute = ROUTES.PHONE_VERIFICATION_SCREEN;
 
   const navigationRef = useNavigationContainerRef(); // You can also use a regular ref with `React.useRef()`
 
@@ -46,6 +46,10 @@ const Navigator = () => {
         <Stack.Screen
           name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
           component={SetDriverProfile}
+        />
+        <Stack.Screen
+          name={ROUTES.PHONE_VERIFICATION_SCREEN}
+          component={PhoneVerification}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { pick } from 'lodash';
 
 import {
+  AuthState,
   ProfileGetParams,
   ProfileState,
   ProfileUpdateParams,
@@ -23,7 +24,7 @@ const PUBILC_ATTRS = [
   'color',
   'plate',
 ];
-const PRIVATE_ATTRS = ['email', 'phone', 'verifiedPhone'];
+const PRIVATE_ATTRS = ['email', 'phoneNumber', 'phoneVerificationCode'];
 
 export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
   'profile/getMyProfile',
@@ -63,7 +64,45 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
       ...updatedPrivateProfiles.data(),
     };
 
-    return { updatedProfile };
+    return updatedProfile;
+  }
+);
+
+export const setPhoneVerificationCode = createAsyncThunk<any, { code: string }>(
+  'profile/setPhoneVerificationCode',
+  async ({ code }, { getState }) => {
+    const { auth } = getState() as { auth: AuthState };
+
+    if (!auth.user) {
+      return;
+    }
+
+    const privateProfile = await firestore()
+      .doc(`privateProfiles/${auth.user.uid}`)
+      .get();
+
+    await firestore()
+      .doc(`privateProfiles/${auth.user.uid}`)
+      .set({ ...privateProfile, phoneVerificationCode: code });
+  }
+);
+
+export const setPhoneNumber = createAsyncThunk<any, { phoneNumber: string }>(
+  'profile/setPhoneNumber',
+  async ({ phoneNumber }, { getState }) => {
+    const { auth } = getState() as { auth: AuthState };
+
+    if (!auth.user) {
+      return;
+    }
+
+    const privateProfile = await firestore()
+      .doc(`privateProfiles/${auth.user.uid}`)
+      .get();
+
+    await firestore()
+      .doc(`privateProfiles/${auth.user.uid}`)
+      .set({ ...privateProfile, phoneNumber: phoneNumber });
   }
 );
 

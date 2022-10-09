@@ -8,4 +8,5 @@ export type RootStackParamList = {
   [ROUTES.HOME_SCREEN]: undefined;
   [ROUTES.SET_PROFILE_SCREEN]: undefined;
   [ROUTES.SET_DRIVER_PROFILE_SCREEN]: { commonProfile: CommonsProfile };
+  [ROUTES.PHONE_VERIFICATION_SCREEN]: undefined;
 };
