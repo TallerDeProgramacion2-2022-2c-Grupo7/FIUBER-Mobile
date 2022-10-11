@@ -1,5 +1,6 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-native';
 import Config from 'react-native-config';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { LatLng } from 'react-native-maps';
@@ -33,6 +34,7 @@ function Home({ navigation }: Props) {
 
   return (
     <Container>
+      <Button title="Driver" onPress={() => navigation.navigate(ROUTES.DRIVER_TRIPS)} />
       <GooglePlacesAutocomplete
         GooglePlacesDetailsQuery={{ fields: 'geometry' }}
         fetchDetails={true} // you need this to fetch the details object onPress

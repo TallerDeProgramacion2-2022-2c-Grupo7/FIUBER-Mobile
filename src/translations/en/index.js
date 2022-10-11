@@ -43,6 +43,9 @@ const translations = {
     submit: 'Create',
     continue: 'Continue',
   },
+  driverTrips: {
+    title: 'Available trips'
+  },
 };
 
 export default translations;
