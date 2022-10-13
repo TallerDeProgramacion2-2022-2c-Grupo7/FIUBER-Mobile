@@ -23,6 +23,7 @@ type Trip = {
   uid: null | string,
   distance: null | number,
   time: null | number,
+  cost: null | number,
 };
 
 const NULL_TRIP = {
@@ -31,7 +32,8 @@ const NULL_TRIP = {
   to: null,
   uid: null,
   distance: null,
-  time: null
+  time: null,
+  cost: null
 };
 
 // Test functions
@@ -49,7 +51,8 @@ const getAvailableTrip = async () => {
     to: 'y',
     uid: 'test',
     distance: 1.5,
-    time: 2
+    time: 2,
+    cost: 500,
   }
 }
 
@@ -102,6 +105,11 @@ function DriverTrip({ navigation }: Props) {
         <View>
           <Text style={styles.title}>
             {trip.distance} km - {trip.time} min
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.title}>
+            $ {trip.cost}
           </Text>
         </View>
         <Button
