@@ -13,7 +13,7 @@ import { Container } from '../../layouts';
 import Map from './components/map';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
-const { MAPS_API_KEY } = Config;
+const MAPS_API_KEY = 'AIzaSyC4v2WZ-EvD-aK32ksbFutOivW3bUpNmxk';
 
 function Home({ navigation }: Props) {
   const { logedIn } = useSelector((state: ReduxState) => state.auth);

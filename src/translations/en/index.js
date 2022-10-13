@@ -43,8 +43,11 @@ const translations = {
     submit: 'Create',
     continue: 'Continue',
   },
-  driverTrips: {
-    title: 'Available trips'
+  driverTrip: {
+    searching: 'Searching trips...',
+    available: 'Available trip',
+    accepted: 'Trip accepted',
+    accept: 'Accept',
   },
 };
 

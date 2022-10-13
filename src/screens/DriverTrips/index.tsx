@@ -1,19 +1,14 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Switch, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
 import KeyboardScrollView from '../../components/KeyboardScrollView';
 import Text from '../../components/Text';
-import TextInput from '../../components/TextInput';
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
-import { Profile } from '../../interfaces/profile';
-import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
-import { update } from '../../redux/slices/profile';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<
@@ -21,116 +16,97 @@ type Props = NativeStackScreenProps<
   ROUTES.DRIVER_TRIPS
 >;
 
-const isValidProfile = (profile?: Profile) => {
-  if (!profile) {
-    return false;
-  }
-  return profile.firstName && profile.lastName && profile.phone;
+type Trip = {
+  trip_id: null | string,
+  from: null | string,
+  to: null | string,
+  uid: null | string,
+  distance: null | number,
+  time: null | number,
 };
+
+const NULL_TRIP = {
+  trip_id: null,
+  from: null,
+  to: null,
+  uid: null,
+  distance: null,
+  time: null
+};
+
+// Test functions
+const delay = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(null), 5000)
+  });
+};
+
+const getAvailableTrip = async () => {
+  await delay();
+  return {
+    trip_id: 'test',
+    from: 'x',
+    to: 'y',
+    uid: 'test',
+    distance: 1.5,
+    time: 2
+  }
+}
 
 function DriverTrips({ navigation }: Props) {
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const { logedIn, user } = useSelector((state: ReduxState) => state.auth);
-  const { profile } = useSelector((state: ReduxState) => state.profile);
-
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [isDriver, setIsDriver] = useState(false);
+  const [trip, setTrip] = useState<Trip>(NULL_TRIP);
+  const [acceptedTrip, setAcceptedTrip] = useState<Trip>(NULL_TRIP);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!logedIn) {
-      navigation.navigate(ROUTES.WELCOME);
-    }
-  }, [logedIn]);
-
-  useEffect(() => {
-    if (logedIn && profile) {
-      navigation.navigate(ROUTES.HOME_SCREEN);
-    }
-  }, [logedIn, profile]);
-
-  const generateProfile = (): Profile | undefined => {
-    if (user && user.email) {
-      return {
-        firstName,
-        lastName,
-        phone,
-        email: user.email,
-        isDriver: false,
-        verifiedPhone: false,
-      };
-    }
-  };
-
-  const handleSubmit = async () => {
-    setLoading(true);
-    if (user && user.email) {
-      const generatedProfile = generateProfile();
-      if (!generatedProfile) {
-        return;
-      }
-      if (!isDriver) {
-        await dispatch(
-          update({
-            uid: user.uid,
-            profile: generatedProfile,
-          })
-        );
-      } else {
-        navigation.navigate(ROUTES.SET_DRIVER_PROFILE_SCREEN, {
-          commonProfile: generatedProfile,
-        });
-      }
-    }
+  const loadTrip = async () => {
+    const availableTrip = await getAvailableTrip();
+    setTrip(availableTrip);
+    // Nota: el delay debería ser un poco menos que el tiempo de validez de un available trip.
+    // Por ejemplo, si se define que un trip dura 30 segundos en el estado available,
+    // podríamos poner un delay de 20 segundos. Al pasar este tiempo, el front volvería a
+    // hacer un request a /trips/available y el back debería expirar ese trip para
+    // este chofer y devolver uno nuevo.
+    await delay();
+    setTrip(NULL_TRIP);
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (!loading && !acceptedTrip.trip_id) {
+      setLoading(true);
+      loadTrip();
+    }
+  });
+
+  if (!trip.trip_id && !acceptedTrip.trip_id) {
+    return (
+      <Container>
+        <KeyboardScrollView contentStyle={styles.container}>
+          <View>
+            <Text style={styles.title}>{t('driverTrip.searching')}</Text>
+          </View>
+        </KeyboardScrollView>
+      </Container>
+    );
+  }
 
   return (
     <Container>
       <KeyboardScrollView contentStyle={styles.container}>
         <View>
-          <Text style={styles.title}>{t('driverTrips.title')}</Text>
+          <Text style={styles.title}>{t('driverTrip.available')}</Text>
         </View>
-        <View style={[styles.textInputContainer]}>
-          <TextInput
-            value={firstName}
-            onChangeText={setFirstName}
-            contentContainerStyle={styles.textInput}
-            placeholder={t('common.firstName')}
-            inputStyle={styles.text}
-          />
-        </View>
-
-        <View style={[styles.textInputContainer]}>
-          <TextInput
-            value={lastName}
-            onChangeText={setLastName}
-            contentContainerStyle={styles.textInput}
-            placeholder={t('common.lastName')}
-            inputStyle={styles.text}
-          />
-        </View>
-        <View style={[styles.textInputContainer]}>
-          <TextInput
-            value={phone}
-            onChangeText={setPhone}
-            contentContainerStyle={styles.textInput}
-            placeholder={t('common.phone')}
-            inputStyle={styles.text}
-          />
-        </View>
-        <View style={styles.switchContainer}>
-          <Text style={styles.text}>{t('common.isDriver')}</Text>
-          <Switch onValueChange={setIsDriver} value={isDriver} />
+        <View>
+          <Text style={styles.title}>
+            {trip.distance || acceptedTrip.distance} km - {trip.time || acceptedTrip.time} min
+          </Text>
         </View>
         <Button
-          disabled={!isValidProfile(generateProfile())}
-          text={isDriver ? t('profile.continue') : t('profile.submit')}
-          onPress={handleSubmit}
-          loading={loading}
+          text={acceptedTrip.trip_id ? t('driverTrip.accepted') : t('driverTrip.accept')}
+          onPress={() => setAcceptedTrip(trip)}
+          loading={false}
+          disabled={acceptedTrip.trip_id ? true : false}
           buttonStyle={styles.buttonMargin}
         />
       </KeyboardScrollView>
