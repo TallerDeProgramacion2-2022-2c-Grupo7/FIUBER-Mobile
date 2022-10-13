@@ -14,7 +14,7 @@ interface MapProps {
   destination?: LatLng | null;
 }
 
-const MAPS_API_KEY = 'AIzaSyC4v2WZ-EvD-aK32ksbFutOivW3bUpNmxk';
+const { MAPS_API_KEY } = Config;
 
 function Map({ destination }: MapProps) {
   const [perms, setPerms] = useState(false);
