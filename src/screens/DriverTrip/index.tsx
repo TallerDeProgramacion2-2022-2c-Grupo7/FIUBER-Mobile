@@ -13,7 +13,7 @@ import styles from './styles';
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
-  ROUTES.DRIVER_TRIPS
+  ROUTES.DRIVER_TRIP
 >;
 
 type Trip = {

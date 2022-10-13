@@ -13,7 +13,7 @@ import { Container } from '../../layouts';
 import Map from './components/map';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
-const MAPS_API_KEY = 'AIzaSyC4v2WZ-EvD-aK32ksbFutOivW3bUpNmxk';
+const { MAPS_API_KEY } = Config;
 
 function Home({ navigation }: Props) {
   const { logedIn } = useSelector((state: ReduxState) => state.auth);
@@ -34,7 +34,7 @@ function Home({ navigation }: Props) {
 
   return (
     <Container>
-      <Button title="Driver" onPress={() => navigation.navigate(ROUTES.DRIVER_TRIPS)} />
+      <Button title="Driver" onPress={() => navigation.navigate(ROUTES.DRIVER_TRIP)} />
       <GooglePlacesAutocomplete
         GooglePlacesDetailsQuery={{ fields: 'geometry' }}
         fetchDetails={true} // you need this to fetch the details object onPress

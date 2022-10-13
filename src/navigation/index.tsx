@@ -48,7 +48,7 @@ const Navigator = () => {
           name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
           component={SetDriverProfile}
         />
-        <Stack.Screen name={ROUTES.DRIVER_TRIPS} component={DriverTrip} />
+        <Stack.Screen name={ROUTES.DRIVER_TRIP} component={DriverTrip} />
       </Stack.Navigator>
     </NavigationContainer>
   );
