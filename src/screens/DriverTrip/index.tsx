@@ -37,7 +37,7 @@ const NULL_TRIP = {
 // Test functions
 const delay = () => {
   return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(null), 5000)
+    setTimeout(() => resolve(null), 2000)
   });
 };
 
@@ -53,33 +53,35 @@ const getAvailableTrip = async () => {
   }
 }
 
-function DriverTrips({ navigation }: Props) {
+function DriverTrip({ navigation }: Props) {
   const { t } = useTranslation();
   const [trip, setTrip] = useState<Trip>(NULL_TRIP);
-  const [acceptedTrip, setAcceptedTrip] = useState<Trip>(NULL_TRIP);
-  const [loading, setLoading] = useState(false);
+  const [acceptedTrip, setAcceptedTrip] = useState(false);
 
-  const loadTrip = async () => {
-    const availableTrip = await getAvailableTrip();
-    setTrip(availableTrip);
-    // Nota: el delay debería ser un poco menos que el tiempo de validez de un available trip.
-    // Por ejemplo, si se define que un trip dura 30 segundos en el estado available,
-    // podríamos poner un delay de 20 segundos. Al pasar este tiempo, el front volvería a
-    // hacer un request a /trips/available y el back debería expirar ese trip para
-    // este chofer y devolver uno nuevo.
-    await delay();
-    setTrip(NULL_TRIP);
-    setLoading(false);
+  const setAvailableTrip = async () => {
+    setTrip(await getAvailableTrip());
+  };
+
+  const unsetAvailableTripIfNotAccepted = () => {
+    setTimeout(() => {
+      setAcceptedTrip(value => {
+        if (!value) {
+          setTrip(NULL_TRIP);
+        }
+        return value;
+      });
+    }, 5000);
   };
 
   useEffect(() => {
-    if (!loading && !acceptedTrip.trip_id) {
-      setLoading(true);
-      loadTrip();
+    if (!trip.trip_id) {
+      setAvailableTrip();
+    } else {
+      unsetAvailableTripIfNotAccepted();
     }
-  });
+  }, [trip]);
 
-  if (!trip.trip_id && !acceptedTrip.trip_id) {
+  if (!trip.trip_id) {
     return (
       <Container>
         <KeyboardScrollView contentStyle={styles.container}>
@@ -99,14 +101,14 @@ function DriverTrips({ navigation }: Props) {
         </View>
         <View>
           <Text style={styles.title}>
-            {trip.distance || acceptedTrip.distance} km - {trip.time || acceptedTrip.time} min
+            {trip.distance} km - {trip.time} min
           </Text>
         </View>
         <Button
-          text={acceptedTrip.trip_id ? t('driverTrip.accepted') : t('driverTrip.accept')}
-          onPress={() => setAcceptedTrip(trip)}
+          text={acceptedTrip ? t('driverTrip.accepted') : t('driverTrip.accept')}
+          onPress={() => setAcceptedTrip(true)}
           loading={false}
-          disabled={acceptedTrip.trip_id ? true : false}
+          disabled={acceptedTrip}
           buttonStyle={styles.buttonMargin}
         />
       </KeyboardScrollView>
@@ -114,4 +116,4 @@ function DriverTrips({ navigation }: Props) {
   );
 }
 
-export default DriverTrips;
+export default DriverTrip;
