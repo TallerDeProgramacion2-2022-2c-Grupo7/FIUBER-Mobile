@@ -18,7 +18,7 @@ import { getMyProfile } from '../../redux/slices/profile';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.LOGIN_SCREEN>;
-const MIN_PASSWORD_LENGTH = 8;
+const MIN_PASSWORD_LENGTH = 6;
 
 export const isValidPassword = (password: string) => {
   if (!password) {
