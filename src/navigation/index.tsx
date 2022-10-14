@@ -16,6 +16,7 @@ import SetDriverProfile from '../screens/SetProfile/driver';
 import SignUpScreen from '../screens/SignUp';
 import Welcome from '../screens/Welcome';
 import DriverTrip from '../screens/DriverTrip';
+import PassengerTripGuide from '../screens/PassengerTripGuide'
 
 const Navigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -49,6 +50,7 @@ const Navigator = () => {
           component={SetDriverProfile}
         />
         <Stack.Screen name={ROUTES.DRIVER_TRIP} component={DriverTrip} />
+        <Stack.Screen name={ROUTES.PASSENGER_TRIP_GUIDE} component={PassengerTripGuide} />
       </Stack.Navigator>
     </NavigationContainer>
   );

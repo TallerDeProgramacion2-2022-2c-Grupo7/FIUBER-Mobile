@@ -1,6 +1,6 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-native';
+import Button from '../../components/Button';
 import Config from 'react-native-config';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { LatLng } from 'react-native-maps';
@@ -11,6 +11,7 @@ import { RootStackParamList } from '../../interfaces/navigation';
 import { ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
 import Map from './components/map';
+import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
 const { MAPS_API_KEY } = Config;
@@ -34,7 +35,7 @@ function Home({ navigation }: Props) {
 
   return (
     <Container>
-      <Button title="Driver" onPress={() => navigation.navigate(ROUTES.DRIVER_TRIP)} />
+      <Button text="Driver" onPress={() => navigation.navigate(ROUTES.DRIVER_TRIP)} />
       <GooglePlacesAutocomplete
         GooglePlacesDetailsQuery={{ fields: 'geometry' }}
         fetchDetails={true} // you need this to fetch the details object onPress
@@ -52,6 +53,12 @@ function Home({ navigation }: Props) {
         }}
       />
       <Map destination={destination} />
+       <Button
+        text="Confirm trip"
+        onPress={() => navigation.navigate(ROUTES.PASSENGER_TRIP_GUIDE, { destination: { latitude: -34.6154982, longitude: -58.3770911 }})} //ToDo reemplaze with destination
+        iconStyle={styles.moreOptionsIcon}
+        buttonStyle={[styles.buttonMargin, styles.moreOptionsButton]}
+       />
     </Container>
   );
 }
