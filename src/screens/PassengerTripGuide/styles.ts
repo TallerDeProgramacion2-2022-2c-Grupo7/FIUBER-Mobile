@@ -31,12 +31,13 @@ export default StyleSheet.create({
   title: {
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'black',
     ...fontMaker({
       size: 26,
       weight: SEMIBOLD,
       color: Colors.White.Primary,
     }),
-    marginTop: 27,
+    marginTop: 0,
   },
   text: {
     justifyContent: 'center',

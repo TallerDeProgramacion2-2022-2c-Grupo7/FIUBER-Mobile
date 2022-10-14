@@ -11,6 +11,7 @@ import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import { ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
+import Map from '../Home/components/map';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.PASSENGER_TRIP_GUIDE>;
@@ -19,16 +20,43 @@ function PassengerTripGuide({navigation}: Props) {
 
  const { params } =
     useRoute<RouteProp<RootStackParamList, ROUTES.PASSENGER_TRIP_GUIDE>>();
-  const { destination } = params;
+ const { destination } = params;
+
+ const [tripState, setTripState] = useState("Finding Driver")
+
+
+    const updateTripState = () => {
+      switch(tripState){   
+        case "Finding Driver": return "Driver found";
+        case "Driver found": return "Ongoing trip";
+        case "Ongoing trip": return "Finished trip";
+    }
+   }
+ useEffect(() => {
+    const timer = setInterval(() => {  
+        setTripState(updateTripState());
+     }, 3000);              
+
+    return () => clearInterval(timer);
+  });
+
+
+
+ if (tripState == "Finding Driver"){
+  return (
+    <Container>
+        <Text style={styles.title}>{tripState}</Text>
+    </Container>
+  );
+}
 
   return (
     <Container>
-      <View style={styles.container}>
-        <Text style={styles.title}>{"This is the Passenger trip guide screen"}</Text>
-        <Text style={styles.title}>{destination.latitude}</Text>
-      </View>
+        <Text style={styles.title}>{tripState}</Text>
+        <Map destination={destination} />
     </Container>
   );
+
 }
 
 export default PassengerTripGuide;
