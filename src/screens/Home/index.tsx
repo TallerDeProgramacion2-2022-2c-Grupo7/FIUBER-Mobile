@@ -55,9 +55,10 @@ function Home({ navigation }: Props) {
       <Map destination={destination} />
        <Button
         text="Confirm trip"
-        onPress={() => navigation.navigate(ROUTES.PASSENGER_TRIP_GUIDE, { destination: { latitude: -34.6154982, longitude: -58.3770911 }})} //ToDo reemplaze with destination
+        onPress={() => navigation.navigate(ROUTES.PASSENGER_TRIP_GUIDE, { destination: destination})} 
         iconStyle={styles.moreOptionsIcon}
         buttonStyle={[styles.buttonMargin, styles.moreOptionsButton]}
+        disabled={!destination}
        />
     </Container>
   );
