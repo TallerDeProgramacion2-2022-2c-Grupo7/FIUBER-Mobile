@@ -3,7 +3,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '../../components/Text';
-import { View } from 'react-native';
+import { View, ActivityIndicator,  StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { LatLng } from 'react-native-maps';
 
@@ -33,26 +33,27 @@ function PassengerTripGuide({navigation}: Props) {
     }
    }
  useEffect(() => {
-    const timer = setInterval(() => {  
+    const timer = setInterval(() => {   
         setTripState(updateTripState());
      }, 3000);              
 
     return () => clearInterval(timer);
-  });
+ });
 
 
 
  if (tripState == "Finding Driver"){
   return (
-    <Container>
-        <Text style={styles.title}>{tripState}</Text>
+    <Container  style={styles.container}>
+        <Text style={[styles.title, styles.componentMargin]}>{"Finding driver..."}</Text>
+        <ActivityIndicator style={StyleSheet.absoluteFill} color="white" size="large" />
     </Container>
   );
 }
 
   return (
     <Container>
-        <Text style={styles.title}>{tripState}</Text>
+        <Text style={[styles.title, styles.top]}>{tripState}</Text>
         <Map destination={destination} />
     </Container>
   );
