@@ -12,11 +12,12 @@ const translations = {
     lastName: 'Last Name',
     email: 'Email',
     password: 'Password',
+    google: 'Login with Google',
   },
   signup: {
     submit: 'Create',
     title: 'Create Account',
-    moreOptions: 'More options',
+    google: 'Signup with Google',
   },
   common: {
     enterPassword: 'Enter password',

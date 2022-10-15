@@ -37,6 +37,17 @@ function Home({ navigation }: Props) {
         GooglePlacesDetailsQuery={{ fields: 'geometry' }}
         fetchDetails={true} // you need this to fetch the details object onPress
         placeholder="Search"
+        styles={{
+          textInput: {
+            height: 38,
+            color: '#ffffff',
+            backgroundColor: 'grey',
+            fontSize: 16,
+          },
+           row: {
+             backgroundColor: 'grey',
+           },
+          }}
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
           if (details?.geometry?.location) {
