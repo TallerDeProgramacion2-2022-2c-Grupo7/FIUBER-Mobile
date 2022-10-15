@@ -50,7 +50,7 @@ const CodeInputScreen = ({
         buttonStyle={[styles.componentMargin, styles.secondButtonStyling]}
         text="Change Phone Number"
         onPress={() => {
-          console.log('Resending');
+          console.log('Changing screen');
           setPhoneNumber(null);
         }}
       />

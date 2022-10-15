@@ -2,6 +2,11 @@ import { random } from 'lodash';
 import React, { useRef } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
 import { useDispatch } from 'react-redux';
+import * as Auth from '@react-native-firebase/auth';
+import {
+ View,
+ Text,
+} from "react-native";
 
 import Button from '../../../components/Button';
 import { AppDispatch } from '../../../interfaces/redux';
@@ -18,10 +23,12 @@ const PhoneInputScreen = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const phoneInput = useRef<PhoneInput>(null);
+  const [formattedValue, setFormattedValue] = React.useState("");
   const [value, setValue] = React.useState('');
 
   return (
     <>
+
       <PhoneInput
         ref={phoneInput}
         defaultValue={value}
@@ -29,6 +36,9 @@ const PhoneInputScreen = ({
         layout="first"
         onChangeText={text => {
           setValue(text);
+        }}
+        onChangeFormattedText={(text) => {
+          setFormattedValue(text);
         }}
         countryPickerProps={{ withAlphaFilter: true }}
         autoFocus
@@ -50,7 +60,7 @@ const PhoneInputScreen = ({
           const code = random(100000, 999999).toString();
           setPhoneNumber(value);
           dispatch(setPhoneVerificationCode({ code }));
-          sendPhoneVerification(value, code);
+          sendPhoneVerification(formattedValue, code);
         }}
       />
     </>

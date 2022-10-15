@@ -1,11 +1,38 @@
 import firestore from '@react-native-firebase/firestore';
-
-const TWILIO_ACCOUNT_SID = 'AC720ce4caafa69b31a9dc8c0dd758e98c';
-const TWILIO_AUTH_TOKEN = '9f4f1d2c2cd80a1eef642e92a29f4e94';
-const TWILIO_PHONE_NUMBER = '+14155238886';
+import auth from '@react-native-firebase/auth';
+import axios from "react-native-axios";
 
 export const sendPhoneVerification = async (phone: string, code: string) => {
-  // Send request phone verification
+  try {
+    console.log("sendPhoneVerification", phone, code);
+    const user = auth().currentUser;
+
+    if (!user) {
+    return;
+    }
+
+    const idTokenResult = await user.getIdTokenResult();
+
+    const headers = {
+    'Authorization': `Bearer ${idTokenResult.token}`
+    }
+
+    const data = {
+    to_number: phone,
+    verification_code: code
+    }
+    console.log("hola");
+
+    axios.post('https://fiuber-notification-pin-martinstd96.cloud.okteto.net/send_pin/', data, { headers: headers }).
+    then((response) => {
+      console.log(response);
+    }).catch((error) => {
+      console.log(error);
+    });
+  } catch(error) {
+    console.log(error)
+  }
+  
 };
 
 export const checkPhoneVerification = async (uid?: string, code?: string) => {
