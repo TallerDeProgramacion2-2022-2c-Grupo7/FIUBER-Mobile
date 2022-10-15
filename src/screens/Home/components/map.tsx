@@ -58,6 +58,7 @@ function Map({ destination }: MapProps) {
       }
       setPerms(true);
     };
+
     askPermissions();
   }, []);
 

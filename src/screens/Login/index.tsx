@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
+import SocialButton from '../../components/SocialButton';
 import KeyboardScrollView from '../../components/KeyboardScrollView';
 import PasswordInput from '../../components/PasswordInput';
 import Text from '../../components/Text';
@@ -13,7 +14,7 @@ import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
-import { login } from '../../redux/slices/auth';
+import { login, googleLogin } from '../../redux/slices/auth';
 import { getMyProfile } from '../../redux/slices/profile';
 import styles from './styles';
 
@@ -55,6 +56,10 @@ function Login({ navigation }: Props) {
     );
   };
 
+  const handleGoogleLogin = async () => {
+    await dispatch(googleLogin());
+  };
+
   useEffect(() => {
     const goHome = async () => {
       user && (await dispatch(getMyProfile({ uid: user?.uid })));
@@ -69,7 +74,7 @@ function Login({ navigation }: Props) {
     <Container>
       <KeyboardScrollView contentStyle={styles.container}>
         <View>
-          <Text style={styles.title}>{t('login.unlock')}</Text>
+          <Text style={styles.title}>{t('login.submit')}</Text>
         </View>
         <View style={[styles.emailInputContainer]}>
           <TextInput
@@ -94,12 +99,14 @@ function Login({ navigation }: Props) {
           loading={loading}
           buttonStyle={styles.buttonMargin}
         />
-        <Button
-          text={t('login.moreOptions')}
+        <SocialButton
+          text={t('login.google')}
           onLongPress={() => console.log('long press')}
-          onPress={() => console.log('press')}
+          onPress={() => handleGoogleLogin()}
           iconStyle={styles.moreOptionsIcon}
           buttonStyle={[styles.buttonMargin, styles.moreOptionsButton]}
+          buttonType={'google'}
+          color={'#fff'}
         />
       </KeyboardScrollView>
     </Container>
