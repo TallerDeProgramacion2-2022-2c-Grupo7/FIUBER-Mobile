@@ -61,6 +61,9 @@ export default StyleSheet.create({
   },
   moreOptionsIcon: {
     marginLeft: 11,
+    width: 70,
+    top: 60,
+    alignItems: 'center',
   },
   biometricsButton: {
     flexDirection: 'row-reverse',

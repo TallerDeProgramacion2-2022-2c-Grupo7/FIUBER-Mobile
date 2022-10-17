@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
+import SocialButton from '../../components/SocialButton';
 import KeyboardScrollView from '../../components/KeyboardScrollView';
 import PasswordInput from '../../components/PasswordInput';
 import Text from '../../components/Text';
@@ -13,7 +14,7 @@ import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
-import { signup } from '../../redux/slices/auth';
+import { signup, googleLogin } from '../../redux/slices/auth';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.SIGNUP_SCREEN>;
@@ -54,6 +55,10 @@ function SignUp({ navigation }: Props) {
     );
   };
 
+  const handleGoogleSignin = async () => {
+      await dispatch(googleLogin());
+    };
+
   useEffect(() => {
     if (logedIn) {
       navigation.navigate(ROUTES.HOME_SCREEN);
@@ -89,12 +94,14 @@ function SignUp({ navigation }: Props) {
           loading={loading}
           buttonStyle={styles.buttonMargin}
         />
-        <Button
-          text={t('signup.moreOptions')}
+        <SocialButton
+          text={t('signup.google')}
           onLongPress={() => console.log('long press')}
-          onPress={() => console.log('press')}
+          onPress={() => handleGoogleSignin()}
           iconStyle={styles.moreOptionsIcon}
           buttonStyle={[styles.buttonMargin, styles.moreOptionsButton]}
+          buttonType={'google'}
+          color={'#fff'}
         />
       </KeyboardScrollView>
     </Container>

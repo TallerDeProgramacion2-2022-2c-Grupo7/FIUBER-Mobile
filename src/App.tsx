@@ -21,7 +21,7 @@ const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: Colors.lighter,
+    backgroundColor: Colors.transparent,
   };
 
   return (
