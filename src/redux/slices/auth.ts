@@ -17,6 +17,7 @@ export const login = createAsyncThunk<any, AuthLoginParams>(
 
       return auth().currentUser?.toJSON();
     } catch (error: any) {
+      console.error(error);
       onError(error.message);
       throw error;
     }
@@ -31,6 +32,7 @@ export const signup = createAsyncThunk<any, AuthLoginParams>(
 
       return auth().currentUser?.toJSON();
     } catch (error: any) {
+      console.error(error);
       onError(error.message);
       throw error;
     }

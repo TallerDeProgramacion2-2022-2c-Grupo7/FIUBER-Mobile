@@ -1,25 +1,34 @@
+import auth from '@react-native-firebase/auth';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Config from 'react-native-config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import { Modalize } from 'react-native-modalize';
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
-import { Circle, Svg } from 'react-native-svg';
+import { useSelector } from 'react-redux';
 
 import Target from '../../../assets/target';
-import Button from '../../../components/Button';
-
+import { ReduxState } from '../../../interfaces/redux';
+import { Trip } from '../../../interfaces/trip';
+import { calculateCost, createTrip } from '../../../services/trips';
 interface MapProps {
-  destination?: LatLng | null;
+  destination: LatLng | null;
+  setDestination?: (destination: LatLng | null) => void;
+  origin: LatLng | null;
+  setOrigin: (destination: LatLng | null) => void;
+  trip?: Trip | null;
 }
 
 const { MAPS_API_KEY } = Config;
 
-function Map({ destination }: MapProps) {
+function Map({ destination, setDestination, origin, setOrigin }: MapProps) {
   const [perms, setPerms] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [origin, setOrigin] = useState<LatLng | null>(null);
+
+  const { logedIn } = useSelector((state: ReduxState) => state.auth);
+
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
@@ -84,9 +93,27 @@ function Map({ destination }: MapProps) {
     }
   };
 
+  // useEffect(() => {
+  //   const waitingFn = InteractionManager.runAfterInteractions;
+  //   if (waitingDriver) {
+  //     waitingFn(async () => {
+  //       while (!driver) {
+  //         console.log('waiting for driver');
+  //         const driver = trip ? await getDriver(trip?._id, token!) : undefined;
+  //         if (driver) {
+  //           setDriver(driver);
+  //           break;
+  //         }
+  //         await delay(3000);
+  //       }
+  //     });
+  //   }
+  // }, [waitingDriver]);
+
   return perms ? (
     <>
       <MapView
+        showsCompass={false}
         ref={mapRef}
         style={styles.map}
         showsUserLocation
@@ -124,6 +151,16 @@ function Map({ destination }: MapProps) {
 export default Map;
 
 const styles = StyleSheet.create({
+  input: {
+    marginBottom: 20,
+  },
+  infoContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  version: {
+    alignSelf: 'flex-end',
+  },
   map: {
     ...StyleSheet.absoluteFillObject,
     position: 'absolute',

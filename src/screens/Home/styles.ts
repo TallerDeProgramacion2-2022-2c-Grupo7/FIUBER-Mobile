@@ -69,4 +69,11 @@ export default StyleSheet.create({
     marginTop: 23,
     marginLeft: 30,
   },
+  modalContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 30,
+    flex: 1,
+    flexDirection: 'row',
+  },
 });
