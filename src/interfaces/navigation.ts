@@ -1,6 +1,6 @@
 import { ROUTES } from '../constants/routes';
 import { CommonsProfile } from './profile';
-import { LatLng } from 'react-native-maps';
+import { Trip } from './trip';
 
 export type RootStackParamList = {
   [ROUTES.WELCOME]: undefined;
@@ -10,5 +10,5 @@ export type RootStackParamList = {
   [ROUTES.SET_PROFILE_SCREEN]: undefined;
   [ROUTES.SET_DRIVER_PROFILE_SCREEN]: { commonProfile: CommonsProfile };
   [ROUTES.DRIVER_TRIP]: undefined;
-  [ROUTES.PASSENGER_TRIP_GUIDE]: { destination: LatLng};
+  [ROUTES.PASSENGER_TRIP_GUIDE]: { trip: Trip };
 };

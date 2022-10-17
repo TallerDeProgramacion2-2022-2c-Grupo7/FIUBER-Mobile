@@ -5,18 +5,19 @@ import {
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
+import { Host } from 'react-native-portalize';
 
 import { ROUTES } from '../constants/routes';
 import { Colors } from '../constants/theme';
 import { RootStackParamList } from '../interfaces/navigation';
+import DriverTrip from '../screens/DriverTrip';
 import HomeScreen from '../screens/Home';
 import LoginScreen from '../screens/Login';
+import PassengerTripGuide from '../screens/PassengerTripGuide';
 import SetProfile from '../screens/SetProfile';
 import SetDriverProfile from '../screens/SetProfile/driver';
 import SignUpScreen from '../screens/SignUp';
 import Welcome from '../screens/Welcome';
-import DriverTrip from '../screens/DriverTrip';
-import PassengerTripGuide from '../screens/PassengerTripGuide'
 
 const Navigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -31,27 +32,35 @@ const Navigator = () => {
         ...DefaultTheme,
         colors: { ...DefaultTheme.colors, background: 'transparent' },
       }}>
-      <Stack.Navigator
-        initialRouteName={initialRoute}
-        screenOptions={{
-          headerShown: false,
-          gestureEnabled: true,
-          gestureDirection: 'horizontal',
-          detachPreviousScreen: true,
-          presentation: 'transparentModal',
-        }}>
-        <Stack.Screen name={ROUTES.WELCOME} component={Welcome} />
-        <Stack.Screen name={ROUTES.LOGIN_SCREEN} component={LoginScreen} />
-        <Stack.Screen name={ROUTES.SIGNUP_SCREEN} component={SignUpScreen} />
-        <Stack.Screen name={ROUTES.HOME_SCREEN} component={HomeScreen} />
-        <Stack.Screen name={ROUTES.SET_PROFILE_SCREEN} component={SetProfile} />
-        <Stack.Screen
-          name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
-          component={SetDriverProfile}
-        />
-        <Stack.Screen name={ROUTES.DRIVER_TRIP} component={DriverTrip} />
-        <Stack.Screen name={ROUTES.PASSENGER_TRIP_GUIDE} component={PassengerTripGuide} />
-      </Stack.Navigator>
+      <Host>
+        <Stack.Navigator
+          initialRouteName={initialRoute}
+          screenOptions={{
+            headerShown: false,
+            gestureEnabled: true,
+            gestureDirection: 'horizontal',
+            detachPreviousScreen: true,
+            presentation: 'transparentModal',
+          }}>
+          <Stack.Screen name={ROUTES.WELCOME} component={Welcome} />
+          <Stack.Screen name={ROUTES.LOGIN_SCREEN} component={LoginScreen} />
+          <Stack.Screen name={ROUTES.SIGNUP_SCREEN} component={SignUpScreen} />
+          <Stack.Screen name={ROUTES.HOME_SCREEN} component={HomeScreen} />
+          <Stack.Screen
+            name={ROUTES.SET_PROFILE_SCREEN}
+            component={SetProfile}
+          />
+          <Stack.Screen
+            name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
+            component={SetDriverProfile}
+          />
+          <Stack.Screen name={ROUTES.DRIVER_TRIP} component={DriverTrip} />
+          <Stack.Screen
+            name={ROUTES.PASSENGER_TRIP_GUIDE}
+            component={PassengerTripGuide}
+          />
+        </Stack.Navigator>
+      </Host>
     </NavigationContainer>
   );
 };
