@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, { Path, G } from 'react-native-svg';
+import Svg, { G, Path } from 'react-native-svg';
 
 const SvgComponent = props => (
   <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}>
