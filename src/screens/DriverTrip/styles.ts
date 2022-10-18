@@ -31,17 +31,18 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingVertical: commonMargin,
   },
-  emailInputContainer: {
+  textInputContainer: {
     width: '100%',
     marginBottom: commonMargin,
   },
-  emailInput: {
+  textInput: {
     backgroundColor: Colors.Gray.Secondary,
   },
-  emailTextInput: {
+  text: {
     ...fontMaker({ size: 18, color: Colors.White.Pure }),
     fontFamily: undefined, // Disabling custom font because of problem with Inter and secure text entry
     fontWeight: 'bold',
+    margin: 10,
   },
   componentMargin: {
     marginTop: commonMargin,
@@ -61,14 +62,17 @@ export default StyleSheet.create({
   },
   moreOptionsIcon: {
     marginLeft: 11,
-    width: 70,
-    top: 60,
-    alignItems: 'center',
   },
   biometricsButton: {
     flexDirection: 'row-reverse',
   },
   biometricsIcon: {
     marginRight: 11,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

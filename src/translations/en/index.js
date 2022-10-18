@@ -12,11 +12,12 @@ const translations = {
     lastName: 'Last Name',
     email: 'Email',
     password: 'Password',
+    google: 'Login with Google',
   },
   signup: {
     submit: 'Create',
     title: 'Create Account',
-    moreOptions: 'More options',
+    google: 'Signup with Google',
   },
   common: {
     enterPassword: 'Enter password',
@@ -42,6 +43,12 @@ const translations = {
     title: 'Create Your Profile',
     submit: 'Create',
     continue: 'Continue',
+  },
+  driverTrip: {
+    searching: 'Searching trips...',
+    available: 'Available trip',
+    accepted: 'Trip accepted',
+    accept: 'Accept',
   },
 };
 

@@ -15,6 +15,7 @@ import SetProfile from '../screens/SetProfile';
 import SetDriverProfile from '../screens/SetProfile/driver';
 import SignUpScreen from '../screens/SignUp';
 import Welcome from '../screens/Welcome';
+import DriverTrip from '../screens/DriverTrip';
 
 const Navigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -51,6 +52,7 @@ const Navigator = () => {
           name={ROUTES.PHONE_VERIFICATION_SCREEN}
           component={PhoneVerification}
         />
+        <Stack.Screen name={ROUTES.DRIVER_TRIP} component={DriverTrip} />
       </Stack.Navigator>
     </NavigationContainer>
   );
