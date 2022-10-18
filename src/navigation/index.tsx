@@ -18,7 +18,7 @@ import Welcome from '../screens/Welcome';
 
 const Navigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
-  const initialRoute = ROUTES.PHONE_VERIFICATION_SCREEN;
+  const initialRoute = ROUTES.WELCOME;
 
   const navigationRef = useNavigationContainerRef(); // You can also use a regular ref with `React.useRef()`
 

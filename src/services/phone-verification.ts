@@ -21,11 +21,10 @@ export const sendPhoneVerification = async (phone: string, code: string) => {
     to_number: phone,
     verification_code: code
     }
-    console.log("hola");
 
     axios.post('https://fiuber-notification-pin-martinstd96.cloud.okteto.net/send_pin/', data, { headers: headers }).
     then((response) => {
-      console.log(response);
+      console.log(response["data"]);
     }).catch((error) => {
       console.log(error);
     });
@@ -39,6 +38,7 @@ export const checkPhoneVerification = async (uid?: string, code?: string) => {
   if (!uid || !code) return false;
   const profileCol = await firestore().doc(`privateProfiles/${uid}`).get();
   const { phoneVerificationCode } = profileCol.data() || {};
+  console.log(code, phoneVerificationCode);
 
   return phoneVerificationCode === code;
 };

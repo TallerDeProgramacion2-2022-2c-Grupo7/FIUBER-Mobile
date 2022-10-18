@@ -14,7 +14,7 @@ type Props = NativeStackScreenProps<
   ROUTES.PHONE_VERIFICATION_SCREEN
 >;
 
-function PhoneVerification({}: Props) {
+function PhoneVerification({navigation}: Props) {
   const [phoneNumber, setPhoneNumber] = React.useState<string | null>('');
   return (
     <>
@@ -25,6 +25,7 @@ function PhoneVerification({}: Props) {
               <CodeInputScreen
                 phoneNumber={phoneNumber}
                 setPhoneNumber={setPhoneNumber}
+                screenNavigation={navigation}
               />
             ) : (
               <PhoneInputScreen

@@ -8,13 +8,16 @@ import { AppDispatch, ReduxState } from '../../../interfaces/redux';
 import { setPhoneNumber as setPhoneNumberToFirebase } from '../../../redux/slices/profile';
 import { checkPhoneVerification } from '../../../services/phone-verification';
 import styles from './styles';
+import { ROUTES } from '../../../constants/routes';
 
 const CodeInputScreen = ({
   phoneNumber,
   setPhoneNumber,
+  screenNavigation,
 }: {
   phoneNumber: string | null;
   setPhoneNumber: (phoneNumber: string | null) => void;
+  screenNavigation: any;
 }) => {
   const [invalidCode, setInvalidCode] = useState(false);
   const { user } = useSelector((state: ReduxState) => state.auth);
@@ -33,7 +36,9 @@ const CodeInputScreen = ({
             if (!phoneNumber) {
               return;
             }
-            return dispatch(setPhoneNumberToFirebase({ phoneNumber }));
+            await dispatch(setPhoneNumberToFirebase({ phoneNumber }));
+            //TODO pasar por parametros el phoneNumber y el code
+            screenNavigation.navigate(ROUTES.SET_PROFILE_SCREEN);
           }
           setInvalidCode(true);
         }}

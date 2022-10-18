@@ -24,7 +24,11 @@ const PUBILC_ATTRS = [
   'color',
   'plate',
 ];
-const PRIVATE_ATTRS = ['email', 'phoneNumber', 'phoneVerificationCode'];
+const PRIVATE_ATTRS = [
+    'email',
+    'phoneNumber',
+    'verifiedPhone',
+];
 
 export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
   'profile/getMyProfile',
@@ -39,6 +43,7 @@ export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
     }
 
     const profile = { ...publicProfile.data(), ...privateProfiles.data() };
+    console.log(profile);
 
     return profile;
   }
@@ -50,7 +55,18 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
     const privateProfile = pick(profile, PRIVATE_ATTRS);
     const publicProfile = pick(profile, PUBILC_ATTRS);
     await firestore().doc(`publicProfiles/${uid}`).set(publicProfile);
-    await firestore().doc(`privateProfiles/${uid}`).set(privateProfile);
+
+    const privateProfiles = await firestore()
+      .doc(`privateProfiles/${uid}`)
+      .get();
+
+    const privateProfileToUpdate = {
+      ...privateProfiles.data(),
+      ...privateProfile,
+    };
+    console.log('completePriProf', privateProfileToUpdate);
+
+    await firestore().doc(`privateProfiles/${uid}`).set(privateProfileToUpdate);
 
     const updatedPublicProfile = await firestore()
       .doc(`publicProfiles/${uid}`)
@@ -63,6 +79,7 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
       ...updatedPublicProfile.data(),
       ...updatedPrivateProfiles.data(),
     };
+    console.log(updatedProfile);
 
     return updatedProfile;
   }
@@ -77,13 +94,9 @@ export const setPhoneVerificationCode = createAsyncThunk<any, { code: string }>(
       return;
     }
 
-    const privateProfile = await firestore()
-      .doc(`privateProfiles/${auth.user.uid}`)
-      .get();
-
     await firestore()
       .doc(`privateProfiles/${auth.user.uid}`)
-      .set({ ...privateProfile, phoneVerificationCode: code });
+      .set({ phoneVerificationCode: code });
   }
 );
 
@@ -96,13 +109,11 @@ export const setPhoneNumber = createAsyncThunk<any, { phoneNumber: string }>(
       return;
     }
 
-    const privateProfile = await firestore()
-      .doc(`privateProfiles/${auth.user.uid}`)
-      .get();
+    console.log('phone', phoneNumber);
 
     await firestore()
       .doc(`privateProfiles/${auth.user.uid}`)
-      .set({ ...privateProfile, phoneNumber: phoneNumber });
+      .set({ phoneNumber: phoneNumber });
   }
 );
 

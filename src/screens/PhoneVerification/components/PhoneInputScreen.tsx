@@ -2,11 +2,6 @@ import { random } from 'lodash';
 import React, { useRef } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
 import { useDispatch } from 'react-redux';
-import * as Auth from '@react-native-firebase/auth';
-import {
- View,
- Text,
-} from "react-native";
 
 import Button from '../../../components/Button';
 import { AppDispatch } from '../../../interfaces/redux';
@@ -58,7 +53,7 @@ const PhoneInputScreen = ({
         buttonStyle={[styles.componentMargin, styles.buttonStyling]}
         onPress={() => {
           const code = random(100000, 999999).toString();
-          setPhoneNumber(value);
+          setPhoneNumber(formattedValue);
           dispatch(setPhoneVerificationCode({ code }));
           sendPhoneVerification(formattedValue, code);
         }}
