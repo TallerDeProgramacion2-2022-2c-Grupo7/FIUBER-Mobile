@@ -66,7 +66,7 @@ function PassengerTripGuide({ navigation }: Props) {
   useEffect(() => {
     const waitingFn = InteractionManager.runAfterInteractions;
     waitingFn(async () => {
-      if (!!token) {
+      if (token) {
         while (true) {
           console.log('getting');
           const status = trip

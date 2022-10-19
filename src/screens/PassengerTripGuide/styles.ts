@@ -40,7 +40,7 @@ export default StyleSheet.create({
     }),
   },
   top: {
-      marginTop: 0,
+    marginTop: 0,
   },
   text: {
     justifyContent: 'center',
