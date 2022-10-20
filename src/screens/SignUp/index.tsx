@@ -61,7 +61,7 @@ function SignUp({ navigation }: Props) {
 
   useEffect(() => {
     if (logedIn) {
-      navigation.navigate(ROUTES.HOME_SCREEN);
+      navigation.navigate(ROUTES.PHONE_VERIFICATION_SCREEN); //ROUTES.HOME_SCREEN
     }
   }, [logedIn]);
 

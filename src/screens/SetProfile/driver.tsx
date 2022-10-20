@@ -69,10 +69,9 @@ function SetDriverProfile({ navigation }: Props) {
       return {
         firstName: commonProfile.firstName,
         lastName: commonProfile.lastName,
-        phone: commonProfile.phone,
         email: user.email,
         isDriver: true,
-        verifiedPhone: false,
+        verifiedPhone: true,
         car: {
           brand,
           model,

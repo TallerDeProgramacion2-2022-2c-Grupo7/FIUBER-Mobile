@@ -8,11 +8,11 @@ import React from 'react';
 import { Host } from 'react-native-portalize';
 
 import { ROUTES } from '../constants/routes';
-import { Colors } from '../constants/theme';
 import { RootStackParamList } from '../interfaces/navigation';
 import DriverTrip from '../screens/DriverTrip';
 import HomeScreen from '../screens/Home';
 import LoginScreen from '../screens/Login';
+import PhoneVerification from '../screens/PhoneVerification';
 import PassengerTripGuide from '../screens/PassengerTripGuide';
 import SetProfile from '../screens/SetProfile';
 import SetDriverProfile from '../screens/SetProfile/driver';
@@ -53,6 +53,10 @@ const Navigator = () => {
           <Stack.Screen
             name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
             component={SetDriverProfile}
+          />
+          <Stack.Screen
+          name={ROUTES.PHONE_VERIFICATION_SCREEN}
+          component={PhoneVerification}
           />
           <Stack.Screen name={ROUTES.DRIVER_TRIP} component={DriverTrip} />
           <Stack.Screen
