@@ -31,12 +31,16 @@ export default StyleSheet.create({
   title: {
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
+    backgroundColor: 'black',
     ...fontMaker({
       size: 26,
       weight: SEMIBOLD,
       color: Colors.White.Primary,
     }),
-    marginTop: 27,
+  },
+  top: {
+      marginTop: 0,
   },
   text: {
     justifyContent: 'center',
@@ -68,12 +72,5 @@ export default StyleSheet.create({
     color: Colors.ActionBlue,
     marginTop: 23,
     marginLeft: 30,
-  },
-  modalContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 30,
-    flex: 1,
-    flexDirection: 'row',
   },
 });
