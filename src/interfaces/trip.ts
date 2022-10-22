@@ -14,7 +14,13 @@ export interface Trip {
   status: TripStatus;
 }
 
+export interface MapPoint {
+  name: string;
+  coordinates: LatLng;
+}
+
 export enum TripStatus {
+  WAITING_USER = 'waiting_user',
   SERCHING_DRIVER = 'searching_driver',
   WAITING_DRIVER = 'waiting_driver',
   ACCEPTED = 'accepted',

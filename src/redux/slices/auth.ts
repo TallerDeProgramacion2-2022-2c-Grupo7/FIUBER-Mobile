@@ -25,26 +25,30 @@ export const login = createAsyncThunk<any, AuthLoginParams>(
   }
 );
 
-export const googleLogin = createAsyncThunk('auth/googleLogin', async () => {
-  try {
-    GoogleSignin.configure({
-      webClientId:
-        '595724404035-a714nnjkmgd0uagns8hkdv9nabh0tta7.apps.googleusercontent.com',
-    });
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
+export const googleLogin = createAsyncThunk<any, void>(
+  'auth/googleLogin',
+  async () => {
+    try {
+      GoogleSignin.configure({
+        webClientId:
+          '595724404035-a714nnjkmgd0uagns8hkdv9nabh0tta7.apps.googleusercontent.com',
+      });
+      // Get the users ID token
+      const { idToken } = await GoogleSignin.signIn();
 
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-    // Sign-in the user with the credential
-    await auth().signInWithCredential(googleCredential);
+      // Sign-in the user with the credential
+      await auth().signInWithCredential(googleCredential);
 
-    return auth().currentUser?.toJSON();
-  } catch (error) {
-    console.log(error);
+      return auth().currentUser?.toJSON();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
-});
+);
 
 export const signup = createAsyncThunk<any, AuthLoginParams>(
   'auth/signup',
