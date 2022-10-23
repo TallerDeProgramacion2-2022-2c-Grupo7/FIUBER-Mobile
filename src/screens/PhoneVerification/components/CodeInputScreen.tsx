@@ -22,6 +22,7 @@ const CodeInputScreen = ({
   const [invalidCode, setInvalidCode] = useState(false);
   const { user } = useSelector((state: ReduxState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
+
   return (
     <SafeAreaView style={styles.codeInputWrapper}>
       <OTPInputView
@@ -40,7 +41,9 @@ const CodeInputScreen = ({
             //TODO pasar por parametros el phoneNumber y el code
             screenNavigation.navigate(ROUTES.SET_PROFILE_SCREEN);
           }
-          setInvalidCode(true);
+          else {
+            setInvalidCode(true);
+          }
         }}
       />
       {invalidCode && <Text style={styles.error}>Incorrect code.</Text>}
