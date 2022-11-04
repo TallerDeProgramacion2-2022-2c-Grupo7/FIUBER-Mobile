@@ -63,7 +63,7 @@ function Login({ navigation }: Props) {
   useEffect(() => {
     const goHome = async () => {
       user && (await dispatch(getMyProfile({ uid: user?.uid })));
-      navigation.navigate(ROUTES.HOME_SCREEN);
+      navigation.navigate(ROUTES.TAB_SCREEN);
     };
     if (logedIn) {
       goHome();

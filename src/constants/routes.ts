@@ -8,4 +8,8 @@ export enum ROUTES {
   PHONE_VERIFICATION_SCREEN = 'PhoneVerificationScreen',
   DRIVER_TRIP = 'DriverTrip',
   PASSENGER_TRIP_GUIDE = 'PassengerTripGuide',
+  NOTIFICATIONS_SCREEN = 'NotificationsScreen',
+  MY_PROFILE_SCREEN = 'MyProfileScreen',
+  TAB_SCREEN = 'TabScreen',
+  HOME_TRIPS_STACK_SCREEN = 'HomeTripsStackScreen',
 }
