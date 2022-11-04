@@ -1,6 +1,5 @@
-import auth from '@react-native-firebase/auth';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Config from 'react-native-config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -16,9 +15,10 @@ import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import { ReduxState } from '../../interfaces/redux';
 import { TripStatus } from '../../interfaces/trip';
-import { setDestination, setStatus } from '../../redux/slices/trip';
+import { setStatus, setTo } from '../../redux/slices/trip';
+import DriverTripModal from './components/DriverTripModal';
 import Map from './components/map';
-import TripModal from './components/TripModal';
+import PassangerTripModal from './components/PassangerTripModal';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
@@ -26,6 +26,7 @@ const { MAPS_API_KEY } = Config;
 
 function Home({ navigation }: Props) {
   const dispatch = useDispatch();
+  const [driverMode, setDriverMode] = useState(false);
   const { logedIn } = useSelector((state: ReduxState) => state.auth);
   const { obtained: profileObtained } = useSelector(
     (state: ReduxState) => state.profile
@@ -48,7 +49,16 @@ function Home({ navigation }: Props) {
     if (details?.geometry?.location) {
       const { lat, lng } = details.geometry.location;
       dispatch(
-        setDestination({ coordinates: { latitude: lat, longitude: lng } })
+        setTo({
+          coordinates: { latitude: lat, longitude: lng },
+          description: {
+            name: data.description,
+            formattedAddress: {
+              mainText: data.structured_formatting.main_text,
+              secondaryText: data.structured_formatting.secondary_text,
+            },
+          },
+        })
       );
       dispatch(setStatus(TripStatus.WAITING_USER));
     }
@@ -60,7 +70,7 @@ function Home({ navigation }: Props) {
         <View style={styles.SearchBoxButtonContainer}>
           <TouchableOpacity
             style={styles.SearchBoxButton}
-            onPress={() => navigation.navigate(ROUTES.DRIVER_TRIP)}>
+            onPress={() => setDriverMode(!driverMode)}>
             <Wheel width={'100%'} height={'100%'} />
           </TouchableOpacity>
         </View>
@@ -70,7 +80,7 @@ function Home({ navigation }: Props) {
         />
       </View>
       <Map />
-      <TripModal />
+      {driverMode ? <DriverTripModal /> : <PassangerTripModal />}
     </>
   );
 }

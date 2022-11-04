@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Config from 'react-native-config';
+import Geocoder from 'react-native-geocoding';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapView, { Marker, UserLocationChangeEvent } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
@@ -9,16 +10,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import Target from '../../../assets/target';
 import useMapPermissions from '../../../hooks/useMapPermissions';
 import { ReduxState } from '../../../interfaces/redux';
-import { setOrigin } from '../../../redux/slices/trip';
+import { setFrom } from '../../../redux/slices/trip';
 
 const { MAPS_API_KEY } = Config;
 
 function Map({}) {
   const dispatch = useDispatch();
   const [focused, setFocused] = useState(false);
-  const { origin, destination } = useSelector(
-    (state: ReduxState) => state.trip
-  );
+  const { from, to } = useSelector((state: ReduxState) => state.trip);
 
   const mapRef = useRef<MapView>(null);
 
@@ -29,7 +28,30 @@ function Map({}) {
       return;
     }
     if (mapRef && mapRef.current && !focused) {
-      dispatch(setOrigin({ coordinates: nativeEvent.coordinate }));
+      if (Geocoder.isInit) {
+        Geocoder.from(nativeEvent.coordinate)
+          .then(json => {
+            const formattedAddress = json.results[0].formatted_address;
+            dispatch(
+              setFrom({
+                coordinates: nativeEvent.coordinate,
+                description: {
+                  name: formattedAddress,
+                  formattedAddress: {
+                    mainText: formattedAddress,
+                    secondaryText: '',
+                  },
+                },
+              })
+            );
+          })
+          .catch(error => {
+            dispatch(setFrom({ coordinates: nativeEvent.coordinate }));
+            console.warn(error);
+          });
+      } else {
+        dispatch(setFrom({ coordinates: nativeEvent.coordinate }));
+      }
       setFocused(true);
 
       mapRef.current.animateCamera({
@@ -45,11 +67,8 @@ function Map({}) {
   };
 
   const onDirectionReady = () => {
-    if (origin && destination) {
-      mapRef?.current?.fitToCoordinates([
-        origin.coordinates,
-        destination.coordinates,
-      ]);
+    if (from && to) {
+      mapRef?.current?.fitToCoordinates([from.coordinates, to.coordinates]);
     }
   };
 
@@ -61,15 +80,15 @@ function Map({}) {
         style={styles.map}
         showsUserLocation
         onUserLocationChange={onUserLocationChange}>
-        {destination && origin && (
+        {from && to && (
           <>
             <MapViewDirections
               {...ViewDirectionArgs}
-              origin={origin.coordinates}
-              destination={destination.coordinates}
+              origin={from.coordinates}
+              destination={to.coordinates}
               onReady={onDirectionReady}
             />
-            <Marker coordinate={destination.coordinates} />
+            <Marker coordinate={to.coordinates} />
           </>
         )}
       </MapView>

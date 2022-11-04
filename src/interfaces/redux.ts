@@ -5,9 +5,12 @@ import { Profile } from './profile';
 import { MapPoint, TripStatus } from './trip';
 
 export interface TripState {
-  origin: MapPoint | null;
-  destination: MapPoint | null;
-  passsaenger: Profile | null;
+  id: string | null;
+  from: MapPoint | null;
+  to: MapPoint | null;
+  passangerId: string | null;
+  passsanger: Profile | null;
+  driverId: string | null;
   driver: Profile | null;
   cost: number | null;
   distance: number | null;

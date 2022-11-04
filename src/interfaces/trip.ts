@@ -4,10 +4,15 @@ export interface TripCordinates {
   from: LatLng;
   to: LatLng;
 }
+
+export interface TripPoints {
+  from: MapPoint;
+  to: MapPoint;
+}
 export interface Trip {
   _id: string;
-  from: LatLng;
-  to: LatLng;
+  from: MapPoint;
+  to: MapPoint;
   userId: string;
   cost: number;
   driverId?: string;
@@ -15,7 +20,10 @@ export interface Trip {
 }
 
 export interface MapPoint {
-  name: string;
+  description: {
+    name: string;
+    formattedAddress: { mainText: string; secondaryText: string };
+  };
   coordinates: LatLng;
 }
 

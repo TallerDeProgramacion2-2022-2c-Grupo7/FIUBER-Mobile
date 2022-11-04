@@ -1,47 +1,42 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import { ReduxState } from '../../../../../interfaces/redux';
-import { setDestination } from '../../../../../redux/slices/trip';
+import useGetCost from '../../../../../hooks/useGetCost';
+import useUserToken from '../../../../../hooks/useUserToken';
+import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
+import { createNewTrip, setTo } from '../../../../../redux/slices/trip';
 
 const WaitingUserAceptance = ({
   modalRef,
 }: {
   modalRef: React.RefObject<IHandles>;
 }) => {
-  const { cost, origin, destination } = useSelector(
-    (state: ReduxState) => state.trip
-  );
+  const dispatch = useDispatch<AppDispatch>();
+  const { cost, from, to } = useSelector((state: ReduxState) => state.trip);
 
-  // useEffect(() => {
-  //   const getCost = async () => {
-  //     const cost = await calculateCost(
-  //       { from: origin!, to: destination! },
-  //       token!
-  //     );
-  //     setTripCost(cost);
-  //     modalRef.current?.open();
-  //   };
-  //   if (origin && destination && logedIn) {
-  //     getCost();
-  //   }
-  // }, [origin, destination]);
+  const token = useUserToken();
+  const getCost = useGetCost(from, to, token);
 
-  // const onAcceptTrip = async () => {
-  //   const trip = await createTrip({ from: origin!, to: destination! }, token!);
-  //   modalRef.current?.close();
-  //   setTrip(trip);
-  // };
+  useEffect(() => {
+    getCost();
+  }, [from, to, token]);
+
+  const onAcceptTrip = async () => {
+    if (from && to && token) {
+      dispatch(createNewTrip({ from, to, token }));
+    }
+  };
 
   const onCancelTrip = async () => {
-    setDestination(null);
+    dispatch(setTo(null));
     modalRef.current?.close();
   };
+
   return (
     <>
       <Header
@@ -80,9 +75,7 @@ const WaitingUserAceptance = ({
             backgroundColor: 'green',
           }}
           text="Accept"
-          onPress={() => {
-            console.log('accept');
-          }}
+          onPress={onAcceptTrip}
         />
       </View>
     </>
