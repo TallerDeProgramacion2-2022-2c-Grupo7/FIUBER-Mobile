@@ -134,7 +134,11 @@ function Home({ navigation }: Props) {
             key: MAPS_API_KEY,
             language: 'en',
           }}
-          styles={{ container: { marginLeft: 10 } }}
+          textInputProps={{ placeholderTextColor: 'grey' }}
+          styles={{
+            container: { marginLeft: 10 },
+            textInput: {color: 'grey'},
+            row: {backgroundColor: 'grey'}}}
         />
       </View>
       <Map

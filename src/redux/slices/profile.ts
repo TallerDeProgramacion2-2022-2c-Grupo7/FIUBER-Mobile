@@ -19,10 +19,7 @@ const PUBILC_ATTRS = [
   'firstName',
   'lastName',
   'isDriver',
-  'brand',
-  'model',
-  'color',
-  'plate',
+  'car',
 ];
 const PRIVATE_ATTRS = [
     'email',
@@ -109,11 +106,21 @@ export const setPhoneNumber = createAsyncThunk<any, { phoneNumber: string }>(
       return;
     }
 
-    console.log('phone', phoneNumber);
+    const privateProfileCode = await firestore()
+      .doc(`privateProfiles/${auth.user.uid}`)
+      .get();
+
+    const phoneAndCode = {
+      ...privateProfileCode.data(),
+      ...{phoneNumber: phoneNumber},
+    };
+
+    phoneAndCode["verificationCode"] = phoneAndCode["phoneVerificationCode"];
+    delete phoneAndCode["phoneVerificationCode"];
 
     await firestore()
       .doc(`privateProfiles/${auth.user.uid}`)
-      .set({ phoneNumber: phoneNumber });
+      .set(phoneAndCode);
   }
 );
 
