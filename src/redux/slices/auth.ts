@@ -15,8 +15,8 @@ export const login = createAsyncThunk<any, AuthLoginParams>(
   async ({ email, password, onError }, {}) => {
     try {
       await auth().signInWithEmailAndPassword(email, password);
-
-      return auth().currentUser?.toJSON();
+      const currentUser = auth().currentUser;
+      return currentUser?.toJSON();
     } catch (error: any) {
       console.error(error);
       onError(error.message);
