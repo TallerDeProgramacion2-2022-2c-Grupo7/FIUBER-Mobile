@@ -3,6 +3,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { AuthLoginParams, AuthState } from '../../interfaces/redux';
+import { createEvent } from '../../services/metrics';
 
 const INITIAL_STATE: AuthState = {
   logedIn: false,
@@ -15,8 +16,8 @@ export const login = createAsyncThunk<any, AuthLoginParams>(
   async ({ email, password, onError }, {}) => {
     try {
       await auth().signInWithEmailAndPassword(email, password);
-      const currentUser = auth().currentUser;
-      return currentUser?.toJSON();
+      createEvent('login');
+      return auth().currentUser?.toJSON();
     } catch (error: any) {
       console.error(error);
       onError(error.message);
@@ -38,6 +39,7 @@ export const googleLogin = createAsyncThunk('auth/googleLogin', async () => {
     
     // Sign-in the user with the credential
     await auth().signInWithCredential(googleCredential);
+    createEvent('federatedLogin');
 
     return auth().currentUser?.toJSON();
   } catch (error) {
@@ -50,6 +52,7 @@ export const signup = createAsyncThunk<any, AuthLoginParams>(
   async ({ email, password, onError }, {}) => {
     try {
       await auth().createUserWithEmailAndPassword(email, password);
+      createEvent('signup');
 
       return auth().currentUser?.toJSON();
     } catch (error: any) {
