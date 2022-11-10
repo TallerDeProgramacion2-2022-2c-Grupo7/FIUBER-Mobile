@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -28,7 +29,7 @@ const App = () => {
     backgroundColor: Colors.transparent,
   };
 
-  Geocoder.init(MAPS_API_KEY);
+  Geocoder.init(MAPS_API_KEY!);
 
   return (
     <Provider store={store}>
