@@ -1,22 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
 import { Bar as ProgressBarr } from 'react-native-progress';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import useGetCost from '../../../../../hooks/useGetCost';
-import useUserToken from '../../../../../hooks/useUserToken';
-import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
-import { createNewTrip } from '../../../../../redux/slices/trip';
+import { ReduxState } from '../../../../../interfaces/redux';
 
-const WaitingForDriver = ({
-  modalRef,
-}: {
-  modalRef: React.RefObject<IHandles>;
-}) => {
-  const dispatch = useDispatch<AppDispatch>();
+const WaitingForDriver = ({}: { modalRef: React.RefObject<IHandles> }) => {
   const { to, cost } = useSelector((state: ReduxState) => state.trip);
 
   return (
@@ -32,7 +24,7 @@ const WaitingForDriver = ({
         <View style={styles.textContainer}>
           <Text type="subtitle2">Destino: </Text>
           <Text type="subtitle2">
-            {to?.description.formattedAddress.mainText}
+            {to?.description?.formattedAddress.mainText || ''}
           </Text>
         </View>
         <View style={styles.textContainer}>

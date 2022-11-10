@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import { LatLng } from 'react-native-maps';
 
 export interface TripCordinates {
@@ -13,14 +14,14 @@ export interface Trip {
   _id: string;
   from: MapPoint;
   to: MapPoint;
-  userId: string;
+  passengerId: string;
   cost: number;
   driverId?: string;
   status: TripStatus;
 }
 
 export interface MapPoint {
-  description: {
+  description?: {
     name: string;
     formattedAddress: { mainText: string; secondaryText: string };
   };
@@ -28,6 +29,7 @@ export interface MapPoint {
 }
 
 export enum TripStatus {
+  WAITING_FOR_TRIP = 'WAITING_FOR_TRIP',
   WAITING_USER = 'waiting_user',
   SERCHING_DRIVER = 'searching_driver',
   WAITING_DRIVER = 'waiting_driver',

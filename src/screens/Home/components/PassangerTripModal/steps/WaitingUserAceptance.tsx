@@ -18,13 +18,22 @@ const WaitingUserAceptance = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { cost, from, to } = useSelector((state: ReduxState) => state.trip);
+  console.log('WAITING USER ACCEPTANCE');
 
   const token = useUserToken();
   const getCost = useGetCost(from, to, token);
 
   useEffect(() => {
+    console.log('getting cost');
     getCost();
-  }, [from, to, token]);
+  }, [getCost]);
+
+  useEffect(() => {
+    console.log('cost', cost, modalRef.current);
+    if (cost) {
+      modalRef.current?.open();
+    }
+  }, [cost]);
 
   const onAcceptTrip = async () => {
     if (from && to && token) {

@@ -1,23 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { Bar as ProgressBarr } from 'react-native-progress';
 
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import useUserToken from '../../../../../hooks/useUserToken';
-import useWaitingForTrip from '../../../../../hooks/useWaitingForTrip';
-import { IModalComponentArgs } from '../../DriverTripModal';
+import { IModalComponentArgs } from '..';
 
-const WaitingForTrip = ({}: IModalComponentArgs) => {
-  const token = useUserToken();
-  useWaitingForTrip(token);
+const TripFinished = ({ modalRef, setAllwaysOpen }: IModalComponentArgs) => {
+  useEffect(() => {
+    setAllwaysOpen(undefined);
+    modalRef.current?.open();
+  }, []);
 
   return (
     <>
       <Header
         center={
           <Text style={{ marginTop: 20 }} type="subtitle1">
-            Esperando por un viaje
+            Viaje finalizado;
           </Text>
         }
       />
@@ -33,4 +33,4 @@ const WaitingForTrip = ({}: IModalComponentArgs) => {
   );
 };
 
-export default WaitingForTrip;
+export default TripFinished;

@@ -13,9 +13,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import Wheel from '../../assets/wheel';
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
-import { ReduxState } from '../../interfaces/redux';
+import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { TripStatus } from '../../interfaces/trip';
-import { setStatus, setTo } from '../../redux/slices/trip';
+import {
+  setCurrentPositionAsFrom,
+  setStatus,
+  setTo,
+} from '../../redux/slices/trip';
 import DriverTripModal from './components/DriverTripModal';
 import Map from './components/map';
 import PassangerTripModal from './components/PassangerTripModal';
@@ -25,7 +29,7 @@ type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
 const { MAPS_API_KEY } = Config;
 
 function Home({ navigation }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [driverMode, setDriverMode] = useState(false);
   const { logedIn } = useSelector((state: ReduxState) => state.auth);
   const { obtained: profileObtained } = useSelector(
@@ -60,8 +64,15 @@ function Home({ navigation }: Props) {
           },
         })
       );
+      dispatch(setCurrentPositionAsFrom());
+
       dispatch(setStatus(TripStatus.WAITING_USER));
     }
+  };
+
+  const onClickDriverMode = async () => {
+    await dispatch(setStatus(TripStatus.WAITING_FOR_TRIP));
+    setDriverMode(true);
   };
 
   return (
@@ -70,7 +81,7 @@ function Home({ navigation }: Props) {
         <View style={styles.SearchBoxButtonContainer}>
           <TouchableOpacity
             style={styles.SearchBoxButton}
-            onPress={() => setDriverMode(!driverMode)}>
+            onPress={onClickDriverMode}>
             <Wheel width={'100%'} height={'100%'} />
           </TouchableOpacity>
         </View>

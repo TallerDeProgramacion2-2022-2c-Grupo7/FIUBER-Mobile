@@ -1,28 +1,41 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { IHandles } from 'react-native-modalize/lib/options';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import useGetCost from '../../../../../hooks/useGetCost';
 import useUserToken from '../../../../../hooks/useUserToken';
 import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
-import { clearTrip, createNewTrip, setTo } from '../../../../../redux/slices/trip';
+import { clearTrip, goToTripFrom } from '../../../../../redux/slices/trip';
 import { accept } from '../../../../../services/trips';
+import { IModalComponentArgs } from '../../DriverTripModal';
 
 const WaitingDriverAceptance = ({
-  modalRef,
-}: {
-  modalRef: React.RefObject<IHandles>;
-}) => {
+  setAllwaysOpen,
+  setOnClose,
+}: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
   const { cost, id } = useSelector((state: ReduxState) => state.trip);
   const token = useUserToken();
 
+  useEffect(() => {
+    setAllwaysOpen(85);
+    setOnClose(() => {
+      return () => {
+        dispatch(clearTrip());
+      };
+    });
+    return () => {
+      setAllwaysOpen(undefined);
+      setOnClose(() => () => {});
+    };
+  }, []);
+
   const onAcceptTrip = async () => {
     if (id && token) {
+      await dispatch(goToTripFrom({}));
       accept(id, token);
     }
   };

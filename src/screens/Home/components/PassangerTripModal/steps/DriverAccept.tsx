@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
 import { Bar as ProgressBarr } from 'react-native-progress';
@@ -10,18 +10,16 @@ import useUserToken from '../../../../../hooks/useUserToken';
 import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
 import { getDriverProfile } from '../../../../../redux/slices/trip';
 
-const DriverAccept = ({
-  modalRef,
-}: {
-  modalRef: React.RefObject<IHandles>;
-}) => {
+const DriverAccept = ({}: { modalRef: React.RefObject<IHandles> }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { driver } = useSelector((state: ReduxState) => state.trip);
 
   const token = useUserToken();
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      return;
+    }
     dispatch(getDriverProfile({ token }));
   }, [token]);
 

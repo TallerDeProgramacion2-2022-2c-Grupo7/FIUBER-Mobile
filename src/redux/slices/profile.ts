@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import firestore from '@react-native-firebase/firestore';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { pick } from 'lodash';

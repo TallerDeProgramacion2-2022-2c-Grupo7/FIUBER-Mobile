@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { Trip, TripCordinates, TripPoints } from '../interfaces/trip';
 
-const ENDPOINT = 'https://c39d-2803-9800-9021-45b7-16a-fc9f-dfcf-b599.ngrok.io/api'; //'https://fiuber-trips-aleacevedo.cloud.okteto.net/api';
+const ENDPOINT = 'https://fiuber-trips-aleacevedo.cloud.okteto.net/api';
 
 export const calculateCost = async (trip: TripCordinates, token: string) => {
   try {
@@ -74,6 +74,20 @@ export const getTripStatus = async (id: string, token: string) => {
       },
     });
     return data.result?.status;
+  } catch (e) {
+    console.error(e.message);
+    return undefined;
+  }
+};
+
+export const getTrip = async (id: string, token: string) => {
+  try {
+    const { data } = await axios.get(`${ENDPOINT}/trips/${id}`, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    return data.result;
   } catch (e) {
     console.error(e.message);
     return undefined;

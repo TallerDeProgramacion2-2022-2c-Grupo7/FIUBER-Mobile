@@ -1,11 +1,9 @@
-import { useCallback, useEffect } from 'react';
-import { InteractionManager } from 'react-native';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch } from '../interfaces/redux';
 import { setStatus } from '../redux/slices/trip';
 import { getTripStatus } from '../services/trips';
-import { delay } from '../utils';
 
 export default (tripId: string | null, token: string | null) => {
   const dispatch = useDispatch<AppDispatch>();

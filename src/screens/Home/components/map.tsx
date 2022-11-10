@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Config from 'react-native-config';
-import Geocoder from 'react-native-geocoding';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapView, { Marker, UserLocationChangeEvent } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Target from '../../../assets/target';
 import useMapPermissions from '../../../hooks/useMapPermissions';
 import { ReduxState } from '../../../interfaces/redux';
-import { setFrom } from '../../../redux/slices/trip';
+import { setCurrentPosition } from '../../../redux/slices/trip';
 
 const { MAPS_API_KEY } = Config;
 
@@ -27,31 +27,8 @@ function Map({}) {
     if (!nativeEvent.coordinate) {
       return;
     }
+    dispatch(setCurrentPosition(nativeEvent.coordinate));
     if (mapRef && mapRef.current && !focused) {
-      if (Geocoder.isInit) {
-        Geocoder.from(nativeEvent.coordinate)
-          .then(json => {
-            const formattedAddress = json.results[0].formatted_address;
-            dispatch(
-              setFrom({
-                coordinates: nativeEvent.coordinate,
-                description: {
-                  name: formattedAddress,
-                  formattedAddress: {
-                    mainText: formattedAddress,
-                    secondaryText: '',
-                  },
-                },
-              })
-            );
-          })
-          .catch(error => {
-            dispatch(setFrom({ coordinates: nativeEvent.coordinate }));
-            console.warn(error);
-          });
-      } else {
-        dispatch(setFrom({ coordinates: nativeEvent.coordinate }));
-      }
       setFocused(true);
 
       mapRef.current.animateCamera({
@@ -110,7 +87,7 @@ export default Map;
 const ViewDirectionArgs = {
   strokeColor: '#007EC6',
   strokeWidth: 4,
-  apikey: MAPS_API_KEY,
+  apikey: MAPS_API_KEY!,
 };
 
 const styles = StyleSheet.create({

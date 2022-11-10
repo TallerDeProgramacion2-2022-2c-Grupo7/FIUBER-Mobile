@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
-import { Bar as ProgressBarr } from 'react-native-progress';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import useUserToken from '../../../../../hooks/useUserToken';
-import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
-import { getDriverProfile } from '../../../../../redux/slices/trip';
+import { ReduxState } from '../../../../../interfaces/redux';
 import { finishTrip } from '../../../../../services/trips';
 
-const TripInCourse = ({
-  modalRef,
-}: {
-  modalRef: React.RefObject<IHandles>;
-}) => {
-  const dispatch = useDispatch<AppDispatch>();
+const TripInCourse = ({}: { modalRef: React.RefObject<IHandles> }) => {
   const { driver, id } = useSelector((state: ReduxState) => state.trip);
 
   const token = useUserToken();

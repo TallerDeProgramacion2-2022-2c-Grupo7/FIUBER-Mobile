@@ -5,10 +5,8 @@ import {
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Host } from 'react-native-portalize';
 
 import { ROUTES } from '../constants/routes';
-import { Colors } from '../constants/theme';
 import { RootStackParamList } from '../interfaces/navigation';
 import HomeScreen from '../screens/Home';
 import LoginScreen from '../screens/Login';

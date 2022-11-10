@@ -26,7 +26,7 @@ const TripModal = () => {
   const modalRef = useRef<Modalize>(null);
   const { status, id } = useSelector((state: ReduxState) => state.trip);
   const [alwaysOpen, setAllwaysOpen] = useState<number | undefined>(undefined);
-  const [onClose, setOnClose] = useState<() => void>(() => {});
+  const [onClose, setOnClose] = useState<() => void>(() => () => {});
 
   const ModalComponent = useMemo<IModalComponent | null>(() => {
     switch (status) {

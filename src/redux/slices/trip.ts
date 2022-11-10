@@ -1,10 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import Geocoder from 'react-native-geocoding';
 import { LatLng } from 'react-native-maps';
 
 import { ReduxState, TripState } from '../../interfaces/redux';
 import { MapPoint } from '../../interfaces/trip';
 import { getPublicProfile } from '../../services/profile';
-import { calculateCost, createTrip, getDriver } from '../../services/trips';
+import {
+  calculateCost,
+  createTrip,
+  getDriver,
+  getTrip,
+} from '../../services/trips';
 
 const INITIAL_STATE: TripState = {
   id: null,
@@ -18,6 +25,7 @@ const INITIAL_STATE: TripState = {
   distance: null,
   duration: null,
   status: null,
+  currentPosition: null,
 };
 
 export const obtainCalculatedCost = createAsyncThunk(
@@ -51,6 +59,43 @@ export const getDriverProfile = createAsyncThunk<
   return { driverId, driverProfile };
 });
 
+export const setCurrentPositionAsFrom = createAsyncThunk<
+  any,
+  void,
+  { state: ReduxState }
+>('trip/setCurrentPositionAsFrom', async (_, { getState }) => {
+  const { trip } = getState();
+  if (!trip?.currentPosition) {
+    return null;
+  }
+
+  const geoCoderData = await Geocoder.from(trip.currentPosition);
+  const formattedAddress = geoCoderData.results[0].formatted_address;
+  return {
+    coordinates: trip.currentPosition,
+    description: {
+      name: formattedAddress,
+      formattedAddress: {
+        mainText: formattedAddress,
+        secondaryText: '',
+      },
+    },
+  };
+});
+
+export const reloadTrip = createAsyncThunk<
+  any,
+  { token: string },
+  { state: ReduxState }
+>('trip/reloadTrip', async ({ token }, { getState }) => {
+  const { trip } = getState();
+  if (!trip?.id) {
+    return null;
+  }
+
+  return getTrip(trip.id, token);
+});
+
 const tripSlice = createSlice({
   name: 'trip',
   initialState: INITIAL_STATE,
@@ -80,13 +125,14 @@ const tripSlice = createSlice({
       state.status = action.payload;
     },
     setTrip: (state, action) => {
+      state.from = action.payload.from;
+      state.to = action.payload.to;
       state.cost = action.payload.cost;
       state.id = action.payload._id;
       state.status = action.payload.status;
-      state.passangerId = action.payload.userId;
+      state.passangerId = action.payload.passengerId;
     },
     clearTrip: state => {
-      console.log('Clearing trip');
       state.id = null;
       state.from = null;
       state.to = null;
@@ -98,6 +144,16 @@ const tripSlice = createSlice({
       state.distance = null;
       state.duration = null;
       state.status = null;
+    },
+    setCurrentPosition: (state, action) => {
+      state.currentPosition = action.payload;
+    },
+    goToTripFrom: (state, _action) => {
+      if (!state.currentPosition) {
+        return;
+      }
+      state.to = state.from;
+      state.from = { coordinates: state.currentPosition };
     },
   },
   extraReducers: builder => {
@@ -112,7 +168,7 @@ const tripSlice = createSlice({
       state.cost = action.payload.cost;
       state.id = action.payload._id;
       state.status = action.payload.status;
-      state.passangerId = action.payload.userId;
+      state.passangerId = action.payload.passengerId;
     });
     builder.addCase(createNewTrip.rejected, (state, action) => {
       console.error(action.error);
@@ -126,6 +182,25 @@ const tripSlice = createSlice({
     builder.addCase(getDriverProfile.rejected, (state, action) => {
       console.error(action.error);
       throw action.error;
+    });
+    builder.addCase(setCurrentPositionAsFrom.fulfilled, (state, action) => {
+      state.from = action.payload;
+    });
+    builder.addCase(setCurrentPositionAsFrom.rejected, (state, action) => {
+      console.error(action.error);
+      if (state.currentPosition) {
+        state.from = {
+          coordinates: state.currentPosition,
+        };
+      }
+    });
+    builder.addCase(reloadTrip.fulfilled, (state, action) => {
+      state.from = action.payload.from;
+      state.to = action.payload.to;
+      state.cost = action.payload.cost;
+      state.id = action.payload._id;
+      state.status = action.payload.status;
+      state.passangerId = action.payload.passengerId;
     });
   },
 });
@@ -142,6 +217,8 @@ export const {
     setStatus,
     setTrip,
     clearTrip,
+    setCurrentPosition,
+    goToTripFrom,
   },
 } = tripSlice;
 

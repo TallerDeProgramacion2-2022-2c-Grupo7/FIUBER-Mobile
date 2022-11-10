@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { IHandles } from 'react-native-modalize/lib/options';
 import { Bar as ProgressBarr } from 'react-native-progress';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import useUserToken from '../../../../../hooks/useUserToken';
-import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
-import { getDriverProfile } from '../../../../../redux/slices/trip';
+import { AppDispatch } from '../../../../../interfaces/redux';
 import { clearTrip } from '../../../../../redux/slices/trip';
 import { IModalComponentArgs } from '../index';
 
-const TripFinished = ({ modalRef, setOnClose }: IModalComponentArgs) => {
+const TripFinished = ({ setOnClose }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { driver } = useSelector((state: ReduxState) => state.trip);
-  const token = useUserToken();
 
   useEffect(() => {
     setOnClose(() => () => {
