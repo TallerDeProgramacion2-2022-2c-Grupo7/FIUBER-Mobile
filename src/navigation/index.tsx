@@ -10,6 +10,7 @@ import { ROUTES } from '../constants/routes';
 import { RootStackParamList } from '../interfaces/navigation';
 import HomeScreen from '../screens/Home';
 import LoginScreen from '../screens/Login';
+import PhoneVerification from '../screens/PhoneVerification';
 import SetProfile from '../screens/SetProfile';
 import SetDriverProfile from '../screens/SetProfile/driver';
 import SignUpScreen from '../screens/SignUp';
@@ -45,6 +46,10 @@ const Navigator = () => {
         <Stack.Screen
           name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
           component={SetDriverProfile}
+        />
+        <Stack.Screen
+          name={ROUTES.PHONE_VERIFICATION_SCREEN}
+          component={PhoneVerification}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -6,6 +6,7 @@ export enum ROUTES {
   HOME_SCREEN = 'HomeScreen',
   SET_PROFILE_SCREEN = 'SetProfileScreen',
   SET_DRIVER_PROFILE_SCREEN = 'SetDriverProfileScreen',
+  PHONE_VERIFICATION_SCREEN = 'PhoneVerificationScreen',
   DRIVER_TRIP = 'DriverTrip',
   PASSENGER_TRIP_GUIDE = 'PassengerTripGuide',
 }

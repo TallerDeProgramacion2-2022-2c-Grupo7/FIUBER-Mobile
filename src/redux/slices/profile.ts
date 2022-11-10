@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { pick } from 'lodash';
 
 import {
+  AuthState,
   ProfileGetParams,
   ProfileState,
   ProfileUpdateParams,
@@ -19,12 +20,13 @@ const PUBILC_ATTRS = [
   'firstName',
   'lastName',
   'isDriver',
-  'brand',
-  'model',
-  'color',
-  'plate',
+  'car',
 ];
-const PRIVATE_ATTRS = ['email', 'phone', 'verifiedPhone'];
+const PRIVATE_ATTRS = [
+    'email',
+    'phoneNumber',
+    'verifiedPhone',
+];
 
 export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
   'profile/getMyProfile',
@@ -39,6 +41,7 @@ export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
     }
 
     const profile = { ...publicProfile.data(), ...privateProfiles.data() };
+    console.log(profile);
 
     return profile;
   }
@@ -50,7 +53,18 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
     const privateProfile = pick(profile, PRIVATE_ATTRS);
     const publicProfile = pick(profile, PUBILC_ATTRS);
     await firestore().doc(`publicProfiles/${uid}`).set(publicProfile);
-    await firestore().doc(`privateProfiles/${uid}`).set(privateProfile);
+
+    const privateProfiles = await firestore()
+      .doc(`privateProfiles/${uid}`)
+      .get();
+
+    const privateProfileToUpdate = {
+      ...privateProfiles.data(),
+      ...privateProfile,
+    };
+    console.log('completePriProf', privateProfileToUpdate);
+
+    await firestore().doc(`privateProfiles/${uid}`).set(privateProfileToUpdate);
 
     const updatedPublicProfile = await firestore()
       .doc(`publicProfiles/${uid}`)
@@ -63,8 +77,51 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
       ...updatedPublicProfile.data(),
       ...updatedPrivateProfiles.data(),
     };
+    console.log(updatedProfile);
 
-    return { updatedProfile };
+    return updatedProfile;
+  }
+);
+
+export const setPhoneVerificationCode = createAsyncThunk<any, { code: string }>(
+  'profile/setPhoneVerificationCode',
+  async ({ code }, { getState }) => {
+    const { auth } = getState() as { auth: AuthState };
+
+    if (!auth.user) {
+      return;
+    }
+
+    await firestore()
+      .doc(`privateProfiles/${auth.user.uid}`)
+      .set({ phoneVerificationCode: code });
+  }
+);
+
+export const setPhoneNumber = createAsyncThunk<any, { phoneNumber: string }>(
+  'profile/setPhoneNumber',
+  async ({ phoneNumber }, { getState }) => {
+    const { auth } = getState() as { auth: AuthState };
+
+    if (!auth.user) {
+      return;
+    }
+
+    const privateProfileCode = await firestore()
+      .doc(`privateProfiles/${auth.user.uid}`)
+      .get();
+
+    const phoneAndCode = {
+      ...privateProfileCode.data(),
+      ...{phoneNumber: phoneNumber},
+    };
+
+    phoneAndCode["verificationCode"] = phoneAndCode["phoneVerificationCode"];
+    delete phoneAndCode["phoneVerificationCode"];
+
+    await firestore()
+      .doc(`privateProfiles/${auth.user.uid}`)
+      .set(phoneAndCode);
   }
 );
 

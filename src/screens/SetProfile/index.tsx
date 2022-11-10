@@ -25,7 +25,7 @@ const isValidProfile = (profile?: Profile) => {
   if (!profile) {
     return false;
   }
-  return profile.firstName && profile.lastName && profile.phone;
+  return profile.firstName && profile.lastName;
 };
 
 function SetProfile({ navigation }: Props) {
@@ -36,7 +36,6 @@ function SetProfile({ navigation }: Props) {
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
   const [isDriver, setIsDriver] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -57,10 +56,9 @@ function SetProfile({ navigation }: Props) {
       return {
         firstName,
         lastName,
-        phone,
         email: user.email,
         isDriver: false,
-        verifiedPhone: false,
+        verifiedPhone: true,
       };
     }
   };
@@ -113,22 +111,13 @@ function SetProfile({ navigation }: Props) {
             inputStyle={styles.text}
           />
         </View>
-        <View style={[styles.textInputContainer]}>
-          <TextInput
-            value={phone}
-            onChangeText={setPhone}
-            contentContainerStyle={styles.textInput}
-            placeholder={t('common.phone')}
-            inputStyle={styles.text}
-          />
-        </View>
         <View style={styles.switchContainer}>
           <Text style={styles.text}>{t('common.isDriver')}</Text>
           <Switch onValueChange={setIsDriver} value={isDriver} />
         </View>
         <Button
           disabled={!isValidProfile(generateProfile())}
-          text={isDriver ? t('profile.continue') : t('profile.submit')}
+          text={isDriver ? t('setProfile.continue') : t('setProfile.submit')}
           onPress={handleSubmit}
           loading={loading}
           buttonStyle={styles.buttonMargin}

@@ -15,7 +15,6 @@ export interface CommonsProfile {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
   verifiedPhone: boolean;
 }
 
