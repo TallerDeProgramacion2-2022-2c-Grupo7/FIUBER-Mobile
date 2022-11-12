@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 export enum ROUTES {
   WELCOME = 'Welcome',
   LOGIN_SCREEN = 'LoginScreen',

@@ -5,16 +5,16 @@ import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
-import SocialButton from '../../components/SocialButton';
 import KeyboardScrollView from '../../components/KeyboardScrollView';
 import PasswordInput from '../../components/PasswordInput';
+import SocialButton from '../../components/SocialButton';
 import Text from '../../components/Text';
 import TextInput from '../../components/TextInput';
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
-import { login, googleLogin } from '../../redux/slices/auth';
+import { googleLogin, login } from '../../redux/slices/auth';
 import { getMyProfile } from '../../redux/slices/profile';
 import styles from './styles';
 

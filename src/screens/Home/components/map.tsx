@@ -1,79 +1,34 @@
-import auth from '@react-native-firebase/auth';
-import React, { useEffect, useRef, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Config from 'react-native-config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MapView, { LatLng, Marker } from 'react-native-maps';
+import MapView, { Marker, UserLocationChangeEvent } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import { Modalize } from 'react-native-modalize';
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Target from '../../../assets/target';
+import useMapPermissions from '../../../hooks/useMapPermissions';
 import { ReduxState } from '../../../interfaces/redux';
-import { Trip } from '../../../interfaces/trip';
-import { calculateCost, createTrip } from '../../../services/trips';
-interface MapProps {
-  destination: LatLng | null;
-  setDestination?: (destination: LatLng | null) => void;
-  origin: LatLng | null;
-  setOrigin: (destination: LatLng | null) => void;
-  trip?: Trip | null;
-}
+import { setCurrentPosition } from '../../../redux/slices/trip';
 
 const { MAPS_API_KEY } = Config;
 
-function Map({ destination, setDestination, origin, setOrigin }: MapProps) {
-  const [perms, setPerms] = useState(false);
+function Map({}) {
+  const dispatch = useDispatch();
   const [focused, setFocused] = useState(false);
-
-  const { logedIn } = useSelector((state: ReduxState) => state.auth);
+  const { from, to } = useSelector((state: ReduxState) => state.trip);
 
   const mapRef = useRef<MapView>(null);
 
-  useEffect(() => {
-    const askPermissions = async () => {
-      switch (await check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)) {
-        case RESULTS.UNAVAILABLE:
-        case RESULTS.BLOCKED:
-        case RESULTS.LIMITED:
-          console.error('Not coarse location available');
-          return;
-        case RESULTS.DENIED:
-          switch (await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)) {
-            case RESULTS.UNAVAILABLE:
-            case RESULTS.BLOCKED:
-            case RESULTS.LIMITED:
-            case RESULTS.DENIED:
-              console.error('Not coarse location available');
-              return;
-          }
-      }
-      switch (await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)) {
-        case RESULTS.UNAVAILABLE:
-        case RESULTS.BLOCKED:
-        case RESULTS.LIMITED:
-          console.error('Not fine location available');
-          break;
-        case RESULTS.DENIED:
-          switch (await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)) {
-            case RESULTS.UNAVAILABLE:
-            case RESULTS.BLOCKED:
-            case RESULTS.LIMITED:
-            case RESULTS.DENIED:
-              console.error('Not fine location available');
-              break;
-          }
-      }
-      setPerms(true);
-    };
+  const locationPerms = useMapPermissions();
 
-    askPermissions();
-  }, []);
-
-  const onUserLocationChange = ({ nativeEvent }) => {
+  const onUserLocationChange = ({ nativeEvent }: UserLocationChangeEvent) => {
+    if (!nativeEvent.coordinate) {
+      return;
+    }
+    dispatch(setCurrentPosition(nativeEvent.coordinate));
     if (mapRef && mapRef.current && !focused) {
-      setOrigin(nativeEvent.coordinate);
       setFocused(true);
 
       mapRef.current.animateCamera({
@@ -88,51 +43,29 @@ function Map({ destination, setDestination, origin, setOrigin }: MapProps) {
     }
   };
 
-  const onDirectionReady = result => {
-    if (origin && destination) {
-      mapRef?.current?.fitToCoordinates([origin, destination]);
+  const onDirectionReady = () => {
+    if (from && to) {
+      mapRef?.current?.fitToCoordinates([from.coordinates, to.coordinates]);
     }
   };
 
-  // useEffect(() => {
-  //   const waitingFn = InteractionManager.runAfterInteractions;
-  //   if (waitingDriver) {
-  //     waitingFn(async () => {
-  //       while (!driver) {
-  //         console.log('waiting for driver');
-  //         const driver = trip ? await getDriver(trip?._id, token!) : undefined;
-  //         if (driver) {
-  //           setDriver(driver);
-  //           break;
-  //         }
-  //         await delay(3000);
-  //       }
-  //     });
-  //   }
-  // }, [waitingDriver]);
-
-  return perms ? (
+  return locationPerms ? (
     <>
       <MapView
         showsCompass={false}
         ref={mapRef}
         style={styles.map}
         showsUserLocation
-        onMapReady={() => {
-          console.log('mapRead');
-        }}
         onUserLocationChange={onUserLocationChange}>
-        {destination && origin && (
+        {from && to && (
           <>
             <MapViewDirections
-              strokeColor="#007EC6"
-              strokeWidth={4}
-              origin={origin}
-              destination={destination}
-              apikey={MAPS_API_KEY}
+              {...ViewDirectionArgs}
+              origin={from.coordinates}
+              destination={to.coordinates}
               onReady={onDirectionReady}
             />
-            <Marker coordinate={destination} />
+            <Marker coordinate={to.coordinates} />
           </>
         )}
       </MapView>
@@ -150,6 +83,12 @@ function Map({ destination, setDestination, origin, setOrigin }: MapProps) {
 }
 
 export default Map;
+
+const ViewDirectionArgs = {
+  strokeColor: '#007EC6',
+  strokeWidth: 4,
+  apikey: MAPS_API_KEY!,
+};
 
 const styles = StyleSheet.create({
   input: {

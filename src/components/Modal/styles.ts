@@ -4,7 +4,7 @@ import { Colors } from '../../constants/theme';
 
 export default StyleSheet.create({
   modal: {
-    zIndex: 5,
+    zIndex: 1,
     backgroundColor: Colors.Black.Pure,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
@@ -23,7 +23,6 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: 'rgba(21, 22, 28, 0.6)', //TODO: I think we should remove this, looks better without it
   },
   handle: {
     alignSelf: 'center',
