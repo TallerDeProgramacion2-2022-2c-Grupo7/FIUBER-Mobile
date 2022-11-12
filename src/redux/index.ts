@@ -11,6 +11,7 @@ import {
 
 import authReducer from './slices/auth';
 import profileReducer from './slices/profile';
+import tripReducer from './slices/trip';
 
 // const authPersistConfig = {
 //   key: 'auth',
@@ -20,6 +21,7 @@ import profileReducer from './slices/profile';
 const rootReducer = combineReducers({
   auth: authReducer,
   profile: profileReducer,
+  trip: tripReducer,
 });
 
 export const store = configureStore({

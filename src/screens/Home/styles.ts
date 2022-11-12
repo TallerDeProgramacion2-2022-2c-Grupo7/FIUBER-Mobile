@@ -69,11 +69,25 @@ export default StyleSheet.create({
     marginTop: 23,
     marginLeft: 30,
   },
-  modalContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 30,
-    flex: 1,
+  searchBoxContainer: {
+    margin: 10,
+    display: 'flex',
     flexDirection: 'row',
+    alignContent: 'flex-start',
+    justifyContent: 'center',
+  },
+  SearchBoxButtonContainer: {
+    height: 40,
+    width: 35,
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  SearchBoxButton: {
+    alignItems: 'center',
+    borderRadius: 50,
+    padding: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
   },
 });

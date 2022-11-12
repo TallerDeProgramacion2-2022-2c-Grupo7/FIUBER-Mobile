@@ -1,19 +1,32 @@
 import axios from 'axios';
 
-import { Trip, TripCordinates } from '../interfaces/trip';
+import { Trip, TripCordinates, TripPoints } from '../interfaces/trip';
 
 const ENDPOINT = 'https://fiuber-trips-aleacevedo.cloud.okteto.net/api';
 
 export const calculateCost = async (trip: TripCordinates, token: string) => {
-  const { data } = await axios.post(`${ENDPOINT}/costs/calculate`, trip, {
-    headers: {
-      Authorization: `${token}`,
-    },
-  });
-  return data.result;
+  try {
+    const { data } = await axios.post(`${ENDPOINT}/costs/calculate`, trip, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    return data.result;
+  } catch (e) {
+    if (e.response) {
+      const { error } = e.response.data;
+      console.error(error);
+      return undefined;
+    }
+    console.error(e.message);
+    return undefined;
+  }
 };
 
-export const createTrip = async (trip: TripCordinates, token: string) => {
+export const createTrip = async (
+  trip: TripPoints,
+  token: string
+): Promise<Trip> => {
   const { data } = await axios.post(`${ENDPOINT}/trips`, trip, {
     headers: {
       Authorization: `${token}`,
@@ -28,7 +41,6 @@ export const getAvailable = async (token: string) => {
       Authorization: `${token}`,
     },
   });
-  console.log('data', data);
   return data.result;
 };
 
@@ -61,11 +73,36 @@ export const getTripStatus = async (id: string, token: string) => {
         Authorization: `${token}`,
       },
     });
-    console.log('data', data);
     return data.result?.status;
   } catch (e) {
-    console.log('TOKEN ERROR', token);
     console.error(e.message);
     return undefined;
   }
+};
+
+export const getTrip = async (id: string, token: string) => {
+  try {
+    const { data } = await axios.get(`${ENDPOINT}/trips/${id}`, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    return data.result;
+  } catch (e) {
+    console.error(e.message);
+    return undefined;
+  }
+};
+
+export const finishTrip = async (id: string, token: string) => {
+  const { data } = await axios.post(
+    `${ENDPOINT}/trips/${id}/finish`,
+    {},
+    {
+      headers: {
+        Authorization: `${token}`,
+      },
+    }
+  );
+  return data.result;
 };
