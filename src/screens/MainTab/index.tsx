@@ -44,6 +44,7 @@ function MainTab() {
           initialRouteName={ROUTES.HOME_TRIPS_STACK_SCREEN}
           screenOptions={{
             tabBarActiveTintColor: '#e91e63',
+            headerShown: false,
           }}
         >
           <Tab.Screen
@@ -60,7 +61,7 @@ function MainTab() {
             name={ROUTES.NOTIFICATIONS_SCREEN}
             component={Notification}
             options={{
-              tabBarLabel: 'Updates',
+              tabBarLabel: 'Notifications',
               tabBarIcon: ({ color, size }) => (
                 <FontAwesome name="bell" color={color} size={size} />
               ),

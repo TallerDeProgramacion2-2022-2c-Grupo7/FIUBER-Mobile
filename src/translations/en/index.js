@@ -38,6 +38,8 @@ const translations = {
   },
   validations: {
     passIncorrect: 'Wrong Password',
+    passInccorectNoEnought: 'Password must have at least 8 characters',
+    dataNoEmpty: 'You cannot leave the field empty',
   },
   setProfile: {
     title: 'Create Your Profile',
