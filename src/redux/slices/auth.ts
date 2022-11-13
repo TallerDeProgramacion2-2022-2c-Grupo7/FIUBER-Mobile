@@ -16,8 +16,10 @@ export const login = createAsyncThunk<any, AuthLoginParams>(
   'auth/login',
   async ({ email, password, onError }, {}) => {
     try {
-      await auth().signInWithEmailAndPassword(email, password);
-      createEvent('login');
+      const response = await auth().signInWithEmailAndPassword(email, password);
+      const uid = response.user.uid;
+      const token = await response.user.getIdToken();
+      createEvent('login', uid, token);
       return auth().currentUser?.toJSON();
     } catch (error: any) {
       console.error(error);
@@ -42,8 +44,10 @@ export const googleLogin = createAsyncThunk<any, void>(
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
       // Sign-in the user with the credential
-      await auth().signInWithCredential(googleCredential);
-      createEvent('federatedLogin');
+      const response = await auth().signInWithCredential(googleCredential);
+      const uid = response.user.uid;
+      const token = await response.user.getIdToken();
+      createEvent('federatedLogin', uid, token);
       return auth().currentUser?.toJSON();
     } catch (error) {
       console.error(error);
@@ -56,9 +60,10 @@ export const signup = createAsyncThunk<any, AuthLoginParams>(
   'auth/signup',
   async ({ email, password, onError }, {}) => {
     try {
-      await auth().createUserWithEmailAndPassword(email, password);
-      createEvent('signup');
-
+      const response = await auth().createUserWithEmailAndPassword(email, password);
+      const uid = response.user.uid;
+      const token = await response.user.getIdToken();
+      createEvent('signup', uid, token);
       return auth().currentUser?.toJSON();
     } catch (error: any) {
       console.error(error);
