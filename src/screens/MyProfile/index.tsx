@@ -1,18 +1,16 @@
-import { SafeAreaView, View, Alert, ScrollView } from 'react-native';
-import React, { useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { SafeAreaView, View, ScrollView } from 'react-native';
+import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Modalize } from 'react-native-modalize';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import Text from '../../components/Text';
-import TextInput from '../../components/TextInput';
 import styles from './styles';
-import Header from '../../components/Header';
-import Modal from '../../components/Modal';
 import MyProfileData from '../../components/MyProfileData';
+import { logout } from '../../redux/slices/auth';
+import { AppDispatch, ReduxState } from '../../interfaces/redux';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.MY_PROFILE_SCREEN>;
 
@@ -84,6 +82,12 @@ function DriverInfo() {
 }
 
 function MyProfile({ navigation }: Props) {
+  const dispatch = useDispatch<AppDispatch>();
+  
+  const handleLogOut = async () => {
+    await dispatch(logout());
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
@@ -167,7 +171,7 @@ function MyProfile({ navigation }: Props) {
             alignContent: 'center',
             justifyContent: 'center',
           }}
-          onPress={() => console.log("logout")}>
+          onPress={() => handleLogOut()}>
           <Text style={styles.textLogOut}>Logout</Text>
         </TouchableOpacity>
       </View>
