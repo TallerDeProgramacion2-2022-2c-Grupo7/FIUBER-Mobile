@@ -21,7 +21,6 @@ export default (token: string | null) => {
     }, WAIT_FOR_TRIP);
 
     return () => {
-      console.log('Canceling waiting trip');
       clearInterval(interval);
     };
   }, [token, trip.id]);

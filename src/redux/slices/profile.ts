@@ -41,7 +41,6 @@ export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
     }
 
     const profile = { ...publicProfile.data(), ...privateProfiles.data() };
-    console.log(profile);
 
     return profile;
   }
@@ -62,7 +61,6 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
       ...privateProfiles.data(),
       ...privateProfile,
     };
-    console.log('completePriProf', privateProfileToUpdate);
 
     await firestore().doc(`privateProfiles/${uid}`).set(privateProfileToUpdate);
 
@@ -77,7 +75,6 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
       ...updatedPublicProfile.data(),
       ...updatedPrivateProfiles.data(),
     };
-    console.log(updatedProfile);
 
     return updatedProfile;
   }
