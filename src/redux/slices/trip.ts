@@ -26,6 +26,7 @@ const INITIAL_STATE: TripState = {
   duration: null,
   status: null,
   currentPosition: null,
+  onTheMove: false,
 };
 
 export const obtainCalculatedCost = createAsyncThunk(
@@ -155,6 +156,9 @@ const tripSlice = createSlice({
       state.to = state.from;
       state.from = { coordinates: state.currentPosition };
     },
+    setOnTheMove: (state, action) => {
+      state.onTheMove = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(obtainCalculatedCost.fulfilled, (state, action) => {
@@ -219,6 +223,7 @@ export const {
     clearTrip,
     setCurrentPosition,
     goToTripFrom,
+    setOnTheMove,
   },
 } = tripSlice;
 
