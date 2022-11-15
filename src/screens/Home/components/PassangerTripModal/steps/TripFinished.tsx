@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Bar as ProgressBarr } from 'react-native-progress';
-import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import { AppDispatch } from '../../../../../interfaces/redux';
+import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
 import { clearTrip } from '../../../../../redux/slices/trip';
+import styles from '../../../styles';
 import { IModalComponentArgs } from '../index';
 
 const TripFinished = ({ setOnClose }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
+  const { cost } = useSelector((state: ReduxState) => state.trip);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setOnClose(() => () => {
@@ -22,38 +25,24 @@ const TripFinished = ({ setOnClose }: IModalComponentArgs) => {
     <>
       <Header
         center={
-          <Text style={{ marginTop: 20 }} type="subtitle1">
-            Viaje Finalizado
+          <Text style={styles.ModalTitle} type="subtitle1">
+            {t('passangerTrip.tripFinished.title')}
           </Text>
         }
       />
-      <View style={styles.modalContainer}>
-        <View style={styles.textContainer}>
-          <Text type="subtitle2">Calificar chofer: </Text>
+      <View style={styles.ModalContainer}>
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">{t('passangerTrip.tripFinished.price')}</Text>
+          <Text type="subtitle2">$ {cost?.toFixed(2)}</Text>
         </View>
-      </View>
-      <View>
-        <ProgressBarr
-          indeterminate={true}
-          borderWidth={0}
-          width={null}
-          indeterminateAnimationDuration={2000}
-        />
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">
+            {t('passangerTrip.tripFinished.raiting')}
+          </Text>
+        </View>
       </View>
     </>
   );
 };
 
 export default TripFinished;
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 30,
-  },
-  textContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-});

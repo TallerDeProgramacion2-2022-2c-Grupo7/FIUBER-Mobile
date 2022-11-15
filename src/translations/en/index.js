@@ -83,6 +83,39 @@ const translations = {
       raiting: 'Raite the passanger: ',
     },
   },
+  passangerTrip: {
+    waitingUserAceptance: {
+      title: 'Confirm Trip',
+      price: 'Price of the trip: ',
+      to: 'Going to: ',
+      accept: 'Accept',
+      reject: 'Reject',
+    },
+    waitingForDriver: {
+      title: 'Waiting for driver',
+      price: 'Price of the trip: ',
+      to: 'Going to: ',
+    },
+    driverAccept: {
+      title: 'Driver on the way',
+      driverName: 'Name of the driver: ',
+      driverRating: 'Rating of the driver: ',
+    },
+    tripInCourse: {
+      title: 'Going to final destination',
+      price: 'Price of the trip: ',
+      from: 'From: ',
+      to: 'Going to: ',
+      passanger: 'Passanger: ',
+      raiting: 'Raiting: ',
+      finish: 'Finish Trip',
+    },
+    tripFinished: {
+      title: 'Trip Finished',
+      price: 'Price of the trip: ',
+      raiting: 'Raite the driver: ',
+    },
+  },
 };
 
 export default translations;

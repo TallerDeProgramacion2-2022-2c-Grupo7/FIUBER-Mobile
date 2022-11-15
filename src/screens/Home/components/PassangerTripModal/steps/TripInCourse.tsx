@@ -1,74 +1,100 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
+import { Bar as ProgressBarr } from 'react-native-progress';
 import { useSelector } from 'react-redux';
 
 import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import useUserToken from '../../../../../hooks/useUserToken';
+import useTripStatus from '../../../../../hooks/useTripStatus';
 import { ReduxState } from '../../../../../interfaces/redux';
 import { finishTrip } from '../../../../../services/trips';
+import styles from '../../../styles';
 
 const TripInCourse = ({}: { modalRef: React.RefObject<IHandles> }) => {
-  const { driver, id } = useSelector((state: ReduxState) => state.trip);
+  const { driver, id, nearToDestination, to, cost } = useSelector(
+    (state: ReduxState) => state.trip
+  );
+  const { t } = useTranslation();
 
-  const token = useUserToken();
+  useTripStatus();
 
   const onFinishTrip = () => {
-    if (!token || !id) {
+    if (!id) {
       return;
     }
-    finishTrip(id, token);
+    finishTrip(id);
   };
 
   return (
     <>
       <Header
         center={
-          <Text style={{ marginTop: 20 }} type="subtitle1">
-            Viaje en curso
+          <Text style={styles.ModalTitle} type="subtitle1">
+            {t('passangerTrip.tripInCourse.title')}
           </Text>
         }
       />
-      <View style={styles.modalContainer}>
-        <View style={styles.textContainer}>
-          <Text type="subtitle2">Chofer: </Text>
-          <Text type="subtitle2">{driver?.firstName}</Text>
+      <View style={styles.ModalContainer}>
+        <>
+          {nearToDestination ? (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignSelf: 'center',
+                alignContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Button
+                buttonStyle={{
+                  alignSelf: 'center',
+                  paddingHorizontal: '10%',
+                  marginLeft: 10,
+                  backgroundColor: 'green',
+                }}
+                text={t('driverTrip.tripInCourse.finish')}
+                onPress={onFinishTrip}
+              />
+            </View>
+          ) : (
+            <ProgressBarr
+              indeterminate={true}
+              borderWidth={0}
+              width={null}
+              indeterminateAnimationDuration={2000}
+            />
+          )}
+        </>
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">{t('driverTrip.tripInCourse.to')}</Text>
+          <Text type="subtitle2">
+            {' '}
+            {to?.description?.formattedAddress.mainText}{' '}
+          </Text>
         </View>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignSelf: 'center',
-          alignContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Button
-          buttonStyle={{
-            alignSelf: 'center',
-            paddingHorizontal: '10%',
-            marginLeft: 10,
-            backgroundColor: 'green',
-          }}
-          text="Finish"
-          onPress={onFinishTrip}
-        />
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">{t('driverTrip.tripInCourse.price')}</Text>
+          <Text type="subtitle2">$ {cost?.toFixed(2)}</Text>
+        </View>
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">{t('driverTrip.tripInCourse.passanger')}</Text>
+          <Text type="subtitle2">
+            {' '}
+            {driver?.firstName} {driver?.lastName}{' '}
+          </Text>
+        </View>
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">{t('driverTrip.tripInCourse.raiting')}</Text>
+          <Text type="subtitle2">
+            {' '}
+            {driver?.firstName} {driver?.lastName}{' '}
+          </Text>
+        </View>
       </View>
     </>
   );
 };
 
 export default TripInCourse;
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 30,
-  },
-  textContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-});
