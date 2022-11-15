@@ -16,17 +16,8 @@ const INITIAL_STATE: ProfileState = {
   error: null,
 };
 
-const PUBILC_ATTRS = [
-  'firstName',
-  'lastName',
-  'isDriver',
-  'car',
-];
-const PRIVATE_ATTRS = [
-    'email',
-    'phoneNumber',
-    'verifiedPhone',
-];
+const PUBILC_ATTRS = ['firstName', 'lastName', 'isDriver', 'car'];
+const PRIVATE_ATTRS = ['email', 'phoneNumber', 'verifiedPhone'];
 
 export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
   'profile/getMyProfile',
@@ -41,7 +32,6 @@ export const getMyProfile = createAsyncThunk<any, ProfileGetParams>(
     }
 
     const profile = { ...publicProfile.data(), ...privateProfiles.data() };
-    console.log(profile);
 
     return profile;
   }
@@ -62,7 +52,6 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
       ...privateProfiles.data(),
       ...privateProfile,
     };
-    console.log('completePriProf', privateProfileToUpdate);
 
     await firestore().doc(`privateProfiles/${uid}`).set(privateProfileToUpdate);
 
@@ -77,7 +66,6 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
       ...updatedPublicProfile.data(),
       ...updatedPrivateProfiles.data(),
     };
-    console.log(updatedProfile);
 
     return updatedProfile;
   }
@@ -113,15 +101,13 @@ export const setPhoneNumber = createAsyncThunk<any, { phoneNumber: string }>(
 
     const phoneAndCode = {
       ...privateProfileCode.data(),
-      ...{phoneNumber: phoneNumber},
+      ...{ phoneNumber: phoneNumber },
     };
 
-    phoneAndCode["verificationCode"] = phoneAndCode["phoneVerificationCode"];
-    delete phoneAndCode["phoneVerificationCode"];
+    phoneAndCode.verificationCode = phoneAndCode.phoneVerificationCode;
+    delete phoneAndCode.phoneVerificationCode;
 
-    await firestore()
-      .doc(`privateProfiles/${auth.user.uid}`)
-      .set(phoneAndCode);
+    await firestore().doc(`privateProfiles/${auth.user.uid}`).set(phoneAndCode);
   }
 );
 
@@ -136,7 +122,6 @@ const profileSlice = createSlice({
       state.error = null;
     });
     builder.addCase(getMyProfile.rejected, (state, action) => {
-      console.error('GET PROFILE ERROR', action.error);
       state.error = action.error.message || null;
       state.obtained = false;
       state.profile = null;

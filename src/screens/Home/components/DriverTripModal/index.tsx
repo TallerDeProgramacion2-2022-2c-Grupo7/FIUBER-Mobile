@@ -11,7 +11,6 @@ import { useSelector } from 'react-redux';
 
 import Modal from '../../../../components/Modal';
 import useTripStatus from '../../../../hooks/useTripStatus';
-import useUserToken from '../../../../hooks/useUserToken';
 import { ReduxState } from '../../../../interfaces/redux';
 import { TripStatus } from '../../../../interfaces/trip';
 import TripAccepted from './steps/TripAccepted';
@@ -23,16 +22,29 @@ import WaitingForTrip from './steps/WaitingForTrip';
 export type IModalComponentArgs = {
   modalRef: React.RefObject<Modalize>;
   setOnClose: (cb: () => void) => void;
+  setOnClosed: (cb: () => void) => void;
   setAllwaysOpen: (height: number | undefined) => void;
+  setDriverMode: (driverMode: boolean) => void;
 };
 
 export type IModalComponent = React.FC<IModalComponentArgs>;
 
-const TripModal = () => {
+interface TripModalArgs {
+  driverMode: boolean;
+  setDriverMode: (driverMode: boolean) => void;
+}
+
+const TripModal = ({ setDriverMode }: TripModalArgs) => {
   const modalRef = useRef<Modalize>(null);
-  const { status, id } = useSelector((state: ReduxState) => state.trip);
+  const { status } = useSelector((state: ReduxState) => state.trip);
   const [alwaysOpen, setAllwaysOpen] = useState<number | undefined>(undefined);
-  const [onClose, setOnClose] = useState<() => void>(() => () => {});
+  const [componentOnClose, setComponentOnClose] = useState<
+    (() => void) | undefined
+  >(undefined);
+  const [componentOnClosed, setComponentOnClosed] = useState<
+    (() => void) | undefined
+  >(undefined);
+  const [isOpen, setIsOpen] = useState(false);
 
   const ModalComponent = useMemo<IModalComponent | null>(() => {
     switch (status) {
@@ -50,29 +62,45 @@ const TripModal = () => {
     }
   }, [status]);
 
-  const token = useUserToken();
-
-  useTripStatus(id, token);
+  useTripStatus();
 
   useEffect(() => {
-    modalRef.current?.open();
-  }, [modalRef.current]);
+    if (!isOpen) {
+      modalRef.current?.open();
+    }
+  }, [modalRef.current, ModalComponent]);
+
+  const modalOnOpended = useCallback(() => {
+    setIsOpen(true);
+  }, []);
 
   const modalOnClose = useCallback(() => {
-    onClose();
-  }, [onClose]);
+    componentOnClose?.();
+  }, [componentOnClose]);
+
+  const modalOnClosed = useCallback(() => {
+    componentOnClosed?.();
+    setIsOpen(false);
+  }, [componentOnClosed]);
 
   return (
     <Modal
       modalRef={modalRef}
       adjustToContentHeight={!alwaysOpen}
       alwaysOpen={alwaysOpen}
-      onClose={modalOnClose}>
+      onOpened={modalOnOpended}
+      onClose={modalOnClose}
+      onClosed={modalOnClosed}
+      onBackButtonPress={() => {
+        return true;
+      }}>
       {ModalComponent && (
         <ModalComponent
           modalRef={modalRef}
           setAllwaysOpen={setAllwaysOpen}
-          setOnClose={setOnClose}
+          setOnClose={setComponentOnClose}
+          setOnClosed={setComponentOnClosed}
+          setDriverMode={setDriverMode}
         />
       )}
     </Modal>

@@ -9,6 +9,8 @@ import styles from './styles';
 interface Props {
   children: React.ReactNode;
   modalRef: React.RefObject<Modalize>;
+  onOpen?: () => void;
+  onOpened?: () => void;
   onClose?: () => void;
   onClosed?: () => void;
   fullHeight?: boolean;
@@ -20,6 +22,7 @@ interface Props {
   FloatingComponent?: React.ReactNode;
   disableScrollIfPossible?: boolean;
   alwaysOpen?: number;
+  onBackButtonPress: () => boolean;
 }
 
 function Modal({
@@ -36,6 +39,7 @@ function Modal({
   FloatingComponent,
   disableScrollIfPossible,
   alwaysOpen,
+  onBackButtonPress,
   ...props
 }: Props) {
   const handleOnClose = () => onClose?.();
@@ -75,7 +79,8 @@ function Modal({
       FloatingComponent={FloatingComponent}
       disableScrollIfPossible={disableScrollIfPossible}
       threshold={15}
-      alwaysOpen={alwaysOpen}>
+      alwaysOpen={alwaysOpen}
+      onBackButtonPress={onBackButtonPress}>
       {children}
     </Modalize>
   );

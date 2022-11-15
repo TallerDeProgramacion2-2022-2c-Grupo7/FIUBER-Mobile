@@ -8,10 +8,15 @@ import MapViewDirections from 'react-native-maps-directions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Target from '../../../assets/target';
+import { LOW_DISTANCE } from '../../../constants/trip';
 import useMapPermissions from '../../../hooks/useMapPermissions';
 import { ReduxState } from '../../../interfaces/redux';
 import { UserLocationChangeEventCoordinate } from '../../../interfaces/trip';
-import { setCurrentPosition } from '../../../redux/slices/trip';
+import {
+  setCurrentPosition,
+  setNearToDestination,
+} from '../../../redux/slices/trip';
+import { calculateDistanceInMeters } from '../../../utils';
 
 const { MAPS_API_KEY } = Config;
 
@@ -31,6 +36,21 @@ function Map({}) {
       return;
     }
     dispatch(setCurrentPosition(nativeEvent.coordinate));
+
+    if (to) {
+      const distance = calculateDistanceInMeters(
+        nativeEvent.coordinate,
+        to.coordinates
+      );
+      if (distance < LOW_DISTANCE) {
+        dispatch(setNearToDestination(true));
+      } else {
+        dispatch(setNearToDestination(false));
+      }
+    } else {
+      dispatch(setNearToDestination(false));
+    }
+
     if (mapRef && mapRef.current) {
       if (onTheMove) {
         followUserPosition(nativeEvent.coordinate);
@@ -43,7 +63,6 @@ function Map({}) {
   };
 
   useEffect(() => {
-    console.log(onTheMove);
     followUserPosition();
   }, [onTheMove]);
 
@@ -78,6 +97,7 @@ function Map({}) {
         heading: 0,
         altitude: 1,
         zoom: 18,
+        pitch: 0,
       });
       setFocused(true);
     }

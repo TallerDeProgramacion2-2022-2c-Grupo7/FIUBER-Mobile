@@ -18,12 +18,11 @@ const PhoneInputScreen = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const phoneInput = useRef<PhoneInput>(null);
-  const [formattedValue, setFormattedValue] = React.useState("");
+  const [formattedValue, setFormattedValue] = React.useState('');
   const [value, setValue] = React.useState('');
 
   return (
     <>
-
       <PhoneInput
         ref={phoneInput}
         defaultValue={value}
@@ -32,7 +31,7 @@ const PhoneInputScreen = ({
         onChangeText={text => {
           setValue(text);
         }}
-        onChangeFormattedText={(text) => {
+        onChangeFormattedText={text => {
           setFormattedValue(text);
         }}
         countryPickerProps={{ withAlphaFilter: true }}
