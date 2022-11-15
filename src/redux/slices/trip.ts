@@ -28,7 +28,10 @@ const INITIAL_STATE: TripState = {
 export const obtainCalculatedCost = createAsyncThunk(
   'trip/obtainCalculatedCost',
   ({ from, to }: { from: LatLng; to: LatLng }) => {
-    return calculateCost({ from, to });
+    return calculateCost({
+      from: { coordinates: from },
+      to: { coordinates: to },
+    });
   }
 );
 
@@ -202,6 +205,7 @@ const tripSlice = createSlice({
       state.id = action.payload._id;
       state.status = action.payload.status;
       state.passangerId = action.payload.passengerId;
+      state.driverId = action.payload.driverId;
     });
   },
 });

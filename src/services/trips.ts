@@ -3,25 +3,29 @@ import axios from 'axios';
 import { Trip, TripCordinates, TripPoints } from '../interfaces/trip';
 import { getFirebaseToken } from '../utils/firebase';
 
-const ENDPOINT = 'https://fiuber-trips-aleacevedo.cloud.okteto.net/api';
+const ENDPOINT = 'https://708f-190-16-193-159.ngrok.io/api';
 
-export const calculateCost = async (trip: TripCordinates) => {
+export const calculateCost = async (trip: TripPoints) => {
   const token = await getFirebaseToken();
 
   try {
-    const { data } = await axios.post(`${ENDPOINT}/costs/calculate`, trip, {
-      headers: {
-        Authorization: `${token}`,
-      },
-    });
+    const { data } = await axios.post(
+      `${ENDPOINT}/costs/calculate`,
+      { tripParams: trip },
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
     return data.result;
   } catch (e) {
     if (e.response) {
-      const { error } = e.response.data;
-      console.error(error);
+      const { error } = e.response;
+      console.error('calculate cost error wit response', e);
       return undefined;
     }
-    console.error(e.message);
+    console.error('calculate cost', e.message);
     return undefined;
   }
 };
