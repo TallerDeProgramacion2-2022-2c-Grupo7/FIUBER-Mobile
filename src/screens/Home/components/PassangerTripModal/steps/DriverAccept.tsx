@@ -1,41 +1,56 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
 import { Bar as ProgressBarr } from 'react-native-progress';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import useUserToken from '../../../../../hooks/useUserToken';
+import useTripStatus from '../../../../../hooks/useTripStatus';
 import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
-import { getDriverProfile } from '../../../../../redux/slices/trip';
+import {
+  fetchDriverProfile,
+  reloadTrip,
+} from '../../../../../redux/slices/trip';
+import styles from '../../../styles';
 
 const DriverAccept = ({}: { modalRef: React.RefObject<IHandles> }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { driver } = useSelector((state: ReduxState) => state.trip);
+  const { driver, driverId } = useSelector((state: ReduxState) => state.trip);
+  const { t } = useTranslation();
 
-  const token = useUserToken();
+  useTripStatus();
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-    dispatch(getDriverProfile({ token }));
-  }, [token]);
+    dispatch(reloadTrip());
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchDriverProfile());
+  }, [driverId]);
 
   return (
     <>
       <Header
         center={
-          <Text style={{ marginTop: 20 }} type="subtitle1">
-            Chofer en camino
+          <Text style={styles.ModalTitle} type="subtitle1">
+            {t('passangerTrip.driverAccept.title')}
           </Text>
         }
       />
-      <View style={styles.modalContainer}>
-        <View style={styles.textContainer}>
-          <Text type="subtitle2">Chofer: </Text>
+      <View style={styles.ModalContainer}>
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">
+            {t('passangerTrip.driverAccept.driverName')}
+          </Text>
           <Text type="subtitle2">{driver?.firstName}</Text>
+        </View>
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">
+            {t('passangerTrip.driverAccept.driverRating')}
+          </Text>
+          <Text type="subtitle2">{driver?.rating}</Text>
         </View>
       </View>
       <View>
@@ -51,15 +66,3 @@ const DriverAccept = ({}: { modalRef: React.RefObject<IHandles> }) => {
 };
 
 export default DriverAccept;
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 30,
-  },
-  textContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-});

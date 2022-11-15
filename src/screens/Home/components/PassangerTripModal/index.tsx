@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Modalize } from 'react-native-modalize';
 import { useSelector } from 'react-redux';
 
 import Modal from '../../../../components/Modal';
-import useTripStatus from '../../../../hooks/useTripStatus';
-import useUserToken from '../../../../hooks/useUserToken';
 import { ReduxState } from '../../../../interfaces/redux';
 import { TripStatus } from '../../../../interfaces/trip';
 import DriverAccept from './steps/DriverAccept';
@@ -24,9 +28,13 @@ export type IModalComponent = React.FC<IModalComponentArgs>;
 
 const TripModal = () => {
   const modalRef = useRef<Modalize>(null);
-  const { status, id } = useSelector((state: ReduxState) => state.trip);
+  const { status } = useSelector((state: ReduxState) => state.trip);
   const [alwaysOpen, setAllwaysOpen] = useState<number | undefined>(undefined);
-  const [onClose, setOnClose] = useState<() => void>(() => () => {});
+  const [componentOnClose, setComponentOnClose] = useState<(() => void) | undefined
+  >(undefined);
+  const [componentOnClosed, setComponentOnClosed] = useState<(() => void) | undefined
+  >(undefined);
+  const [isOpen, setIsOpen] = useState(false);
 
   const ModalComponent = useMemo<IModalComponent | null>(() => {
     switch (status) {
@@ -47,30 +55,40 @@ const TripModal = () => {
   }, [status]);
 
   useEffect(() => {
-    if (ModalComponent !== null) {
+    if (!isOpen && !!ModalComponent) {
       modalRef.current?.open();
     }
   }, [ModalComponent, modalRef.current]);
 
-  const token = useUserToken();
+  const modalOnOpended = useCallback(() => {
+    setIsOpen(true);
+  }, []);
 
-  useTripStatus(id, token);
+  const modalOnClose = useCallback(() => {
+    componentOnClose?.();
+  }, [componentOnClose]);
 
-  const modalOnClose = () => {
-    onClose();
-  };
+  const modalOnClosed = useCallback(() => {
+    componentOnClosed?.();
+    setIsOpen(false);
+  }, [componentOnClosed]);
 
   return (
     <Modal
       modalRef={modalRef}
       adjustToContentHeight={!alwaysOpen}
       alwaysOpen={alwaysOpen}
-      onClose={modalOnClose}>
+      onOpened={modalOnOpended}
+      onClose={modalOnClose}
+      onClosed={modalOnClosed}
+      onBackButtonPress={() => {
+        return true;
+      }}>
       {ModalComponent && (
         <ModalComponent
           modalRef={modalRef}
           setAllwaysOpen={setAllwaysOpen}
-          setOnClose={setOnClose}
+          setOnClose={setComponentOnClose}
         />
       )}
     </Modal>

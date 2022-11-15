@@ -15,7 +15,6 @@ export default StyleSheet.create({
     right: 0,
     zIndex: -1,
   },
-
   container: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -89,5 +88,17 @@ export default StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
+  },
+  ModalContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 30,
+  },
+  ModalTextContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  ModalTitle: {
+    marginTop: 20,
   },
 });
