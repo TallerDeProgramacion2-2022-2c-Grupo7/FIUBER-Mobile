@@ -18,18 +18,15 @@ const WaitingUserAceptance = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { cost, from, to } = useSelector((state: ReduxState) => state.trip);
-  console.log('WAITING USER ACCEPTANCE');
 
   const token = useUserToken();
   const getCost = useGetCost(from, to, token);
 
   useEffect(() => {
-    console.log('getting cost');
     getCost();
   }, [getCost]);
 
   useEffect(() => {
-    console.log('cost', cost, modalRef.current);
     if (cost) {
       modalRef.current?.open();
     }

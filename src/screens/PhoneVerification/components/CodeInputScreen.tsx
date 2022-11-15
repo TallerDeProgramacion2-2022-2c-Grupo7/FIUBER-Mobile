@@ -4,11 +4,11 @@ import { SafeAreaView, StyleSheet, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../../components/Button';
+import { ROUTES } from '../../../constants/routes';
 import { AppDispatch, ReduxState } from '../../../interfaces/redux';
 import { setPhoneNumber as setPhoneNumberToFirebase } from '../../../redux/slices/profile';
 import { checkPhoneVerification } from '../../../services/phone-verification';
 import styles from './styles';
-import { ROUTES } from '../../../constants/routes';
 
 const CodeInputScreen = ({
   phoneNumber,
@@ -40,8 +40,7 @@ const CodeInputScreen = ({
             await dispatch(setPhoneNumberToFirebase({ phoneNumber }));
             //TODO pasar por parametros el phoneNumber y el code
             screenNavigation.navigate(ROUTES.SET_PROFILE_SCREEN);
-          }
-          else {
+          } else {
             setInvalidCode(true);
           }
         }}

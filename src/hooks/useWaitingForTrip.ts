@@ -6,14 +6,14 @@ import { AppDispatch, ReduxState } from '../interfaces/redux';
 import { setTrip } from '../redux/slices/trip';
 import { getAvailable } from '../services/trips';
 
-export default (token: string | null) => {
+export default () => {
   const dispatch = useDispatch<AppDispatch>();
   const { trip } = useSelector((state: ReduxState) => state);
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (token && !trip.id) {
-        const availableTrip = await getAvailable(token);
+      if (!trip.id) {
+        const availableTrip = await getAvailable();
         if (availableTrip) {
           dispatch(setTrip(availableTrip));
         }
@@ -23,5 +23,5 @@ export default (token: string | null) => {
     return () => {
       clearInterval(interval);
     };
-  }, [token, trip.id]);
+  }, []);
 };

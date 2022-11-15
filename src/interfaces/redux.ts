@@ -1,5 +1,4 @@
 import * as Auth from '@react-native-firebase/auth';
-import { LatLng } from 'react-native-maps';
 
 import { store } from '../redux';
 import { Profile } from './profile';
@@ -23,6 +22,7 @@ export interface TripState {
   status: TripStatus | null;
   currentPosition: UserLocationChangeEventCoordinate | null;
   onTheMove: boolean;
+  nearToDestination: boolean;
 }
 export interface AuthState {
   logedIn: boolean;

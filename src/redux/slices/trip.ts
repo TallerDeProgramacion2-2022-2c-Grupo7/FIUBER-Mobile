@@ -6,12 +6,7 @@ import { LatLng } from 'react-native-maps';
 import { ReduxState, TripState } from '../../interfaces/redux';
 import { MapPoint } from '../../interfaces/trip';
 import { getPublicProfile } from '../../services/profile';
-import {
-  calculateCost,
-  createTrip,
-  getDriver,
-  getTrip,
-} from '../../services/trips';
+import { calculateCost, createTrip, getTrip } from '../../services/trips';
 
 const INITIAL_STATE: TripState = {
   id: null,
@@ -27,38 +22,22 @@ const INITIAL_STATE: TripState = {
   status: null,
   currentPosition: null,
   onTheMove: false,
+  nearToDestination: false,
 };
 
 export const obtainCalculatedCost = createAsyncThunk(
   'trip/obtainCalculatedCost',
-  ({ from, to, token }: { from: LatLng; to: LatLng; token: string }) => {
-    return calculateCost({ from, to }, token);
+  ({ from, to }: { from: LatLng; to: LatLng }) => {
+    return calculateCost({ from, to });
   }
 );
 
 export const createNewTrip = createAsyncThunk(
   'trip/createNewTrip',
-  ({ from, to, token }: { from: MapPoint; to: MapPoint; token: string }) => {
-    return createTrip({ from, to }, token);
+  ({ from, to }: { from: MapPoint; to: MapPoint }) => {
+    return createTrip({ from, to });
   }
 );
-
-export const getDriverProfile = createAsyncThunk<
-  any,
-  { token: string },
-  { state: ReduxState }
->('trip/getDriverProfile', async ({ token }, { getState }) => {
-  const { trip } = getState();
-  if (!trip?.id) {
-    return null;
-  }
-  const driverId = await getDriver(trip.id, token);
-  if (!driverId) {
-    return null;
-  }
-  const driverProfile = await getPublicProfile(driverId);
-  return { driverId, driverProfile };
-});
 
 export const setCurrentPositionAsFrom = createAsyncThunk<
   any,
@@ -84,17 +63,38 @@ export const setCurrentPositionAsFrom = createAsyncThunk<
   };
 });
 
-export const reloadTrip = createAsyncThunk<
-  any,
-  { token: string },
-  { state: ReduxState }
->('trip/reloadTrip', async ({ token }, { getState }) => {
-  const { trip } = getState();
-  if (!trip?.id) {
-    return null;
-  }
+export const reloadTrip = createAsyncThunk<any, void, { state: ReduxState }>(
+  'trip/reloadTrip',
+  async (_, { getState }) => {
+    const { trip } = getState();
+    if (!trip?.id) {
+      return null;
+    }
 
-  return getTrip(trip.id, token);
+    return getTrip(trip.id);
+  }
+);
+
+export const fetchPassangerProfile = createAsyncThunk<
+  any,
+  void,
+  { state: ReduxState }
+>('trip/fetchPassangerProfile', async (_, { getState }) => {
+  const { trip } = getState();
+  if (trip.passangerId) {
+    return getPublicProfile(trip.passangerId);
+  }
+});
+
+export const fetchDriverProfile = createAsyncThunk<
+  any,
+  void,
+  { state: ReduxState }
+>('trip/fetchDriverProfile', async (_, { getState }) => {
+  const { trip } = getState();
+  if (trip.driverId) {
+    return getPublicProfile(trip.driverId);
+  }
 });
 
 const tripSlice = createSlice({
@@ -159,13 +159,15 @@ const tripSlice = createSlice({
     setOnTheMove: (state, action) => {
       state.onTheMove = action.payload;
     },
+    setNearToDestination: (state, action) => {
+      state.nearToDestination = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(obtainCalculatedCost.fulfilled, (state, action) => {
       state.cost = action.payload;
     });
     builder.addCase(obtainCalculatedCost.rejected, (state, action) => {
-      console.error(action.error);
       throw action.error;
     });
     builder.addCase(createNewTrip.fulfilled, (state, action) => {
@@ -175,23 +177,18 @@ const tripSlice = createSlice({
       state.passangerId = action.payload.passengerId;
     });
     builder.addCase(createNewTrip.rejected, (state, action) => {
-      console.error(action.error);
       throw action.error;
     });
-    builder.addCase(getDriverProfile.fulfilled, (state, action) => {
-      console.log('Driver profile: ', action.payload);
-      state.driver = action.payload.driverProfile;
-      state.driverId = action.payload.driverId;
+    builder.addCase(fetchDriverProfile.fulfilled, (state, action) => {
+      state.driver = action.payload;
     });
-    builder.addCase(getDriverProfile.rejected, (state, action) => {
-      console.error(action.error);
-      throw action.error;
+    builder.addCase(fetchPassangerProfile.fulfilled, (state, action) => {
+      state.passsanger = action.payload;
     });
     builder.addCase(setCurrentPositionAsFrom.fulfilled, (state, action) => {
       state.from = action.payload;
     });
-    builder.addCase(setCurrentPositionAsFrom.rejected, (state, action) => {
-      console.error(action.error);
+    builder.addCase(setCurrentPositionAsFrom.rejected, (state, _action) => {
       if (state.currentPosition) {
         state.from = {
           coordinates: state.currentPosition,
@@ -224,6 +221,7 @@ export const {
     setCurrentPosition,
     goToTripFrom,
     setOnTheMove,
+    setNearToDestination,
   },
 } = tripSlice;
 
