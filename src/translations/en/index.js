@@ -54,7 +54,7 @@ const translations = {
       from: 'From: ',
       to: 'To: ',
       passanger: 'Passanger: ',
-      raiting: 'Raiting: ',
+      rating: 'Rating: ',
       accept: 'Accept',
       reject: 'Reject',
     },
@@ -65,7 +65,7 @@ const translations = {
       from: 'From: ',
       to: 'Final destination: ',
       passanger: 'Passanger: ',
-      raiting: 'Raiting: ',
+      rating: 'Rating: ',
       start: 'Start Trip',
     },
     tripInCourse: {
@@ -74,13 +74,13 @@ const translations = {
       from: 'From: ',
       to: 'Going to: ',
       passanger: 'Passanger: ',
-      raiting: 'Raiting: ',
+      rating: 'Rating: ',
       finish: 'Finish Trip',
     },
     tripFinished: {
       title: 'Trip Finished',
       price: 'Price of the trip: ',
-      raiting: 'Raite the passanger: ',
+      rating: 'Raite the passanger: ',
     },
   },
   passangerTrip: {

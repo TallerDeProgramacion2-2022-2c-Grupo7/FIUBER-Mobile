@@ -16,6 +16,7 @@ export interface CommonsProfile {
   lastName: string;
   email: string;
   verifiedPhone: boolean;
+  rating?: number;
 }
 
 export type Profile = CommonsProfile & (DriverProfile | PassengerProfile);

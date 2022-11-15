@@ -97,8 +97,19 @@ export default StyleSheet.create({
   ModalTextContainer: {
     flex: 1,
     flexDirection: 'row',
+    marginBottom: 10,
   },
   ModalTitle: {
     marginTop: 20,
+  },
+  ModalRating: {
+    flexDirection: 'column',
+    paddingBottom: 30,
+  },
+  ModalButtonContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });
