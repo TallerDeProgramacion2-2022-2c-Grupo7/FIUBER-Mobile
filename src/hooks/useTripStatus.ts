@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 
 import { AppDispatch, ReduxState } from '../interfaces/redux';
 import { setStatus } from '../redux/slices/trip';

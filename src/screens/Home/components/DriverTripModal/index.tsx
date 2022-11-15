@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-spaced-func */
 import React, {
   useCallback,
   useEffect,

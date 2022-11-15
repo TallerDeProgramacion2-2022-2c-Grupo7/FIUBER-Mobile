@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-spaced-func */
 import React, {
   useCallback,
   useEffect,
@@ -30,9 +30,11 @@ const TripModal = () => {
   const modalRef = useRef<Modalize>(null);
   const { status } = useSelector((state: ReduxState) => state.trip);
   const [alwaysOpen, setAllwaysOpen] = useState<number | undefined>(undefined);
-  const [componentOnClose, setComponentOnClose] = useState<(() => void) | undefined
+  const [componentOnClose, setComponentOnClose] = useState<
+    (() => void) | undefined
   >(undefined);
-  const [componentOnClosed, setComponentOnClosed] = useState<(() => void) | undefined
+  const [componentOnClosed, setComponentOnClosed] = useState<
+    (() => void) | undefined
   >(undefined);
   const [isOpen, setIsOpen] = useState(false);
 
