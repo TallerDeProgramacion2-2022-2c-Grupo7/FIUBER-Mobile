@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Config from 'react-native-config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -8,16 +8,24 @@ import MapViewDirections from 'react-native-maps-directions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Target from '../../../assets/target';
+import { LOW_DISTANCE } from '../../../constants/trip';
 import useMapPermissions from '../../../hooks/useMapPermissions';
 import { ReduxState } from '../../../interfaces/redux';
-import { setCurrentPosition } from '../../../redux/slices/trip';
+import { UserLocationChangeEventCoordinate } from '../../../interfaces/trip';
+import {
+  setCurrentPosition,
+  setNearToDestination,
+} from '../../../redux/slices/trip';
+import { calculateDistanceInMeters } from '../../../utils';
 
 const { MAPS_API_KEY } = Config;
 
 function Map({}) {
   const dispatch = useDispatch();
   const [focused, setFocused] = useState(false);
-  const { from, to } = useSelector((state: ReduxState) => state.trip);
+  const { from, to, onTheMove, currentPosition } = useSelector(
+    (state: ReduxState) => state.trip
+  );
 
   const mapRef = useRef<MapView>(null);
 
@@ -28,18 +36,70 @@ function Map({}) {
       return;
     }
     dispatch(setCurrentPosition(nativeEvent.coordinate));
-    if (mapRef && mapRef.current && !focused) {
-      setFocused(true);
 
+    if (to) {
+      const distance = calculateDistanceInMeters(
+        nativeEvent.coordinate,
+        to.coordinates
+      );
+      if (distance < LOW_DISTANCE) {
+        dispatch(setNearToDestination(true));
+      } else {
+        dispatch(setNearToDestination(false));
+      }
+    } else {
+      dispatch(setNearToDestination(false));
+    }
+
+    if (mapRef && mapRef.current) {
+      if (onTheMove) {
+        followUserPosition(nativeEvent.coordinate);
+      }
+
+      if (!focused) {
+        focusUserPosition();
+      }
+    }
+  };
+
+  useEffect(() => {
+    followUserPosition();
+  }, [onTheMove]);
+
+  const followUserPosition = (
+    coordinate?: UserLocationChangeEventCoordinate
+  ) => {
+    if (!coordinate && !currentPosition) {
+      return;
+    }
+
+    if (mapRef && mapRef.current) {
       mapRef.current.animateCamera({
         center: {
-          latitude: nativeEvent.coordinate.latitude,
-          longitude: nativeEvent.coordinate.longitude,
+          latitude: coordinate?.latitude || currentPosition?.latitude || 0,
+          longitude: coordinate?.longitude || currentPosition?.longitude || 0,
         },
-        heading: nativeEvent.coordinate.heading,
+        heading: coordinate?.heading || currentPosition?.heading,
         altitude: 1,
-        zoom: 14,
+        zoom: 18,
+        pitch: 45,
       });
+    }
+  };
+
+  const focusUserPosition = () => {
+    if (mapRef && mapRef.current && currentPosition) {
+      mapRef.current.animateCamera({
+        center: {
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude,
+        },
+        heading: 0,
+        altitude: 1,
+        zoom: 18,
+        pitch: 0,
+      });
+      setFocused(true);
     }
   };
 
@@ -72,9 +132,7 @@ function Map({}) {
       <View style={styles.buttonView}>
         <TouchableOpacity
           style={styles.buttonOpacity}
-          onPress={() => {
-            setFocused(false);
-          }}>
+          onPress={focusUserPosition}>
           <Target width={'100%'} height={'100%'} />
         </TouchableOpacity>
       </View>

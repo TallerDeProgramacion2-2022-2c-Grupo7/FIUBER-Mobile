@@ -91,7 +91,14 @@ function Home({ navigation }: Props) {
         />
       </View>
       <Map />
-      {driverMode ? <DriverTripModal /> : <PassangerTripModal />}
+      {driverMode ? (
+        <DriverTripModal
+          driverMode={driverMode}
+          setDriverMode={setDriverMode}
+        />
+      ) : (
+        <PassangerTripModal />
+      )}
     </>
   );
 }

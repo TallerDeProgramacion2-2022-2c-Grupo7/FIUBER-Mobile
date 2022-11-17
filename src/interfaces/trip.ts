@@ -37,3 +37,19 @@ export enum TripStatus {
   STARTED = 'started',
   FINISHED = 'finished',
 }
+
+export type UserLocationChangeEventCoordinate = LatLng & {
+  altitude: number;
+  timestamp: number;
+  accuracy: number;
+  speed: number;
+  heading: number;
+  /**
+   * @platform iOS
+   */
+  altitudeAccuracy?: number;
+  /**
+   * @platform Android
+   */
+  isFromMockProvider?: boolean;
+};

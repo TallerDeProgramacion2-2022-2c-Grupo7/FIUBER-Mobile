@@ -1,26 +1,26 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 
-import { AppDispatch } from '../interfaces/redux';
+import { AppDispatch, ReduxState } from '../interfaces/redux';
 import { setStatus } from '../redux/slices/trip';
 import { getTripStatus } from '../services/trips';
 
-export default (tripId: string | null, token: string | null) => {
+export default () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { getState } = useStore<ReduxState>();
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!tripId || !token) {
-        return undefined;
+      const { id } = getState().trip;
+      if (!id) {
+        return dispatch(setStatus(null));
       }
-      const status = await getTripStatus(tripId, token);
-      console.log('Trip status: ', tripId, status);
+      const status = await getTripStatus(id);
       if (status) {
         dispatch(setStatus(status));
       }
-    }, 5000);
+    }, 100);
     return () => {
-      console.log('Canceling update trip status');
       clearInterval(interval);
     };
-  }, [token, tripId]);
+  }, []);
 };
