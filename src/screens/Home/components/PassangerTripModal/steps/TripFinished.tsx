@@ -15,7 +15,7 @@ import { IModalComponentArgs } from '../index';
 
 const TripFinished = ({ setOnClose, modalRef }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { cost, driver, driverId } = useSelector(
+  const { cost, driver, driverId, id, passangerId } = useSelector(
     (state: ReduxState) => state.trip
   );
   const { t } = useTranslation();
@@ -27,7 +27,7 @@ const TripFinished = ({ setOnClose, modalRef }: IModalComponentArgs) => {
   }, []);
 
   const ratingDriver = (value: number) => {
-    addRating(driverId!, value);
+    addRating(id, driverId, value, passangerId);
     modalRef.current?.close();
   };
 

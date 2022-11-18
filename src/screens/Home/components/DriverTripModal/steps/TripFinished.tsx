@@ -21,7 +21,7 @@ const TripFinished = ({
 }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
-  const { cost, passangerId } = useSelector((state: ReduxState) => state.trip);
+  const { cost, passangerId, id, driverId} = useSelector((state: ReduxState) => state.trip);
 
   useEffect(() => {
     setAllwaysOpen(undefined);
@@ -49,7 +49,7 @@ const TripFinished = ({
   }, []);
 
   const ratingPassanger = (value: number) => {
-    addRating(passangerId!, value);
+    addRating(id, passangerId, value, driverId);
     modalRef.current?.close();
   };
 
