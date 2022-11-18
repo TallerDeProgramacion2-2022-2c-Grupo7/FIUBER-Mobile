@@ -10,7 +10,7 @@ export const getRating = async (userId: string) => {
    console.log('Will get rating ');
    const { data } = await axios.get(`${ENDPOINT}/${userId}/average`, {
      headers: {
-       Authorization: `${token}`,
+       Authorization: `Bearer ${token}`,
      },
    });
    console.log('Got rating: ', data.result);
@@ -43,7 +43,7 @@ export const addRating = async ( idTrip: string, idUserScored: string, value: nu
      },
       {
         headers: {
-          Authorization: `${token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
