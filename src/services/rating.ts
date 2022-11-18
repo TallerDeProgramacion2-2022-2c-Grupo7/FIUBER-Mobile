@@ -20,6 +20,7 @@ export const getRating = async (userId: string) => {
     if (e.response) {
       const { error } = e.response;
       console.error('GET RATING ERROR WITH RESPONSE: ', e);
+      console.error('GET RATING ERROR WITH RESPONSE: ', e.data);
       return undefined;
     }
  console.error('GET RATING ERROR: ', e.message);
@@ -29,6 +30,7 @@ export const getRating = async (userId: string) => {
 
 export const addRating = async ( idTrip: string, idUserScored: string, value: number, idUserScorer: string) => {
   const token = await getFirebaseToken();
+  console.log("Token: ", token)
 
   try{
     console.log('WILL POST RATING ');
@@ -36,8 +38,8 @@ export const addRating = async ( idTrip: string, idUserScored: string, value: nu
       `${ENDPOINT}/`,
       {  id_trip: idTrip ,
          id_user_scored: idUserScored, 
-         value: vaulue,
-         idUserScorer: string 
+         value: value,
+         idUserScorer: idUserScorer 
      },
       {
         headers: {
@@ -53,7 +55,7 @@ export const addRating = async ( idTrip: string, idUserScored: string, value: nu
     if (e.response) {
       const { error } = e.response;
       console.error('POST RATING ERROR WITH RESPONSE: ', e);
-      console.error('POST RATING ERROR WITH RESPONSE: ', e.json());
+      console.error('POST RATING ERROR WITH RESPONSE: ', e.data);
       return undefined;
     }
  console.error('POST RATING ERROR: ', e.message);
