@@ -29,34 +29,32 @@ const Navigator = () => {
         ...DefaultTheme,
         colors: { ...DefaultTheme.colors, background: 'transparent' },
       }}>
-      <Host>
-        <Stack.Navigator
-          initialRouteName={initialRoute}
-          screenOptions={{
-            headerShown: false,
-            gestureEnabled: true,
-            gestureDirection: 'horizontal',
-            detachPreviousScreen: true,
-            presentation: 'transparentModal',
-          }}>
-          <Stack.Screen name={ROUTES.WELCOME} component={Welcome} />
-          <Stack.Screen name={ROUTES.LOGIN_SCREEN} component={LoginScreen} />
-          <Stack.Screen name={ROUTES.SIGNUP_SCREEN} component={SignUpScreen} />
-          <Stack.Screen name={ROUTES.HOME_SCREEN} component={HomeScreen} />
-          <Stack.Screen
-            name={ROUTES.SET_PROFILE_SCREEN}
-            component={SetProfile}
-          />
-          <Stack.Screen
-            name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
-            component={SetDriverProfile}
-          />
-          <Stack.Screen
-          name={ROUTES.PHONE_VERIFICATION_SCREEN}
-          component={PhoneVerification}
-          />
-        </Stack.Navigator>
-      </Host>
+      <Stack.Navigator
+        initialRouteName={initialRoute}
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+          detachPreviousScreen: true,
+          presentation: 'transparentModal',
+        }}>
+        <Stack.Screen name={ROUTES.WELCOME} component={Welcome} />
+        <Stack.Screen name={ROUTES.LOGIN_SCREEN} component={LoginScreen} />
+        <Stack.Screen name={ROUTES.SIGNUP_SCREEN} component={SignUpScreen} />
+        <Stack.Screen name={ROUTES.TAB_SCREEN} component={MainTab} />
+        <Stack.Screen
+          name={ROUTES.SET_PROFILE_SCREEN}
+          component={SetProfile}
+        />
+        <Stack.Screen
+          name={ROUTES.SET_DRIVER_PROFILE_SCREEN}
+          component={SetDriverProfile}
+        />
+        <Stack.Screen
+        name={ROUTES.PHONE_VERIFICATION_SCREEN}
+        component={PhoneVerification}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
