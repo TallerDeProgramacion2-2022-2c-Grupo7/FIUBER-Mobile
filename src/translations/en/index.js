@@ -21,6 +21,8 @@ const translations = {
   },
   common: {
     enterPassword: 'Enter password',
+    enterCurrentPassword: 'Enter current password',
+    enterNewPassword: 'Enter new password',
     enterEmail: 'Enter email',
     firstName: 'First Name',
     lastName: 'Last Name',
