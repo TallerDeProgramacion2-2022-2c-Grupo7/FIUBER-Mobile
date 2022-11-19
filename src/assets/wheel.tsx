@@ -8,7 +8,7 @@ function SvgComponent(props) {
       width={440.211}
       height={440.211}
       viewBox="0 0 440.211 440.211"
-      {...props } >
+      {...props}>
       <G fill="black">
         <Path
           data-name="Path 8"

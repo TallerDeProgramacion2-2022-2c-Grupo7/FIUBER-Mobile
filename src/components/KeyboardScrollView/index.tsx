@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HeaderHeightContext } from '@react-navigation/elements';
 import React from 'react';
 import {

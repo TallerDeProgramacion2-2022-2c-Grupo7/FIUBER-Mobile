@@ -5,7 +5,6 @@ import {
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Host } from 'react-native-portalize';
 
 import { ROUTES } from '../constants/routes';
 import { RootStackParamList } from '../interfaces/navigation';
@@ -43,7 +42,7 @@ const Navigator = () => {
           <Stack.Screen name={ROUTES.WELCOME} component={Welcome} />
           <Stack.Screen name={ROUTES.LOGIN_SCREEN} component={LoginScreen} />
           <Stack.Screen name={ROUTES.SIGNUP_SCREEN} component={SignUpScreen} />
-          <Stack.Screen name={ROUTES.TAB_SCREEN} component={MainTab} />
+          <Stack.Screen name={ROUTES.HOME_SCREEN} component={HomeScreen} />
           <Stack.Screen
             name={ROUTES.SET_PROFILE_SCREEN}
             component={SetProfile}

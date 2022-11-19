@@ -15,7 +15,6 @@ export default StyleSheet.create({
     right: 0,
     zIndex: -1,
   },
-
   container: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -69,11 +68,37 @@ export default StyleSheet.create({
     marginTop: 23,
     marginLeft: 30,
   },
-  modalContainer: {
+  searchBoxContainer: {
+    margin: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    alignContent: 'flex-start',
+    justifyContent: 'center',
+  },
+  SearchBoxButtonContainer: {
+    height: 40,
+    width: 35,
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  SearchBoxButton: {
+    alignItems: 'center',
+    borderRadius: 50,
+    padding: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  ModalContainer: {
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 30,
+  },
+  ModalTextContainer: {
     flex: 1,
     flexDirection: 'row',
+  },
+  ModalTitle: {
+    marginTop: 20,
   },
 });

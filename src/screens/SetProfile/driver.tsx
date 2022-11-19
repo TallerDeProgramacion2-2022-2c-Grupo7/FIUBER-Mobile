@@ -2,7 +2,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Switch, View } from 'react-native';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
@@ -11,7 +11,7 @@ import Text from '../../components/Text';
 import TextInput from '../../components/TextInput';
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
-import { CommonsProfile, Profile } from '../../interfaces/profile';
+import { Profile } from '../../interfaces/profile';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
 import { update } from '../../redux/slices/profile';
