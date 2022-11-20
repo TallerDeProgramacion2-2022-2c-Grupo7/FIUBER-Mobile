@@ -60,7 +60,7 @@ function SetDriverProfile({ navigation }: Props) {
 
   useEffect(() => {
     if (logedIn && profile) {
-      navigation.navigate(ROUTES.HOME_SCREEN);
+      navigation.navigate(ROUTES.TAB_SCREEN);
     }
   }, [logedIn, profile]);
 

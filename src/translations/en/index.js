@@ -21,6 +21,8 @@ const translations = {
   },
   common: {
     enterPassword: 'Enter password',
+    enterCurrentPassword: 'Enter current password',
+    enterNewPassword: 'Enter new password',
     enterEmail: 'Enter email',
     firstName: 'First Name',
     lastName: 'Last Name',
@@ -38,6 +40,8 @@ const translations = {
   },
   validations: {
     passIncorrect: 'Wrong Password',
+    passInccorectNoEnought: 'Password must have at least 8 characters',
+    dataNoEmpty: 'You cannot leave the field empty',
   },
   setProfile: {
     title: 'Create Your Profile',

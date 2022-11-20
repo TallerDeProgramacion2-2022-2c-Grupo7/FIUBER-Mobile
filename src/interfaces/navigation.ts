@@ -12,5 +12,7 @@ export type RootStackParamList = {
   [ROUTES.PHONE_VERIFICATION_SCREEN]: undefined;
   [ROUTES.DRIVER_TRIP]: undefined;
   [ROUTES.PASSENGER_TRIP_GUIDE]: { trip: Trip };
-  [ROUTES.PHONE_VERIFICATION_SCREEN]: undefined;
+  [ROUTES.NOTIFICATIONS_SCREEN]: undefined;
+  [ROUTES.MY_PROFILE_SCREEN]: undefined;
+  [ROUTES.TAB_SCREEN]: undefined;
 };

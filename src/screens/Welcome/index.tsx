@@ -30,7 +30,7 @@ function Welcome({ navigation }: Props) {
       if (currentUser) {
         await dispatch(setUser(currentUser.toJSON()));
         await dispatch(getMyProfile({ uid: currentUser.uid }));
-        navigation.navigate(ROUTES.HOME_SCREEN);
+        navigation.navigate(ROUTES.TAB_SCREEN);
       }
     };
     checkUser();
