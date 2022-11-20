@@ -2,6 +2,7 @@ import { View, Alert } from 'react-native';
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
 
 import Text from '../Text';
 import TextInput from '../TextInput';
@@ -75,67 +76,73 @@ const MyProfileData = ({
             :
             null}
           </View>
-
-          <Modal modalRef={modalRef} adjustToContentHeight>
-            <Header
-              center={
-                <Text style={styles.textHeader} type="subtitle1">
-                  {modalizeDescription}
-                </Text>
-              }
-            />
-            <View style={styles.modalContainer}>
-              <TextInput
-                value={dataFront}
-                autoCapitalize={autoCapitalize}
-                onChangeText={setDataFront}
-                keyboardType='default'
-                onSubmitEditing={(event) => {
-                  if (event.nativeEvent.text.length < 1) { //dataFront.length < 1
-                      setIsError(true);
-                      return;
-                  }
-
-                  setIsError(false);
-                  setCanSave(false);
+          <Portal>
+            <Modal 
+              modalRef={modalRef}
+              adjustToContentHeight
+              onBackButtonPress={() => {
+               return true;
+            }}>
+              <Header
+                center={
+                  <Text style={styles.textHeader} type="subtitle1">
+                    {modalizeDescription}
+                  </Text>
+                }
+              />
+              <View style={styles.modalContainer}>
+                <TextInput
+                  value={dataFront}
+                  autoCapitalize={autoCapitalize}
+                  onChangeText={setDataFront}
+                  keyboardType='default'
+                  onSubmitEditing={(event) => {
+                    if (event.nativeEvent.text.length < 1) { //dataFront.length < 1
+                        setIsError(true);
+                        return;
+                    }
+  
+                    setIsError(false);
+                    setCanSave(false);
+                  }}
+                  returnKeyType="done"
+                  contentContainerStyle={styles.textInput}
+                  placeholder={t(translateText || '')}
+                  inputStyle={styles.text}
+                />
+              </View>
+              <View style={styles.styleError}>
+                {(isError === true)?
+                <Text style={styles.errorText}>{t('validations.dataNoEmpty')}</Text>
+                :
+                null
+                }
+              </View>
+              <View style={styles.styleActions}>
+                <Button
+                  buttonStyle={{
+                  alignSelf: 'center',
+                  paddingHorizontal: '10%',
+                  marginRight: 10,
+                  backgroundColor: 'red',
                 }}
-                returnKeyType="done"
-                contentContainerStyle={styles.textInput}
-                placeholder={t(translateText || '')}
-                inputStyle={styles.text}
-              />
-            </View>
-            <View style={styles.styleError}>
-              {(isError === true)?
-              <Text style={styles.errorText}>{t('validations.dataNoEmpty')}</Text>
-              :
-              null
-              }
-            </View>
-            <View style={styles.styleActions}>
-              <Button
-                buttonStyle={{
-                alignSelf: 'center',
-                paddingHorizontal: '10%',
-                marginRight: 10,
-                backgroundColor: 'red',
-              }}
-              text="Cancel"
-              onPress={onCancelEdit}
-              />
-              <Button
-                buttonStyle={{
-                alignSelf: 'center',
-                paddingHorizontal: '10%',
-                marginLeft: 10,
-                backgroundColor: 'green',
-              }}
-              disabled={canSave}
-              text="Save"
-              onPress={onSaveEdit}
-              />
-            </View>
-          </Modal>
+                text="Cancel"
+                onPress={onCancelEdit}
+                />
+                <Button
+                  buttonStyle={{
+                  alignSelf: 'center',
+                  paddingHorizontal: '10%',
+                  marginLeft: 10,
+                  backgroundColor: 'green',
+                }}
+                disabled={canSave}
+                text="Save"
+                onPress={onSaveEdit}
+                />
+              </View>
+            </Modal>
+          </Portal>
         </>
     );
   };

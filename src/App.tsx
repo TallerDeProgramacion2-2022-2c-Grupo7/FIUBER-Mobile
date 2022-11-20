@@ -16,6 +16,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Config from 'react-native-config';
 import Geocoder from 'react-native-geocoding';
 import { Provider } from 'react-redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Navigator from './navigation';
 import { store } from './redux';
@@ -32,13 +33,15 @@ const App = () => {
   Geocoder.init(MAPS_API_KEY!);
 
   return (
-    <Provider store={store}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <Navigator />
-    </Provider>
+    <SafeAreaProvider>
+      <Provider store={store}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <Navigator />
+      </Provider>
+    </SafeAreaProvider>
   );
 };
 
