@@ -48,16 +48,18 @@ const DriverAccept = ({}: { modalRef: React.RefObject<IHandles> }) => {
           </Text>
           <Text type="subtitle2">{driver?.firstName}</Text>
         </View>
-        <View style={styles.ModalRating}>
-          <Text type="subtitle2">
-            {t('passangerTrip.driverAccept.driverRating')}
-          </Text>
-          <Rating
-            readonly
-            tintColor={Colors.Black.Pure}
-            startingValue={driver?.rating || 0}
-          />
-        </View>
+        {driver?.rating && (
+          <View style={styles.ModalRating}>
+            <Text type="subtitle2">
+              {t('passangerTrip.driverAccept.driverRating')}
+            </Text>
+            <Rating
+              readonly
+              tintColor={Colors.Black.Pure}
+              startingValue={driver?.rating || 0}
+            />
+          </View>
+        )}
       </View>
       <View>
         <ProgressBarr

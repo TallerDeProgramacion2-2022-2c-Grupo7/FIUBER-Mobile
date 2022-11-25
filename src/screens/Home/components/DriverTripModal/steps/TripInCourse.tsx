@@ -100,14 +100,16 @@ const TripInCourse = ({
             {passsanger?.firstName} {passsanger?.lastName}{' '}
           </Text>
         </View>
-        <View style={styles.ModalRating}>
-          <Text type="subtitle2">{t('driverTrip.tripInCourse.rating')}</Text>
-          <Rating
-            readonly
-            tintColor={Colors.Black.Pure}
-            startingValue={passsanger?.rating || 0}
-          />
-        </View>
+        {passsanger?.rating && (
+          <View style={styles.ModalTextContainer}>
+            <Text type="subtitle2">{t('driverTrip.tripAccepted.rating')}</Text>
+            <Rating
+              readonly
+              tintColor={Colors.Black.Pure}
+              startingValue={passsanger?.rating || 0}
+            />
+          </View>
+        )}
       </View>
     </>
   );

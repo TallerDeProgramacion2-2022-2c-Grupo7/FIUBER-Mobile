@@ -87,14 +87,18 @@ const TripInCourse = ({}: { modalRef: React.RefObject<IHandles> }) => {
             {driver?.firstName} {driver?.lastName}{' '}
           </Text>
         </View>
-        <View style={styles.ModalTextContainer}>
-          <Text type="subtitle2">{t('driverTrip.tripInCourse.raiting')}</Text>
-          <Rating
-            readonly
-            tintColor={Colors.Black.Pure}
-            startingValue={driver?.rating || 0}
-          />
-        </View>
+        {driver?.rating && (
+          <View style={styles.ModalRating}>
+            <Text type="subtitle2">
+              {t('passangerTrip.driverAccept.driverRating')}
+            </Text>
+            <Rating
+              readonly
+              tintColor={Colors.Black.Pure}
+              startingValue={driver?.rating || 0}
+            />
+          </View>
+        )}
       </View>
     </>
   );

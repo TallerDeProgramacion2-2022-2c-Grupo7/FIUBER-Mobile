@@ -50,7 +50,6 @@ const TripFinished = ({ setOnClose, modalRef }: IModalComponentArgs) => {
             {t('passangerTrip.tripFinished.raiting')}
           </Text>
           <Rating
-            readonly
             tintColor={Colors.Black.Pure}
             startingValue={driver?.rating || 0}
             onFinishRating={ratingDriver}
