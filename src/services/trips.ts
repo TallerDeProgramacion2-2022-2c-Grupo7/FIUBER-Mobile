@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Trip, TripCordinates, TripPoints } from '../interfaces/trip';
 import { getFirebaseToken } from '../utils/firebase';
 
-const ENDPOINT = 'https://708f-190-16-193-159.ngrok.io/api';
+const ENDPOINT = 'https://fiuber-trips-aleacevedo.cloud.okteto.net/api';
 
 export const calculateCost = async (trip: TripPoints) => {
   const token = await getFirebaseToken();

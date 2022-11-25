@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
 import { Bar as ProgressBarr } from 'react-native-progress';
+import { Rating } from 'react-native-ratings';
 import { useSelector } from 'react-redux';
 
 import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
+import { Colors } from '../../../../../constants/theme';
 import useTripStatus from '../../../../../hooks/useTripStatus';
 import { ReduxState } from '../../../../../interfaces/redux';
 import { finishTrip } from '../../../../../services/trips';
@@ -85,13 +87,18 @@ const TripInCourse = ({}: { modalRef: React.RefObject<IHandles> }) => {
             {driver?.firstName} {driver?.lastName}{' '}
           </Text>
         </View>
-        <View style={styles.ModalTextContainer}>
-          <Text type="subtitle2">{t('driverTrip.tripInCourse.raiting')}</Text>
-          <Text type="subtitle2">
-            {' '}
-            {driver?.firstName} {driver?.lastName}{' '}
-          </Text>
-        </View>
+        {driver?.rating && (
+          <View style={styles.ModalRating}>
+            <Text type="subtitle2">
+              {t('passangerTrip.driverAccept.driverRating')}
+            </Text>
+            <Rating
+              readonly
+              tintColor={Colors.Black.Pure}
+              startingValue={driver?.rating || 0}
+            />
+          </View>
+        )}
       </View>
     </>
   );
