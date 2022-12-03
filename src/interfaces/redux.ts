@@ -53,7 +53,7 @@ export interface ProfileGetParams {
 
 export interface ProfileUpdateParams {
   uid: string;
-  profile: Profile;
+  profile: Partial<Profile>;
 }
 
 export type AppDispatch = typeof store.dispatch;

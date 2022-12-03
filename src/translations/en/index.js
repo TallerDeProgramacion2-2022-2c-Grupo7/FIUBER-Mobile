@@ -120,6 +120,27 @@ const translations = {
       raiting: 'Raite the driver: ',
     },
   },
+  profile: {
+    edit: {
+      firstName: 'First Name',
+      firstNamePlaceholder: 'Enter your first name',
+      lastName: 'Last Name',
+      lastNamePlaceholder: 'Enter your last name',
+      email: 'Email',
+      emailPlaceholder: 'Enter your email',
+      phone: 'Phone',
+      phonePlaceholder: 'Enter your phone',
+      isDriver: 'I am Driver',
+      brand: 'Brand',
+      brandPlaceholder: 'Enter your car brand',
+      model: 'Model',
+      modelPlaceholder: 'Enter your car model',
+      plate: 'Plate',
+      platePlaceholder: 'Enter your car plate',
+      color: 'Color',
+      colorPlaceholder: 'Enter your car color',
+    },
+  },
 };
 
 export default translations;
