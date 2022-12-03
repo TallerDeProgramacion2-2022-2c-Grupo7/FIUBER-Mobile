@@ -1,7 +1,9 @@
+import auth from '@react-native-firebase/auth';
 import { SafeAreaView, View, ScrollView } from 'react-native';
 import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ROUTES } from '../../constants/routes';
@@ -11,18 +13,29 @@ import styles from './styles';
 import MyProfileData from '../../components/MyProfileData';
 import ChangePassword from '../../components/ChangePassword';
 import { logout } from '../../redux/slices/auth';
+import { Profile } from '../../interfaces/profile';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
+import { getMyProfile } from '../../redux/slices/profile';
 
-type Props = NativeStackScreenProps<RootStackParamList, ROUTES.MY_PROFILE_SCREEN>;
+type Props = BottomTabScreenProps<RootStackParamList, ROUTES.MY_PROFILE_SCREEN>;
 
-const isADriver = true;
+const DriverInfo = ({
+  brand,
+  model,
+  color,
+  plate
+}: {
+  brand: string;
+  model: string;
+  color: string;
+  plate: string;
+}) => {
 
-function DriverInfo() {
   return (
     <>
       <MyProfileData
         dataDescription='Brand'
-        dataValue='User brand'
+        dataValue={brand}
         leftPosition={-380} //-110
         rightPosition={110} //-110
         modalizeDescription='Change brand'
@@ -33,7 +46,7 @@ function DriverInfo() {
 
       <MyProfileData
         dataDescription='Model'
-        dataValue='User model'
+        dataValue={model}
         leftPosition={-380} //-110
         rightPosition={110} //-110
         modalizeDescription='Change model'
@@ -44,7 +57,7 @@ function DriverInfo() {
 
       <MyProfileData
         dataDescription='Color'
-        dataValue='User color'
+        dataValue={color}
         leftPosition={-380} //-113
         rightPosition={110} //-113
         modalizeDescription='Change color'
@@ -55,7 +68,7 @@ function DriverInfo() {
 
       <MyProfileData
         dataDescription='Plate'
-        dataValue='User plate'
+        dataValue={plate}
         leftPosition={-380} //-113
         rightPosition={110} //-113
         modalizeDescription='Change plate'
@@ -69,10 +82,23 @@ function DriverInfo() {
 
 function MyProfile({ navigation }: Props) {
   const dispatch = useDispatch<AppDispatch>();
+  const { profile } = useSelector((state: ReduxState) => state.profile);
   
   const handleLogOut = async () => {
+    navigation.navigate(ROUTES.HOME_SCREEN);
     await dispatch(logout());
   };
+
+  const {email} = profile;
+  const {firstName} = profile;
+  const {lastName} = profile;
+  const {phoneNumber} = profile;
+  const {isDriver} = profile;
+  const {car} = profile;
+  const {brand} = car || {"brand": ""};
+  const {model} = car || {"model": ""};
+  const {color} = car || {"color": ""};
+  const {plate} = car || {"plate": ""};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -89,7 +115,7 @@ function MyProfile({ navigation }: Props) {
       <ScrollView>
       <MyProfileData
         dataDescription='First name'
-        dataValue='User first name'
+        dataValue={firstName}
         leftPosition={-380}
         rightPosition={97}
         modalizeDescription='Change first name'
@@ -100,7 +126,7 @@ function MyProfile({ navigation }: Props) {
 
       <MyProfileData
         dataDescription='Last name'
-        dataValue='User last name'
+        dataValue={lastName}
         leftPosition={-380}
         rightPosition={97}
         modalizeDescription='Change last name'
@@ -111,19 +137,23 @@ function MyProfile({ navigation }: Props) {
 
       <MyProfileData
         dataDescription='Email'
-        dataValue='User email'
-        leftPosition={-340}
+        dataValue={email}
+        leftPosition={-320}
         rightPosition={115}
         isEditable={false}/>
 
       <MyProfileData
         dataDescription='Phone'
-        dataValue='User phone'
+        dataValue={phoneNumber}
         leftPosition={-360}
         rightPosition={110}
         isEditable={false}/>
 
-      {isADriver ? <DriverInfo/> : <></>}
+      {isDriver === true ? <DriverInfo
+                              brand={brand}
+                              model={model}
+                              color={color}
+                              plate={plate}/> : <></>}
 
       <View
         style={{
