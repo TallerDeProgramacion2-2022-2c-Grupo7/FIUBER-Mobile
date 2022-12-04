@@ -1,4 +1,4 @@
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useRef, useState } from 'react';
 import { SafeAreaView, ScrollView, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -16,7 +16,7 @@ import { carProfilePropList, userProfilePropList } from './data';
 import EditProfileModal from './EditProfileModal';
 import styles from './styles';
 
-type Props = NativeStackScreenProps<
+type Props = BottomTabScreenProps<
   RootStackParamList,
   ROUTES.MY_PROFILE_SCREEN
 >;
@@ -44,6 +44,7 @@ function MyProfile({ navigation }: Props) {
   const isDriver = profile?.isDriver;
 
   const handleLogOut = async () => {
+    navigation.navigate(ROUTES.HOME_SCREEN);
     await dispatch(logout());
   };
 
