@@ -10,6 +10,7 @@ import Header from '../../../components/Header';
 import Modal from '../../../components/Modal';
 import Text from '../../../components/Text';
 import TextInput from '../../../components/TextInput';
+import { Profile } from '../../../interfaces/profile';
 import { AppDispatch, ReduxState } from '../../../interfaces/redux';
 import { update } from '../../../redux/slices/profile';
 import styles from './styles';
@@ -27,22 +28,44 @@ const EditProfileModal = ({
   placeholder,
   dataKey,
 }: Props) => {
+  const carKeys: string[] = ['brand', 'model', 'color', 'plate'];
   const [data, setData] = useState('');
   const [isError, setIsError] = useState(false);
+  const [canSave, setCanSave] = useState(true);
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { uid } = useSelector(
     (state: ReduxState) => state.auth.user || { uid: '' }
   );
+  const profile = useSelector((state: ReduxState) => state.profile.profile);
+
+  const generateProfile = (keyToUpdate: string, value: string): Profile => {
+    const newProfile = { ...profile };
+    if (carKeys.includes(keyToUpdate)) {
+      newProfile["car"][keyToUpdate] = value;
+    }
+    else {
+      newProfile[keyToUpdate] = value;
+    }
+
+    return newProfile;
+  };
 
   const onSaveEdit = () => {
-    dispatch(update({ uid, profile: { [dataKey]: data } })).then(() => {
+    const newProfile: Profile = generateProfile(dataKey, data);
+    dispatch(update({ uid, profile: newProfile})).then(() => {
+      setData("");
+      setCanSave(true);
+      setIsError(false);
       modalRef.current?.close();
     });
   };
 
   const onCancelEdit = () => {
     console.log('Cancel');
+    setIsError(false);
+    setCanSave(true);
+    setData("");
     modalRef.current?.close();
   };
 
@@ -74,6 +97,7 @@ const EditProfileModal = ({
               }
 
               setIsError(false);
+              setCanSave(false);
             }}
             returnKeyType="done"
             contentContainerStyle={styles.textInput}
@@ -106,6 +130,7 @@ const EditProfileModal = ({
             }}
             text="Save"
             onPress={onSaveEdit}
+            disabled={canSave}
           />
         </View>
       </Modal>

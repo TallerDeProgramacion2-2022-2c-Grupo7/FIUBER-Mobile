@@ -27,7 +27,7 @@ export const userProfilePropList = [
     isEditable: false,
   },
   {
-    key: 'phone',
+    key: 'phoneNumber',
     dataDescription: 'common.phone',
     isEditable: false,
   },

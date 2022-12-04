@@ -35,6 +35,7 @@ function MyProfile({ navigation }: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const modalRef = useRef<Modalize>(null);
   const [modalProps, setModalProps] = useState<ModalProps>(defaultModalProps);
+  const [dataKey, setDataKey] = useState("");
   const profile = useSelector((state: ReduxState) => state.profile.profile);
   const profileData = (profile || {}) as { [key: string]: string };
   const carProfile = ((profile?.isDriver && profile?.car) || {}) as {
@@ -52,6 +53,7 @@ function MyProfile({ navigation }: Props) {
         item => item.key === key
       )?.modal || defaultModalProps
     );
+    setDataKey(key);
     modalRef.current?.open();
   };
 
@@ -119,7 +121,7 @@ function MyProfile({ navigation }: Props) {
           </View>
         </ScrollView>
       </View>
-      <EditProfileModal modalRef={modalRef} {...modalProps} />
+      <EditProfileModal modalRef={modalRef} {...modalProps} dataKey={dataKey} />
     </SafeAreaView>
   );
 }
