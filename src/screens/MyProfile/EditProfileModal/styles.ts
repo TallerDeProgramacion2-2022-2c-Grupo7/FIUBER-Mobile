@@ -33,6 +33,7 @@ export default StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     fontWeight: 'bold',
+    marginBottom: 10,
   },
   textHeader: {
     ...fontMaker({

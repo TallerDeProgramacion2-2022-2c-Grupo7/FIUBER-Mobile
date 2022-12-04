@@ -16,26 +16,24 @@ import { carProfilePropList, userProfilePropList } from './data';
 import EditProfileModal from './EditProfileModal';
 import styles from './styles';
 
-type Props = BottomTabScreenProps<
-  RootStackParamList,
-  ROUTES.MY_PROFILE_SCREEN
->;
+type Props = BottomTabScreenProps<RootStackParamList, ROUTES.MY_PROFILE_SCREEN>;
 
 interface ModalProps {
   description: string;
   placeholder: string;
+  dataKey: string;
 }
 
 const defaultModalProps: ModalProps = {
   description: '',
   placeholder: '',
+  dataKey: '',
 };
 
 function MyProfile({ navigation }: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const modalRef = useRef<Modalize>(null);
   const [modalProps, setModalProps] = useState<ModalProps>(defaultModalProps);
-  const [dataKey, setDataKey] = useState("");
   const profile = useSelector((state: ReduxState) => state.profile.profile);
   const profileData = (profile || {}) as { [key: string]: string };
   const carProfile = ((profile?.isDriver && profile?.car) || {}) as {
@@ -49,12 +47,13 @@ function MyProfile({ navigation }: Props) {
   };
 
   const handleEditProfile = (key: string) => {
-    setModalProps(
-      [...userProfilePropList, ...carProfilePropList].find(
+    const modalPropsAux = {
+      ...([...userProfilePropList, ...carProfilePropList].find(
         item => item.key === key
-      )?.modal || defaultModalProps
-    );
-    setDataKey(key);
+      )?.modal || defaultModalProps),
+      dataKey: key,
+    };
+    setModalProps(modalPropsAux);
     modalRef.current?.open();
   };
 
@@ -122,7 +121,7 @@ function MyProfile({ navigation }: Props) {
           </View>
         </ScrollView>
       </View>
-      <EditProfileModal modalRef={modalRef} {...modalProps} dataKey={dataKey} />
+      <EditProfileModal modalRef={modalRef} {...modalProps} />
     </SafeAreaView>
   );
 }

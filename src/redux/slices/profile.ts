@@ -42,14 +42,28 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
   async ({ uid, profile }, {}) => {
     const privateProfile = pick(profile, PRIVATE_ATTRS);
     const publicProfile = pick(profile, PUBILC_ATTRS);
-    await firestore().doc(`publicProfiles/${uid}`).set(publicProfile);
 
-    const privateProfiles = await firestore()
+    const savedPublicProfile = await firestore()
+      .doc(`publicProfiles/${uid}`)
+      .get();
+
+    const publicProfileToUpdate = {
+      ...savedPublicProfile.data(),
+      ...publicProfile,
+      car: {
+        ...savedPublicProfile.data()?.car,
+        ...(publicProfile.isDriver ? publicProfile.car : {}),
+      },
+    };
+
+    await firestore().doc(`publicProfiles/${uid}`).set(publicProfileToUpdate);
+
+    const savedPrivateProfile = await firestore()
       .doc(`privateProfiles/${uid}`)
       .get();
 
     const privateProfileToUpdate = {
-      ...privateProfiles.data(),
+      ...savedPrivateProfile.data(),
       ...privateProfile,
     };
 

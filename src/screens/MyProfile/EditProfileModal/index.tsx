@@ -20,6 +20,7 @@ interface Props {
   dataKey: string;
   description: string;
   placeholder: string;
+  isCarAttr?: boolean;
 }
 
 const EditProfileModal = ({
@@ -27,8 +28,8 @@ const EditProfileModal = ({
   description,
   placeholder,
   dataKey,
+  isCarAttr = false,
 }: Props) => {
-  const carKeys: string[] = ['brand', 'model', 'color', 'plate'];
   const [data, setData] = useState('');
   const [isError, setIsError] = useState(false);
   const [canSave, setCanSave] = useState(true);
@@ -37,25 +38,17 @@ const EditProfileModal = ({
   const { uid } = useSelector(
     (state: ReduxState) => state.auth.user || { uid: '' }
   );
-  const profile = useSelector((state: ReduxState) => state.profile.profile);
-
-  const generateProfile = (keyToUpdate: string, value: string): Profile => {
-    const newProfile = { ...profile };
-    if (carKeys.includes(keyToUpdate)) {
-      newProfile["car"][keyToUpdate] = value;
-    }
-    else {
-      newProfile[keyToUpdate] = value;
-    }
-
-    return newProfile;
-  };
 
   const onSaveEdit = () => {
-    const newProfile: Profile = generateProfile(dataKey, data);
-    dispatch(update({ uid, profile: newProfile})).then(() => {
-      setData("");
-      setCanSave(true);
+    if (!data || data.length === 0) {
+      return;
+    }
+    const profile = isCarAttr
+      ? { car: { [dataKey]: data } }
+      : { [dataKey]: data };
+    dispatch(update({ uid, profile })).then(() => {
+      setData('');
+      setCanSave(false);
       setIsError(false);
       modalRef.current?.close();
     });
@@ -64,8 +57,8 @@ const EditProfileModal = ({
   const onCancelEdit = () => {
     console.log('Cancel');
     setIsError(false);
-    setCanSave(true);
-    setData("");
+    setCanSave(false);
+    setData('');
     modalRef.current?.close();
   };
 
@@ -87,7 +80,15 @@ const EditProfileModal = ({
         <View style={styles.modalContainer}>
           <TextInput
             value={data}
-            onChangeText={setData}
+            onChangeText={value => {
+              if (value.length > 0) {
+                setCanSave(true);
+              } else {
+                setCanSave(false);
+              }
+
+              setData(value);
+            }}
             keyboardType="default"
             onSubmitEditing={event => {
               if (event.nativeEvent.text.length < 1) {
@@ -97,7 +98,7 @@ const EditProfileModal = ({
               }
 
               setIsError(false);
-              setCanSave(false);
+              setCanSave(true);
             }}
             returnKeyType="done"
             contentContainerStyle={styles.textInput}
@@ -130,7 +131,7 @@ const EditProfileModal = ({
             }}
             text="Save"
             onPress={onSaveEdit}
-            disabled={canSave}
+            disabled={!canSave}
           />
         </View>
       </Modal>
