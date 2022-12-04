@@ -25,11 +25,16 @@ un e-mail y contraseña válidos.
 ![image](https://user-images.githubusercontent.com/43656633/205339660-6c90162a-3dd6-4bbe-91e6-7324527fa582.png)
 
 En el siguiente paso, se pedirá un número de teléfono para
-validar la cuenta.
+validar la cuenta. `Twilio`enviará a este número un código de verificación
+de seis dígitos que se deberá ingresar en la aplicación.
 
 ![image](https://user-images.githubusercontent.com/43656633/205341038-fcb709d8-166b-4857-9608-3d2e4c10021a.png)
 
-Luego de ingresar el código recibido de `Twilio`, se puede crear el perfil de usuario.
+* * *
+
+# Creación de perfil
+
+Una vez validada la cuenta, se puede crear el perfil de usuario.
 
 ![image](https://user-images.githubusercontent.com/43656633/205341851-db44c982-a0bb-4403-b895-a7486500572e.png)
 
@@ -42,24 +47,34 @@ utilizar (marca, modelo, color y patente).
 
 ![image](https://user-images.githubusercontent.com/43656633/205342251-678daddb-4a4c-4496-ab52-aa8a6c8f7731.png)
 
-Para continuar, se debe compartir la ubicación con la aplicación.
-
-![image](https://user-images.githubusercontent.com/43656633/205342463-54793bcd-152f-4021-a3f1-7afc6ebd64f3.png)
-
-
 * * *
 
 # Ingreso
 
-* * *
+Para continuar, se debe compartir la ubicación con la aplicación.
 
-# Creación de perfil
+![image](https://user-images.githubusercontent.com/43656633/205342463-54793bcd-152f-4021-a3f1-7afc6ebd64f3.png)
+
+Finalmente la aplicación iniciará en la pantalla de inicio, donde se puede ver nuestra ubicación en el mapa.
+
+![image](https://user-images.githubusercontent.com/43656633/205508129-cca75c21-3ad6-4646-9f44-c9dfb92594f5.png)
 
 * * *
 
 # Uso como pasajero
 
 ## Solicitud de viaje
+
+En la pantalla de inicio, se debe buscar la dirección en la barra de búsqueda.
+
+![image](https://user-images.githubusercontent.com/43656633/205508215-8e3ba094-e762-449e-99b5-9cb9f43d5ffc.png)
+
+La aplicación mostrará el costo del viaje y pedirá la confirmación del usuario.
+
+![image](https://user-images.githubusercontent.com/43656633/205508351-1cb8d5eb-2358-4c02-a075-eb480ca1c4bb.png)
+
+Una vez seleccionada la opción `Accept`, la aplicación mostrará la pantalla de espera y
+permanecerá en este estado hasta que un chofer acepte el viaje.
 
 * * *
 
