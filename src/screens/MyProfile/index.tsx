@@ -1,3 +1,4 @@
+import auth from '@react-native-firebase/auth';
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useRef, useState } from 'react';
 import { SafeAreaView, ScrollView, View } from 'react-native';
@@ -40,6 +41,8 @@ function MyProfile({ navigation }: Props) {
     [key: string]: string;
   };
   const isDriver = profile?.isDriver;
+
+  const emailProvider = auth().currentUser?.email?.split('@')[1];
 
   const handleLogOut = async () => {
     navigation.navigate(ROUTES.HOME_SCREEN);
@@ -117,7 +120,8 @@ function MyProfile({ navigation }: Props) {
               onPress={() => handleLogOut()}>
               <Text style={styles.textLogOut}>Logout</Text>
             </TouchableOpacity>
-            <ChangePassword />
+            {emailProvider === 'gmail.com' || emailProvider === 'fi.uba.ar'?
+            null : <ChangePassword />}
           </View>
         </ScrollView>
       </View>

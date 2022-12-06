@@ -1,3 +1,4 @@
+import auth from '@react-native-firebase/auth';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, View } from 'react-native';
@@ -36,14 +37,31 @@ const ChangePassword = () => {
     modalRef.current?.close();
   };
 
+  const reauthenticate = (currentPassword: string) => {
+    const currentUser = auth().currentUser;
+    var cred = auth.EmailAuthProvider.credential(currentUser?.email || "", currentPassword);
+    return currentUser?.reauthenticateWithCredential(cred);
+  }
+
   const onSaveEdit = () => {
-    Alert.alert('Password changed');
-    setCanSave(true);
-    setPassword('');
-    setNewPassword('');
-    setShowPassword(false);
-    setShowNewPassword(false);
-    modalRef.current?.close();
+    reauthenticate(password)?.then(() => {
+      const user = auth().currentUser;
+      user?.updatePassword(newPassword).then(() => {
+        Alert.alert("Password was changed");
+        setCanSave(true);
+        setPassword('');
+        setNewPassword('');
+        setShowPassword(false);
+        setShowNewPassword(false);
+        modalRef.current?.close();
+      }).catch((error) => { 
+        console.log(error.message); 
+        Alert.alert("An error occurred, please try again");
+      });
+    }).catch((error) => { 
+      console.log(error.message);
+      Alert.alert("An error occurred, please try again");
+     });
   };
 
   const toggleShowPassowrd = () => {
