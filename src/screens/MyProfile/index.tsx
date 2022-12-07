@@ -42,7 +42,8 @@ function MyProfile({ navigation }: Props) {
   };
   const isDriver = profile?.isDriver;
 
-  const emailProvider = auth().currentUser?.email?.split('@')[1];
+  //devuelve password si no es log in con google
+  const providerId = auth().currentUser?.providerData[0]["providerId"];
 
   const handleLogOut = async () => {
     navigation.navigate(ROUTES.HOME_SCREEN);
@@ -120,7 +121,7 @@ function MyProfile({ navigation }: Props) {
               onPress={() => handleLogOut()}>
               <Text style={styles.textLogOut}>Logout</Text>
             </TouchableOpacity>
-            {emailProvider === 'gmail.com' || emailProvider === 'fi.uba.ar'?
+            {providerId !== 'password'?
             null : <ChangePassword />}
           </View>
         </ScrollView>
