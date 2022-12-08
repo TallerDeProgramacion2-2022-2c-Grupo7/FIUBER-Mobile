@@ -1,156 +1,132 @@
-import { SafeAreaView, View, ScrollView } from 'react-native';
-import React from 'react';
+import auth from '@react-native-firebase/auth';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import React, { useRef, useState } from 'react';
+import { SafeAreaView, ScrollView, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Modalize } from 'react-native-modalize';
 import { useDispatch, useSelector } from 'react-redux';
 
+import ChangePassword from '../../components/ChangePassword';
+import MyProfileData from '../../components/MyProfileData';
+import Text from '../../components/Text';
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
-import Text from '../../components/Text';
-import styles from './styles';
-import MyProfileData from '../../components/MyProfileData';
-import ChangePassword from '../../components/ChangePassword';
-import { logout } from '../../redux/slices/auth';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
+import { logout } from '../../redux/slices/auth';
+import { carProfilePropList, userProfilePropList } from './data';
+import EditProfileModal from './EditProfileModal';
+import styles from './styles';
 
-type Props = NativeStackScreenProps<RootStackParamList, ROUTES.MY_PROFILE_SCREEN>;
+type Props = BottomTabScreenProps<RootStackParamList, ROUTES.MY_PROFILE_SCREEN>;
 
-const isADriver = true;
-
-function DriverInfo() {
-  return (
-    <>
-      <MyProfileData
-        dataDescription='Brand'
-        dataValue='User brand'
-        leftPosition={-380} //-110
-        rightPosition={110} //-110
-        modalizeDescription='Change brand'
-        successfullDescription='Brand changed'
-        translateText='common.brand'
-        isEditable={true}
-        autoCapitalize='sentences'/>
-
-      <MyProfileData
-        dataDescription='Model'
-        dataValue='User model'
-        leftPosition={-380} //-110
-        rightPosition={110} //-110
-        modalizeDescription='Change model'
-        successfullDescription='Model changed'
-        translateText='common.model'
-        isEditable={true}
-        autoCapitalize='sentences'/>
-
-      <MyProfileData
-        dataDescription='Color'
-        dataValue='User color'
-        leftPosition={-380} //-113
-        rightPosition={110} //-113
-        modalizeDescription='Change color'
-        successfullDescription='Color changed'
-        translateText='common.color'
-        isEditable={true}
-        autoCapitalize='sentences'/>
-
-      <MyProfileData
-        dataDescription='Plate'
-        dataValue='User plate'
-        leftPosition={-380} //-113
-        rightPosition={110} //-113
-        modalizeDescription='Change plate'
-        successfullDescription='Plate changed'
-        translateText='common.plate'
-        isEditable={true}
-        autoCapitalize='sentences'/>
-    </>
-  );
+interface ModalProps {
+  description: string;
+  placeholder: string;
+  dataKey: string;
 }
+
+const defaultModalProps: ModalProps = {
+  description: '',
+  placeholder: '',
+  dataKey: '',
+};
 
 function MyProfile({ navigation }: Props) {
   const dispatch = useDispatch<AppDispatch>();
-  
+  const modalRef = useRef<Modalize>(null);
+  const [modalProps, setModalProps] = useState<ModalProps>(defaultModalProps);
+  const profile = useSelector((state: ReduxState) => state.profile.profile);
+  const profileData = (profile || {}) as { [key: string]: string };
+  const carProfile = ((profile?.isDriver && profile?.car) || {}) as {
+    [key: string]: string;
+  };
+  const isDriver = profile?.isDriver;
+
+  //devuelve password si no es log in con google
+  const providerId = auth().currentUser?.providerData[0]["providerId"];
+
   const handleLogOut = async () => {
+    navigation.navigate(ROUTES.HOME_SCREEN);
     await dispatch(logout());
+  };
+
+  const handleEditProfile = (key: string) => {
+    const modalPropsAux = {
+      ...([...userProfilePropList, ...carProfilePropList].find(
+        item => item.key === key
+      )?.modal || defaultModalProps),
+      dataKey: key,
+    };
+    setModalProps(modalPropsAux);
+    modalRef.current?.open();
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.userInfoSection}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{marginLeft: -30}}>
-            <Text style={[styles.title, {
-              marginTop: 10,
-            }]} type="subtitle1">User Data</Text>
-          </View>
+      <View>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.title} type="subtitle1">
+            User Data
+          </Text>
         </View>
-      </View>
-      
-      <ScrollView>
-      <MyProfileData
-        dataDescription='First name'
-        dataValue='User first name'
-        leftPosition={-380}
-        rightPosition={97}
-        modalizeDescription='Change first name'
-        successfullDescription='First name changed'
-        translateText='common.firstName'
-        isEditable={true}
-        autoCapitalize='sentences'/>
 
-      <MyProfileData
-        dataDescription='Last name'
-        dataValue='User last name'
-        leftPosition={-380}
-        rightPosition={97}
-        modalizeDescription='Change last name'
-        successfullDescription='Last name changed'
-        translateText='common.lastName'
-        isEditable={true}
-        autoCapitalize='sentences'/>
-
-      <MyProfileData
-        dataDescription='Email'
-        dataValue='User email'
-        leftPosition={-340}
-        rightPosition={115}
-        isEditable={false}/>
-
-      <MyProfileData
-        dataDescription='Phone'
-        dataValue='User phone'
-        leftPosition={-360}
-        rightPosition={110}
-        isEditable={false}/>
-
-      {isADriver ? <DriverInfo/> : <></>}
-
-      <View
-        style={{
-          width: 70,
-          marginTop: 20, //70
-          minWidth: '100%', //hasta aca bottom 70
-          flexDirection: 'row',
-          alignSelf: 'center',
-          alignContent: 'center',
-          alignItems: 'center',
-      }}>
-        <TouchableOpacity
+        <ScrollView
           style={{
-            alignItems: 'center',
-            padding: 1,
-            alignContent: 'center',
-            justifyContent: 'center', //hasta aca
-            alignSelf: 'center',
-            paddingHorizontal: '10%',
-            marginRight: 8,
-          }}
-          onPress={() => handleLogOut()}>
-          <Text style={styles.textLogOut}>Logout</Text>
-        </TouchableOpacity>
-        <ChangePassword/>
+            width: '100%',
+            flexDirection: 'column',
+            alignContent: 'flex-start',
+            margin: 10,
+          }}>
+          {userProfilePropList.map(profileProps => {
+            return (
+              <MyProfileData
+                key={profileProps.key}
+                dataKey={profileProps.key}
+                dataDescription={profileProps.dataDescription}
+                dataValue={profileData[profileProps.key]}
+                isEditable={profileProps.isEditable}
+                onEdit={handleEditProfile}
+              />
+            );
+          })}
+          {isDriver &&
+            carProfilePropList.map(profileProps => {
+              return (
+                <MyProfileData
+                  key={profileProps.key}
+                  dataKey={profileProps.key}
+                  dataDescription={profileProps.dataDescription}
+                  dataValue={carProfile[profileProps.key]}
+                  isEditable={profileProps.isEditable}
+                  onEdit={handleEditProfile}
+                />
+              );
+            })}
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: 'row',
+              alignSelf: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity
+              style={{
+                alignItems: 'center',
+                padding: 1,
+                alignContent: 'center',
+                justifyContent: 'center', //hasta aca
+                alignSelf: 'center',
+              }}
+              onPress={() => handleLogOut()}>
+              <Text style={styles.textLogOut}>Logout</Text>
+            </TouchableOpacity>
+            {providerId !== 'password'?
+            null : <ChangePassword />}
+          </View>
+        </ScrollView>
       </View>
-      </ScrollView>
+      <EditProfileModal modalRef={modalRef} {...modalProps} />
     </SafeAreaView>
   );
 }

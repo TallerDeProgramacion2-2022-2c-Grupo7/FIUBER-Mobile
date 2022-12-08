@@ -6,6 +6,7 @@ import { LatLng } from 'react-native-maps';
 import { ReduxState, TripState } from '../../interfaces/redux';
 import { MapPoint } from '../../interfaces/trip';
 import { getPublicProfile } from '../../services/profile';
+import { getRating } from '../../services/rating';
 import { calculateCost, createTrip, getTrip } from '../../services/trips';
 
 const INITIAL_STATE: TripState = {
@@ -85,8 +86,11 @@ export const fetchPassangerProfile = createAsyncThunk<
 >('trip/fetchPassangerProfile', async (_, { getState }) => {
   const { trip } = getState();
   if (trip.passangerId) {
-    return getPublicProfile(trip.passangerId);
+    const profile = await getPublicProfile(trip.passangerId);
+    const rating = await getRating(trip.passangerId);
+    return { ...profile, rating };
   }
+  return {};
 });
 
 export const fetchDriverProfile = createAsyncThunk<
@@ -96,8 +100,11 @@ export const fetchDriverProfile = createAsyncThunk<
 >('trip/fetchDriverProfile', async (_, { getState }) => {
   const { trip } = getState();
   if (trip.driverId) {
-    return getPublicProfile(trip.driverId);
+    const profile = await getPublicProfile(trip.driverId);
+    const rating = await getRating(trip.driverId);
+    return { ...profile, rating };
   }
+  return {};
 });
 
 const tripSlice = createSlice({

@@ -8,6 +8,10 @@ import {
   UserLocationChangeEventCoordinate,
 } from './trip';
 
+type DeepPartial<T> = T extends object
+  ? { [P in keyof T]?: DeepPartial<T[P]> }
+  : T;
+
 export interface TripState {
   id: string | null;
   from: MapPoint | null;
@@ -53,7 +57,7 @@ export interface ProfileGetParams {
 
 export interface ProfileUpdateParams {
   uid: string;
-  profile: Profile;
+  profile: DeepPartial<Profile>;
 }
 
 export type AppDispatch = typeof store.dispatch;

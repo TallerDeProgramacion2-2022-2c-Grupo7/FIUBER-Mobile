@@ -8,6 +8,7 @@ import messaging from '@react-native-firebase/messaging';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import useWaitingForTrip from '../../../../../hooks/useWaitingForTrip';
+import styles from '../../../styles';
 import { IModalComponentArgs } from '../../DriverTripModal';
 
 const WaitingForTrip = ({
@@ -39,7 +40,7 @@ const WaitingForTrip = ({
     <>
       <Header
         center={
-          <Text style={{ marginTop: 20 }} type="subtitle1">
+          <Text style={styles.ModalTitle} type="subtitle1">
             {t('driverTrip.waitingTrip.title')}
           </Text>
         }

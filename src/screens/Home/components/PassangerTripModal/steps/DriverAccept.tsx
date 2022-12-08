@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
 import { Bar as ProgressBarr } from 'react-native-progress';
+import { Rating } from 'react-native-ratings';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
+import { Colors } from '../../../../../constants/theme';
 import useTripStatus from '../../../../../hooks/useTripStatus';
 import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
 import {
@@ -46,12 +48,18 @@ const DriverAccept = ({}: { modalRef: React.RefObject<IHandles> }) => {
           </Text>
           <Text type="subtitle2">{driver?.firstName}</Text>
         </View>
-        <View style={styles.ModalTextContainer}>
-          <Text type="subtitle2">
-            {t('passangerTrip.driverAccept.driverRating')}
-          </Text>
-          <Text type="subtitle2">{driver?.rating}</Text>
-        </View>
+        {driver?.rating && (
+          <View style={styles.ModalRating}>
+            <Text type="subtitle2">
+              {t('passangerTrip.driverAccept.driverRating')}
+            </Text>
+            <Rating
+              readonly
+              tintColor={Colors.Black.Pure}
+              startingValue={driver?.rating || 0}
+            />
+          </View>
+        )}
       </View>
       <View>
         <ProgressBarr
