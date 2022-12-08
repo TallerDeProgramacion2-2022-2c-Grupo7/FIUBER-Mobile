@@ -21,3 +21,13 @@ export const calculateDistanceInMeters = (coord1: LatLng, coord2: LatLng) => {
   const d = R * c; // in metres
   return d;
 };
+
+export const isValidEmail = (email: string) => {
+  if (!email) {
+    return false;
+  }
+
+  const emailWithoutSpaces = email.trimEnd();
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return emailRegex.test(emailWithoutSpaces.toLowerCase());
+}

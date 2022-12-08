@@ -16,6 +16,7 @@ import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
 import { googleLogin, login } from '../../redux/slices/auth';
 import { getMyProfile } from '../../redux/slices/profile';
+import { isValidEmail } from '../../utils';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.LOGIN_SCREEN>;
@@ -51,6 +52,10 @@ function Login({ navigation }: Props) {
   ) => {
     setLoading(true);
     setDisableInput(true);
+    if (!isValidEmail(submittedEmail)) {
+      onError('signup.invalidEmail');
+      return;
+    }
     await dispatch(
       login({ email: submittedEmail, password: submittedPassword, onError })
     );
@@ -80,6 +85,8 @@ function Login({ navigation }: Props) {
           <TextInput
             value={email}
             onChangeText={setEmail}
+            keyboardType={'email-address'}
+            autoCapitalize={'none'}
             contentContainerStyle={styles.emailInput}
             placeholder={t('common.enterEmail')}
             inputStyle={styles.emailTextInput}
