@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { Bar as ProgressBarr } from 'react-native-progress';
 import { Rating } from 'react-native-ratings';
 import { useDispatch, useSelector } from 'react-redux';
+import messaging from '@react-native-firebase/messaging';
 
 import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
@@ -29,6 +30,9 @@ const TripAccepted = ({
   );
 
   useEffect(() => {
+    messaging().unsubscribeFromTopic('availableTrips')
+      .then(() => console.log('Unsubscribed fom the topic availableTrips'));
+
     setAllwaysOpen(150);
     setOnClose(() => () => {});
     setOnClosed(() => () => {});
