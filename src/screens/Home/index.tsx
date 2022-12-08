@@ -9,7 +9,6 @@ import {
   GooglePlacesAutocomplete,
 } from 'react-native-google-places-autocomplete';
 import { useDispatch, useSelector } from 'react-redux';
-import messaging from '@react-native-firebase/messaging';
 
 import Wheel from '../../assets/wheel';
 import { ROUTES } from '../../constants/routes';
@@ -44,24 +43,7 @@ function Home({ navigation }: Props) {
     }
     if (logedIn && !profileObtained) {
       navigation.navigate(ROUTES.SET_PROFILE_SCREEN);
-    }
-
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification FCM caused app to open from background state:',
-        remoteMessage.notification,
-      );
-      navigation.navigate(ROUTES.HOME_SCREEN);
-    });
-
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        setTimeout(() => {
-             navigation.navigate(ROUTES.MY_PROFILE_SCREEN);
-        }, 5000);
-      });
-      
+    }      
   }, [logedIn, profileObtained]);
 
 
