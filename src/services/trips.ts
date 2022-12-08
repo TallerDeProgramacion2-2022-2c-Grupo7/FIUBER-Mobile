@@ -2,8 +2,9 @@ import axios from 'axios';
 
 import { Trip, TripCordinates, TripPoints } from '../interfaces/trip';
 import { getFirebaseToken } from '../utils/firebase';
+import messaging from '@react-native-firebase/messaging';
 
-const ENDPOINT = 'https://708f-190-16-193-159.ngrok.io/api';
+const ENDPOINT = 'https://fiuber-trips-aleacevedo.cloud.okteto.net/api';
 
 export const calculateCost = async (trip: TripPoints) => {
   const token = await getFirebaseToken();
@@ -32,8 +33,14 @@ export const calculateCost = async (trip: TripPoints) => {
 
 export const createTrip = async (trip: TripPoints): Promise<Trip> => {
   const token = await getFirebaseToken();
+  
+ await messaging().registerDeviceForRemoteMessages();
+ const tokenFCM = await messaging().getToken();
 
-  const { data } = await axios.post(`${ENDPOINT}/trips`, trip, {
+
+ const newTrip = {from: trip.from, to: trip.to, passengerDeviceId: tokenFCM}
+
+  const { data } = await axios.post(`${ENDPOINT}/trips`, newTrip, {
     headers: {
       Authorization: `${token}`,
     },
