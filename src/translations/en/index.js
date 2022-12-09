@@ -18,6 +18,7 @@ const translations = {
     submit: 'Create',
     title: 'Create Account',
     google: 'Signup with Google',
+    invalidEmail: 'Try again with a valid email',
   },
   common: {
     enterPassword: 'Enter password',

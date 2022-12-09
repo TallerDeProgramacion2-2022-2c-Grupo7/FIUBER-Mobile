@@ -73,7 +73,7 @@ function PasswordInput({
         {...inputProps}
       />
       {error && (
-        <Text style={styles.errorText}>{t('validations.passIncorrect')}</Text>
+        <Text style={styles.errorText}>{t(`${error}`)}</Text>
       )}
     </View>
   );
