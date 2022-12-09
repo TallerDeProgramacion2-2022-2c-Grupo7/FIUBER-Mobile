@@ -68,6 +68,10 @@ function Login({ navigation }: Props) {
   useEffect(() => {
     const goHome = async () => {
       user && (await dispatch(getMyProfile({ uid: user?.uid })));
+      setLoading(false);
+      setEmail("");
+      setPassword("");
+      setDisableInput(false);
       navigation.navigate(ROUTES.TAB_SCREEN);
     };
     if (logedIn) {
