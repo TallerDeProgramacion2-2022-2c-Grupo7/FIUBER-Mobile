@@ -13,12 +13,14 @@ const translations = {
     email: 'Email',
     password: 'Password',
     google: 'Login with Google',
+    logInError: 'Your email or password is incorrect, please try again or create an account',
   },
   signup: {
     submit: 'Create',
     title: 'Create Account',
     google: 'Signup with Google',
     invalidEmail: 'Try again with a valid email',
+    emailAlreadyInUse: 'This email is already in use, try with another one',
   },
   common: {
     enterPassword: 'Enter password',
