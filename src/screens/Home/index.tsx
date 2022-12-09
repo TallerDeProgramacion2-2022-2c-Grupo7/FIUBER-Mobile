@@ -43,8 +43,10 @@ function Home({ navigation }: Props) {
     }
     if (logedIn && !profileObtained) {
       navigation.navigate(ROUTES.SET_PROFILE_SCREEN);
-    }
+    }      
   }, [logedIn, profileObtained]);
+
+
 
   const onDestinationSelected = (
     data: GooglePlaceData,
