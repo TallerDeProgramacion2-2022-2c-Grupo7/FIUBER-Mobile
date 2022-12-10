@@ -99,7 +99,7 @@ const authSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.logedIn = false;
       state.user = null;
-      state.error = action.error.message || null;;
+      state.error = action.error.message || null;
     });
     builder.addCase(googleLogin.fulfilled, (state, action) => {
       state.logedIn = true;
