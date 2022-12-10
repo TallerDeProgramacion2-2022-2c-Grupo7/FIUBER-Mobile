@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import Modal from '../../components/Modal';
 import Text from '../../components/Text';
-import TouchableText from '../../components/TouchableText';
 import { Colors } from '../../constants/theme';
 import { ReduxState } from '../../interfaces/redux';
 import { getUnlockStatus, unlockWalletFunds } from '../../services/wallet';

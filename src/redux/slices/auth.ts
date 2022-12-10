@@ -60,7 +60,10 @@ export const signup = createAsyncThunk<any, AuthLoginParams>(
   'auth/signup',
   async ({ email, password, onError }, {}) => {
     try {
-      const response = await auth().createUserWithEmailAndPassword(email, password);
+      const response = await auth().createUserWithEmailAndPassword(
+        email,
+        password
+      );
       const uid = response.user.uid;
       const token = await response.user.getIdToken();
       createEvent('signup', uid, token);

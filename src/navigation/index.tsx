@@ -1,3 +1,5 @@
+import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
 import {
   DefaultTheme,
   NavigationContainer,
@@ -6,22 +8,22 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { Host } from 'react-native-portalize';
-import messaging from '@react-native-firebase/messaging';
-
+import { useSelector } from 'react-redux';
 
 import { ROUTES } from '../constants/routes';
 import { RootStackParamList } from '../interfaces/navigation';
+import { ReduxState } from '../interfaces/redux';
 import LoginScreen from '../screens/Login';
+import MainTab from '../screens/MainTab';
 import PhoneVerification from '../screens/PhoneVerification';
 import SetProfile from '../screens/SetProfile';
 import SetDriverProfile from '../screens/SetProfile/driver';
 import SignUpScreen from '../screens/SignUp';
+import Wallet from '../screens/Wallet';
 import Welcome from '../screens/Welcome';
-import MainTab from '../screens/MainTab';
 
 const Navigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
-  const [initialRoute, setInitialRoute] = useState(ROUTES.WELCOME);
 
   const navigationRef = useNavigationContainerRef(); // You can also use a regular ref with `React.useRef()`
 
@@ -29,19 +31,21 @@ const Navigator = () => {
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log(
         'Notification FCM caused app to open from background state:',
-        remoteMessage.notification,
+        remoteMessage.notification
       );
-      navigationRef.navigate(ROUTES.HOME_SCREEN);
+      navigationRef.navigate(ROUTES.TAB_SCREEN);
     });
 
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
-        if(remoteMessage){
-          setInitialRoute(ROUTES.HOME_SCREEN);
+        if (remoteMessage) {
+          navigationRef.navigate(ROUTES.TAB_SCREEN);
         }
       });
   }, []);
+
+  const initialRoute = auth().currentUser ? ROUTES.TAB_SCREEN : ROUTES.WELCOME;
 
   return (
     <NavigationContainer
@@ -73,9 +77,10 @@ const Navigator = () => {
             component={SetDriverProfile}
           />
           <Stack.Screen
-          name={ROUTES.PHONE_VERIFICATION_SCREEN}
-          component={PhoneVerification}
+            name={ROUTES.PHONE_VERIFICATION_SCREEN}
+            component={PhoneVerification}
           />
+          <Stack.Screen name={ROUTES.WALLET} component={Wallet} />
         </Stack.Navigator>
       </Host>
     </NavigationContainer>

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { BOLD, MEDIUM, REGULAR, SEMIBOLD } from '../../constants/fonts';
+import { BOLD, MEDIUM, SEMIBOLD } from '../../constants/fonts';
 import { Colors } from '../../constants/theme';
 import { fontMaker } from '../../utils/fonts';
 

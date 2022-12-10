@@ -1,6 +1,6 @@
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../../components/Button';

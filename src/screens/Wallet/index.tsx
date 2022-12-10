@@ -9,7 +9,6 @@ import Text from '../../components/Text';
 import { Colors } from '../../constants/theme';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { updateBalance, updateLocked } from '../../redux/slices/wallet';
-import { unlockWalletFunds } from '../../services/wallet';
 import DepositModal from './DepositModal';
 import styles from './styles';
 import UnlockModal from './UnlockModal';

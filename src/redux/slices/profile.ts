@@ -11,7 +11,7 @@ import {
 } from '../../interfaces/redux';
 
 const INITIAL_STATE: ProfileState = {
-  obtained: false,
+  savedProfile: null,
   profile: null,
   error: null,
 };
@@ -128,33 +128,33 @@ export const setPhoneNumber = createAsyncThunk<any, { phoneNumber: string }>(
 const profileSlice = createSlice({
   name: 'profile',
   initialState: INITIAL_STATE,
-  reducers: {},
+  reducers: {
+    clear: () => INITIAL_STATE,
+  },
   extraReducers: builder => {
     builder.addCase(getMyProfile.fulfilled, (state, action) => {
-      state.obtained = true;
+      state.savedProfile = true;
       state.profile = action.payload;
       state.error = null;
     });
     builder.addCase(getMyProfile.rejected, (state, action) => {
       state.error = action.error.message || null;
-      state.obtained = false;
+      state.savedProfile = false;
       state.profile = null;
     });
     builder.addCase(update.fulfilled, (state, action) => {
-      state.obtained = true;
+      state.savedProfile = true;
       state.profile = action.payload;
       state.error = null;
     });
     builder.addCase(update.rejected, (state, action) => {
       state.error = action.error.message || null;
-      state.obtained = false;
-      state.profile = null;
     });
   },
 });
 
 export const {
-  actions: {},
+  actions: { clear: clearProfile },
 } = profileSlice;
 
 export default profileSlice.reducer;

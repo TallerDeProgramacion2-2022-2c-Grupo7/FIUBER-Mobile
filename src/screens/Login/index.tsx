@@ -15,7 +15,6 @@ import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
 import { googleLogin, login } from '../../redux/slices/auth';
-import { getMyProfile } from '../../redux/slices/profile';
 import { isValidEmail } from '../../utils';
 import styles from './styles';
 
@@ -32,7 +31,7 @@ export const isValidPassword = (password: string) => {
 function Login({ navigation }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { logedIn, user } = useSelector((state: ReduxState) => state.auth);
+  const { logedIn } = useSelector((state: ReduxState) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -66,12 +65,8 @@ function Login({ navigation }: Props) {
   };
 
   useEffect(() => {
-    const goHome = async () => {
-      user && (await dispatch(getMyProfile({ uid: user?.uid })));
-      navigation.navigate(ROUTES.TAB_SCREEN);
-    };
     if (logedIn) {
-      goHome();
+      navigation.navigate(ROUTES.TAB_SCREEN);
     }
   }, [logedIn]);
 
