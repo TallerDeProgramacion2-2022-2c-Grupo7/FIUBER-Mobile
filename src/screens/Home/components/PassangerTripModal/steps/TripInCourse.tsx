@@ -87,7 +87,7 @@ const TripInCourse = ({}: { modalRef: React.RefObject<IHandles> }) => {
             {driver?.firstName} {driver?.lastName}{' '}
           </Text>
         </View>
-        {driver?.rating && (
+        {driver?.rating && (driver?.rating != -1) &&(
           <View style={styles.ModalRating}>
             <Text type="subtitle2">
               {t('passangerTrip.driverAccept.driverRating')}

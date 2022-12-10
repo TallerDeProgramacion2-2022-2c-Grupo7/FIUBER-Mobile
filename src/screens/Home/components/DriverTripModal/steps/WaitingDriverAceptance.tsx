@@ -105,7 +105,7 @@ const WaitingDriverAceptance = ({
             {passsanger?.firstName} {passsanger?.lastName}{' '}
           </Text>
         </View>
-        {passsanger?.rating && (
+        {passsanger?.rating && (passsanger?.rating != -1) && (
           <View style={styles.ModalTextContainer}>
             <Text type="subtitle2">{t('driverTrip.tripAccepted.rating')}</Text>
             <Rating
