@@ -48,7 +48,7 @@ const DriverAccept = ({}: { modalRef: React.RefObject<IHandles> }) => {
           </Text>
           <Text type="subtitle2">{driver?.firstName}</Text>
         </View>
-        {driver?.rating && (
+        {driver?.rating && (driver?.rating != -1) &&(
           <View style={styles.ModalRating}>
             <Text type="subtitle2">
               {t('passangerTrip.driverAccept.driverRating')}

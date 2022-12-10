@@ -66,6 +66,9 @@ function Login({ navigation }: Props) {
 
   useEffect(() => {
     if (logedIn) {
+      setEmail('');
+      setPassword('');
+      setDisableInput(false);
       navigation.navigate(ROUTES.TAB_SCREEN);
     }
   }, [logedIn]);

@@ -22,8 +22,8 @@ export const login = createAsyncThunk<any, AuthLoginParams>(
       createEvent('login', uid, token);
       return auth().currentUser?.toJSON();
     } catch (error: any) {
-      console.error(error);
-      onError(error.message);
+      console.log(error);
+      onError("login.logInError");
       throw error;
     }
   }
@@ -69,8 +69,8 @@ export const signup = createAsyncThunk<any, AuthLoginParams>(
       createEvent('signup', uid, token);
       return auth().currentUser?.toJSON();
     } catch (error: any) {
-      console.error(error);
-      onError(error.message);
+      console.log(error);
+      onError("signup.emailAlreadyInUse");
       throw error;
     }
   }
@@ -102,7 +102,7 @@ const authSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.logedIn = false;
       state.user = null;
-      state.error = action.error.message || null;
+      state.error = action.error.message || null;;
     });
     builder.addCase(googleLogin.fulfilled, (state, action) => {
       state.logedIn = true;
