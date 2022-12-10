@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { getFirebaseToken } from '../utils/firebase';
 
-const ENDPOINT = 'https://0dba-2800-22c0-4000-4e7-104c-314f-1d77-5f13.ngrok.io';
+const ENDPOINT = 'https://fiuber-wallet-aleacevedo.cloud.okteto.net';
 
 export const createWallet = async () => {
   const token = await getFirebaseToken();
