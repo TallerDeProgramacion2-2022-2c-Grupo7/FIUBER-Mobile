@@ -13,7 +13,6 @@ export const getRating = async (userId: string) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('Got rating: ', data.result);
     return data;
   } catch (e) {
     if (e.response) {
