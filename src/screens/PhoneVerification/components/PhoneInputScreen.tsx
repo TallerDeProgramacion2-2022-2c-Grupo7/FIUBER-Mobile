@@ -1,9 +1,12 @@
 import { random } from 'lodash';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PhoneInput from 'react-native-phone-number-input';
 import { useDispatch } from 'react-redux';
+import { View } from 'react-native';
 
 import Button from '../../../components/Button';
+import Text from '../../../components/Text';
 import { AppDispatch } from '../../../interfaces/redux';
 import { setPhoneVerificationCode } from '../../../redux/slices/profile';
 import { sendPhoneVerification } from '../../../services/phone-verification';
@@ -16,10 +19,17 @@ const PhoneInputScreen = ({
   phoneNumber: string | null;
   setPhoneNumber: (phoneNumber: string | null) => void;
 }) => {
+  const DIGITS_WITH_CODE_AREA = 14;
   const dispatch = useDispatch<AppDispatch>();
   const phoneInput = useRef<PhoneInput>(null);
   const [formattedValue, setFormattedValue] = React.useState('');
   const [value, setValue] = React.useState('');
+  const [isError, setIsError] = useState(false);
+  const { t } = useTranslation();
+
+  const isValid = (number: string) => {
+    return number.length === DIGITS_WITH_CODE_AREA;
+  }
 
   return (
     <>
@@ -47,14 +57,24 @@ const PhoneInputScreen = ({
           ...styles.textStyling,
         }}
       />
+      <View style={styles.styleError}>
+          {isError === true ? (
+            <Text style={styles.errorText}>{t('validations.phoneNumberLengthIncorrect')}</Text>
+          ) : null}
+        </View>
       <Button
         text="Validate"
         buttonStyle={[styles.componentMargin, styles.buttonStyling]}
-        onPress={() => {
+        onPress={async () => {
           const code = random(100000, 999999).toString();
+          if (!isValid(formattedValue)) {
+            setIsError(true);
+            return;
+          }
           setPhoneNumber(formattedValue);
-          dispatch(setPhoneVerificationCode({ code }));
-          sendPhoneVerification(formattedValue, code);
+          await dispatch(setPhoneVerificationCode({ code }));
+          setIsError(false);
+          await sendPhoneVerification(formattedValue, code);
         }}
       />
     </>
