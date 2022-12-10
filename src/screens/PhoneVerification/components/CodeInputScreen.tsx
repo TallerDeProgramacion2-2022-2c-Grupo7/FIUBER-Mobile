@@ -1,3 +1,4 @@
+import { random } from 'lodash';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
@@ -6,8 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../components/Button';
 import { ROUTES } from '../../../constants/routes';
 import { AppDispatch, ReduxState } from '../../../interfaces/redux';
-import { setPhoneNumber as setPhoneNumberToFirebase } from '../../../redux/slices/profile';
-import { checkPhoneVerification } from '../../../services/phone-verification';
+import { setPhoneNumber as setPhoneNumberToFirebase, setPhoneVerificationCode } from '../../../redux/slices/profile';
+import { checkPhoneVerification, sendPhoneVerification } from '../../../services/phone-verification';
 import styles from './styles';
 
 const CodeInputScreen = ({
@@ -38,7 +39,6 @@ const CodeInputScreen = ({
               return;
             }
             await dispatch(setPhoneNumberToFirebase({ phoneNumber }));
-            //TODO pasar por parametros el phoneNumber y el code
             screenNavigation.navigate(ROUTES.SET_PROFILE_SCREEN);
           } else {
             setInvalidCode(true);
@@ -49,7 +49,10 @@ const CodeInputScreen = ({
       <Button
         buttonStyle={[styles.componentMargin, styles.buttonStyling]}
         text="Resend Code"
-        onPress={() => {
+        onPress={async () => {
+          const code = random(100000, 999999).toString();
+          await dispatch(setPhoneVerificationCode({ code }));
+          await sendPhoneVerification(phoneNumber, code);
           console.log('Resending');
         }}
       />

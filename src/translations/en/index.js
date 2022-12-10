@@ -13,14 +13,11 @@ const translations = {
     email: 'Email',
     password: 'Password',
     google: 'Login with Google',
-    logInError: 'Your email or password is incorrect, please try again or create an account',
   },
   signup: {
     submit: 'Create',
     title: 'Create Account',
     google: 'Signup with Google',
-    invalidEmail: 'Try again with a valid email',
-    emailAlreadyInUse: 'This email is already in use, try with another one',
   },
   common: {
     enterPassword: 'Enter password',
@@ -45,6 +42,10 @@ const translations = {
     passIncorrect: 'Wrong Password',
     passInccorectNoEnought: 'Password must have at least 8 characters',
     dataNoEmpty: 'You cannot leave the field empty',
+    phoneNumberLengthIncorrect: 'The phone number must have 11 digits',
+    invalidEmail: 'Try again with a valid email',
+    emailAlreadyInUse: 'This email is already in use, try with another one',
+    logInError: 'Your email or password is incorrect, please try again or create an account',
   },
   setProfile: {
     title: 'Create Your Profile',

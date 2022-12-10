@@ -97,4 +97,15 @@ export default StyleSheet.create({
   error: {
     color: 'red',
   },
+  styleError: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  errorText: {
+    marginTop: 5,
+    color: 'red',
+  },
 });

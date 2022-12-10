@@ -53,7 +53,7 @@ function Login({ navigation }: Props) {
     setLoading(true);
     setDisableInput(true);
     if (!isValidEmail(submittedEmail)) {
-      onError('signup.invalidEmail');
+      onError('validations.invalidEmail');
       return;
     }
     await dispatch(
