@@ -35,14 +35,22 @@ export interface AuthState {
 }
 
 export interface ProfileState {
-  obtained: boolean;
+  savedProfile: boolean | null;
   profile: Profile | null;
   error: string | null;
+}
+
+export interface WalletState {
+  init: boolean;
+  balance?: number;
+  locked?: number;
+  publicKey: string;
 }
 export interface ReduxState {
   auth: AuthState;
   profile: ProfileState;
   trip: TripState;
+  wallet: WalletState;
 }
 
 export interface AuthLoginParams {
