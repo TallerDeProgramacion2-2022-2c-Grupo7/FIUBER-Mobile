@@ -92,4 +92,9 @@ permanecerá en este estado hasta que un chofer acepte el viaje.
 
 ![image](https://user-images.githubusercontent.com/43656633/206881741-1a0dfd9a-2d01-499d-acca-7bae42864e68.png)
 
+![image](https://user-images.githubusercontent.com/43656633/206881788-479a1750-feba-4283-a0cd-d97ae6582b28.png)
+
+![image](https://user-images.githubusercontent.com/43656633/206881796-0a0f8191-8e15-4557-8718-f58ae5b69e9e.png)
+
+
 * * *
