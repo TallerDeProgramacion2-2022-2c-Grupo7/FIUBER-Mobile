@@ -82,9 +82,15 @@ permanecerá en este estado hasta que un chofer acepte el viaje.
 
 ## Aceptación de viaje
 
+En la pantalla de inicio, pulsar sobre el botón del volante en la parte superior izquierda. Esto iniciará
+la búsqueda de viajes disponibles. Una vez que se encuentre uno, se podrá aceptar o rechazar el mismo.
+
 ![image](https://user-images.githubusercontent.com/43656633/206881626-8d1a9c6a-02f4-42dc-a2c2-eea9e4bac2bf.png)
 
 ![image](https://user-images.githubusercontent.com/43656633/206881644-dd2c78a4-c649-43b6-9056-bb736b05c0f0.png)
+
+Luego de aceptar el viaje se debe dirigir hacia el pasajero. Cuando llegue a su ubicación, se debe seleccionar
+la opción `Start trip` para iniciar el viaje.
 
 ![image](https://user-images.githubusercontent.com/43656633/206881655-fa5568dc-74e1-4c44-9d8f-9f5db8170a09.png)
 
@@ -92,9 +98,9 @@ permanecerá en este estado hasta que un chofer acepte el viaje.
 
 ![image](https://user-images.githubusercontent.com/43656633/206881741-1a0dfd9a-2d01-499d-acca-7bae42864e68.png)
 
+Una vez se llegue al destino, se debe seleccionar `Finish trip` para finalizar el viaje, luego de lo cual
+se podrá calificar al pasajero.
+
 ![image](https://user-images.githubusercontent.com/43656633/206881788-479a1750-feba-4283-a0cd-d97ae6582b28.png)
 
 ![image](https://user-images.githubusercontent.com/43656633/206881796-0a0f8191-8e15-4557-8718-f58ae5b69e9e.png)
-
-
-* * *
