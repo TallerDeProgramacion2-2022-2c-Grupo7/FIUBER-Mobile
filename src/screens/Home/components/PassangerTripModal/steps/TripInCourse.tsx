@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
@@ -10,18 +10,16 @@ import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import { Colors } from '../../../../../constants/theme';
-import useTripStatus from '../../../../../hooks/useTripStatus';
 import { ReduxState } from '../../../../../interfaces/redux';
 import { finishTrip } from '../../../../../services/trips';
 import styles from '../../../styles';
+import { IModalComponentArgs } from '..';
 
-const TripInCourse = ({}: { modalRef: React.RefObject<IHandles> }) => {
+const TripInCourse = ({ setOnClosed, modalRef }: IModalComponentArgs) => {
   const { driver, id, nearToDestination, to, cost } = useSelector(
     (state: ReduxState) => state.trip
   );
   const { t } = useTranslation();
-
-  useTripStatus();
 
   const onFinishTrip = () => {
     if (!id) {
@@ -29,6 +27,18 @@ const TripInCourse = ({}: { modalRef: React.RefObject<IHandles> }) => {
     }
     finishTrip(id);
   };
+
+  useEffect(() => {
+    setOnClosed(() => () => {
+      setTimeout(() => {
+        modalRef?.current?.open();
+      }, 100);
+    });
+
+    return () => {
+      setOnClosed(undefined);
+    };
+  }, []);
 
   return (
     <>
@@ -81,13 +91,13 @@ const TripInCourse = ({}: { modalRef: React.RefObject<IHandles> }) => {
           <Text type="subtitle2">$ {cost?.toFixed(2)}</Text>
         </View>
         <View style={styles.ModalTextContainer}>
-          <Text type="subtitle2">{t('driverTrip.tripInCourse.passanger')}</Text>
+          <Text type="subtitle2">{t('driverTrip.tripInCourse.driver')}</Text>
           <Text type="subtitle2">
             {' '}
             {driver?.firstName} {driver?.lastName}{' '}
           </Text>
         </View>
-        {driver?.rating && (driver?.rating != -1) &&(
+        {driver?.rating && driver?.rating != -1 && (
           <View style={styles.ModalRating}>
             <Text type="subtitle2">
               {t('passangerTrip.driverAccept.driverRating')}

@@ -7,11 +7,12 @@ import React, {
   useState,
 } from 'react';
 import { Modalize } from 'react-native-modalize';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import Modal from '../../../../components/Modal';
-import { ReduxState } from '../../../../interfaces/redux';
+import { AppDispatch, ReduxState } from '../../../../interfaces/redux';
 import { TripStatus } from '../../../../interfaces/trip';
+import { keepStatusUpdated } from '../../../../utils/intervals';
 import DriverAccept from './steps/DriverAccept';
 import TripFinished from './steps/TripFinished';
 import TripInCourse from './steps/TripInCourse';
@@ -20,23 +21,26 @@ import WaitingUserAceptance from './steps/WaitingUserAceptance';
 
 export type IModalComponentArgs = {
   modalRef: React.RefObject<Modalize>;
-  setOnClose: (cb: () => void) => void;
+  setOnClosed: (cb: (() => void) | undefined) => void;
   setAllwaysOpen: (height: number | undefined) => void;
 };
 
 export type IModalComponent = React.FC<IModalComponentArgs>;
 
-const TripModal = () => {
-  const modalRef = useRef<Modalize>(null);
-  const { status } = useSelector((state: ReduxState) => state.trip);
+interface TripModalArgs {
+  modalRef: React.RefObject<Modalize>;
+}
+
+const TripModal = ({ modalRef }: TripModalArgs) => {
+  const { status, id } = useSelector((state: ReduxState) => state.trip);
   const [alwaysOpen, setAllwaysOpen] = useState<number | undefined>(undefined);
-  const [componentOnClose, setComponentOnClose] = useState<
-    (() => void) | undefined
-  >(undefined);
   const [componentOnClosed, setComponentOnClosed] = useState<
     (() => void) | undefined
   >(undefined);
   const [isOpen, setIsOpen] = useState(false);
+  const [idInterval, setIdInterval] = useState<number | undefined>(undefined);
+  const dispatch = useDispatch<AppDispatch>();
+  const { getState } = useStore<ReduxState>();
 
   const ModalComponent = useMemo<IModalComponent | null>(() => {
     switch (status) {
@@ -56,22 +60,19 @@ const TripModal = () => {
     }
   }, [status]);
 
-  useEffect(() => {
-    if (!isOpen && !!ModalComponent) {
-      modalRef.current?.open();
-    }
-  }, [ModalComponent, modalRef.current]);
-
   const modalOnOpended = useCallback(() => {
+    const statusInterval = keepStatusUpdated(dispatch, getState);
+    setIdInterval(statusInterval);
     setIsOpen(true);
   }, []);
 
-  const modalOnClose = useCallback(() => {
-    componentOnClose?.();
-  }, [componentOnClose]);
-
   const modalOnClosed = useCallback(() => {
     componentOnClosed?.();
+
+    if (idInterval) {
+      clearInterval(idInterval);
+    }
+
     setIsOpen(false);
   }, [componentOnClosed]);
 
@@ -81,7 +82,6 @@ const TripModal = () => {
       adjustToContentHeight={!alwaysOpen}
       alwaysOpen={alwaysOpen}
       onOpened={modalOnOpended}
-      onClose={modalOnClose}
       onClosed={modalOnClosed}
       onBackButtonPress={() => {
         return true;
@@ -90,7 +90,7 @@ const TripModal = () => {
         <ModalComponent
           modalRef={modalRef}
           setAllwaysOpen={setAllwaysOpen}
-          setOnClose={setComponentOnClose}
+          setOnClosed={setComponentOnClosed}
         />
       )}
     </Modal>

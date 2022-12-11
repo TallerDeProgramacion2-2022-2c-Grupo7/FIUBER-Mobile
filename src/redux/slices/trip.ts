@@ -102,6 +102,7 @@ export const fetchDriverProfile = createAsyncThunk<
   if (trip.driverId) {
     const profile = await getPublicProfile(trip.driverId);
     const rating = await getRating(trip.driverId);
+
     return { ...profile, rating };
   }
   return {};

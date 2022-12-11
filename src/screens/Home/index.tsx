@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import Config from 'react-native-config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -8,14 +8,16 @@ import {
   GooglePlaceDetail,
   GooglePlacesAutocomplete,
 } from 'react-native-google-places-autocomplete';
-import { useDispatch } from 'react-redux';
+import { Modalize } from 'react-native-modalize';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Wheel from '../../assets/wheel';
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
-import { AppDispatch } from '../../interfaces/redux';
+import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { TripStatus } from '../../interfaces/trip';
 import {
+  obtainCalculatedCost,
   setCurrentPositionAsFrom,
   setStatus,
   setTo,
@@ -31,14 +33,19 @@ const { MAPS_API_KEY } = Config;
 function Home({}: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const [driverMode, setDriverMode] = useState(false);
+  const { to, from } = useSelector((state: ReduxState) => state.trip);
+  const { profile } = useSelector((state: ReduxState) => state.profile);
 
-  const onDestinationSelected = (
+  const driverModalRef = useRef<Modalize>(null);
+  const passangerModalRef = useRef<Modalize>(null);
+
+  const onDestinationSelected = async (
     data: GooglePlaceData,
     details: GooglePlaceDetail | null
   ) => {
     if (details?.geometry?.location) {
       const { lat, lng } = details.geometry.location;
-      dispatch(
+      await dispatch(
         setTo({
           coordinates: { latitude: lat, longitude: lng },
           description: {
@@ -50,40 +57,53 @@ function Home({}: Props) {
           },
         })
       );
-      dispatch(setCurrentPositionAsFrom());
+      await dispatch(setCurrentPositionAsFrom());
 
-      dispatch(setStatus(TripStatus.WAITING_USER));
+      await dispatch(setStatus(TripStatus.WAITING_USER));
+
+      if (from && to) {
+        await dispatch(
+          obtainCalculatedCost({ from: from.coordinates, to: to.coordinates })
+        );
+      }
+
+      passangerModalRef.current?.open();
     }
   };
 
   const onClickDriverMode = async () => {
     await dispatch(setStatus(TripStatus.WAITING_FOR_TRIP));
     setDriverMode(true);
+
+    driverModalRef.current?.open();
   };
 
   return (
     <>
       <View style={styles.searchBoxContainer}>
-        <View style={styles.SearchBoxButtonContainer}>
-          <TouchableOpacity
-            style={styles.SearchBoxButton}
-            onPress={onClickDriverMode}>
-            <Wheel width={'100%'} height={'100%'} />
-          </TouchableOpacity>
-        </View>
+        {profile?.isDriver && (
+          <View style={styles.SearchBoxButtonContainer}>
+            <TouchableOpacity
+              style={styles.SearchBoxButton}
+              onPress={onClickDriverMode}>
+              <Wheel width={'100%'} height={'100%'} />
+            </TouchableOpacity>
+          </View>
+        )}
         <GooglePlacesAutocomplete
           {...PlaceAutoCompleteArgs}
           onPress={onDestinationSelected}
         />
       </View>
       <Map />
-      {driverMode ? (
+      {profile?.isDriver ? (
         <DriverTripModal
           driverMode={driverMode}
           setDriverMode={setDriverMode}
+          modalRef={driverModalRef}
         />
       ) : (
-        <PassangerTripModal />
+        <PassangerTripModal modalRef={passangerModalRef} />
       )}
     </>
   );

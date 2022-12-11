@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import { Colors } from '../../../../../constants/theme';
@@ -12,12 +13,10 @@ import { clearTrip, setOnTheMove } from '../../../../../redux/slices/trip';
 import { addRating } from '../../../../../services/rating';
 import styles from '../../../styles';
 import { IModalComponentArgs } from '..';
-import Button  from '../../../../../components/Button'
 
 const TripFinished = ({
   modalRef,
   setAllwaysOpen,
-  setOnClose,
   setOnClosed,
 }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -36,13 +35,9 @@ const TripFinished = ({
   }, []);
 
   useEffect(() => {
-    setOnClose(() => async () => {
-      await dispatch(clearTrip());
-    });
-  }, []);
-
-  useEffect(() => {
     setOnClosed(() => () => {
+      dispatch(clearTrip());
+
       setTimeout(() => {
         modalRef.current?.open();
       }, 500);
@@ -58,15 +53,15 @@ const TripFinished = ({
     setConfirm(true);
   };
 
-  const confirmRating =(): void => {
-    addRating(id, passangerId, rating, driverId);
+  const confirmRating = (): void => {
+    addRating(id!, passangerId!, rating, driverId!);
     setConfirm(false);
     modalRef.current?.close();
-  }
+  };
 
-  const cancelRating =(): void => {
+  const cancelRating = (): void => {
     modalRef.current?.close();
-  }
+  };
 
   return (
     <>
@@ -95,8 +90,7 @@ const TripFinished = ({
               alignContent: 'center',
               alignItems: 'center',
               marginTop: 20,
-            }}
-          >
+            }}>
             <Button
               buttonStyle={{
                 alignSelf: 'center',

@@ -45,7 +45,8 @@ const translations = {
     phoneNumberLengthIncorrect: 'The phone number must have 11 digits',
     invalidEmail: 'Try again with a valid email',
     emailAlreadyInUse: 'This email is already in use, try with another one',
-    logInError: 'Your email or password is incorrect, please try again or create an account',
+    logInError:
+      'Your email or password is incorrect, please try again or create an account',
   },
   setProfile: {
     title: 'Create Your Profile',
@@ -115,6 +116,7 @@ const translations = {
       from: 'From: ',
       to: 'Going to: ',
       passanger: 'Passanger: ',
+      driver: 'Driver: ',
       raiting: 'Raiting: ',
       finish: 'Finish Trip',
     },

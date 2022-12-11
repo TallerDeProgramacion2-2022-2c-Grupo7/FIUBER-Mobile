@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
 import { Bar as ProgressBarr } from 'react-native-progress';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
-import useTripStatus from '../../../../../hooks/useTripStatus';
 import { ReduxState } from '../../../../../interfaces/redux';
+import { clearTrip } from '../../../../../redux/slices/trip';
+import { cancelTrip } from '../../../../../services/trips';
 import styles from '../../../styles';
+import { IModalComponentArgs } from '..';
 
-const WaitingForDriver = ({}: { modalRef: React.RefObject<IHandles> }) => {
-  const { to, cost } = useSelector((state: ReduxState) => state.trip);
+const WaitingForDriver = ({ setOnClosed }: IModalComponentArgs) => {
+  const { to, cost, id } = useSelector((state: ReduxState) => state.trip);
   const { t } = useTranslation();
+  const dispatch = useDispatch<A>();
 
-  useTripStatus();
+  useEffect(() => {
+    setOnClosed(() => () => {
+      if (id) {
+        dispatch(clearTrip());
+        cancelTrip(id!);
+      }
+    });
+    return () => {
+      setOnClosed(undefined);
+    };
+  }, []);
 
   return (
     <>
