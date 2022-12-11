@@ -82,4 +82,14 @@ permanecerá en este estado hasta que un chofer acepte el viaje.
 
 ## Aceptación de viaje
 
+![image](https://user-images.githubusercontent.com/43656633/206881626-8d1a9c6a-02f4-42dc-a2c2-eea9e4bac2bf.png)
+
+![image](https://user-images.githubusercontent.com/43656633/206881644-dd2c78a4-c649-43b6-9056-bb736b05c0f0.png)
+
+![image](https://user-images.githubusercontent.com/43656633/206881655-fa5568dc-74e1-4c44-9d8f-9f5db8170a09.png)
+
+![image](https://user-images.githubusercontent.com/43656633/206881726-582d4d2c-217d-4bce-b785-eaea321984f5.png)
+
+![image](https://user-images.githubusercontent.com/43656633/206881741-1a0dfd9a-2d01-499d-acca-7bae42864e68.png)
+
 * * *
