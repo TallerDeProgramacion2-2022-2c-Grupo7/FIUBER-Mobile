@@ -104,7 +104,7 @@ const TripFinished = ({
                 marginRight: 10,
                 backgroundColor: 'red',
               }}
-              text="Cancel"
+              text="Skip"
               onPress={cancelRating}
             />
             <Button
