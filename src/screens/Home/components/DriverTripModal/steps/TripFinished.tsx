@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -24,7 +24,9 @@ const TripFinished = ({
   const { t } = useTranslation();
   const [rating, setRating] = useState(0);
   const [confirm, setConfirm] = useState(false);
-  const { cost, passangerId, id, driverId} = useSelector((state: ReduxState) => state.trip);
+  const { cost, passangerId, id, driverId } = useSelector(
+    (state: ReduxState) => state.trip
+  );
 
   useEffect(() => {
     setAllwaysOpen(undefined);

@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import Config from 'react-native-config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -8,12 +8,12 @@ import {
   GooglePlaceDetail,
   GooglePlacesAutocomplete,
 } from 'react-native-google-places-autocomplete';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import Wheel from '../../assets/wheel';
 import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
-import { AppDispatch, ReduxState } from '../../interfaces/redux';
+import { AppDispatch } from '../../interfaces/redux';
 import { TripStatus } from '../../interfaces/trip';
 import {
   setCurrentPositionAsFrom,
@@ -28,25 +28,9 @@ import styles from './styles';
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.HOME_SCREEN>;
 const { MAPS_API_KEY } = Config;
 
-function Home({ navigation }: Props) {
+function Home({}: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const [driverMode, setDriverMode] = useState(false);
-  const { logedIn } = useSelector((state: ReduxState) => state.auth);
-  const { obtained: profileObtained } = useSelector(
-    (state: ReduxState) => state.profile
-  );
-
-  useEffect(() => {
-    if (!logedIn) {
-      navigation.navigate(ROUTES.LOGIN_SCREEN);
-      return;
-    }
-    if (logedIn && !profileObtained) {
-      navigation.navigate(ROUTES.SET_PROFILE_SCREEN);
-    }      
-  }, [logedIn, profileObtained]);
-
-
 
   const onDestinationSelected = (
     data: GooglePlaceData,

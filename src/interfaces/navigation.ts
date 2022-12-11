@@ -14,4 +14,5 @@ export type RootStackParamList = {
   [ROUTES.NOTIFICATIONS_SCREEN]: undefined;
   [ROUTES.MY_PROFILE_SCREEN]: undefined;
   [ROUTES.TAB_SCREEN]: undefined;
+  [ROUTES.WALLET]: undefined;
 };

@@ -15,8 +15,8 @@ import { StatusBar, useColorScheme } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Config from 'react-native-config';
 import Geocoder from 'react-native-geocoding';
-import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
 
 import Navigator from './navigation';
 import { store } from './redux';
