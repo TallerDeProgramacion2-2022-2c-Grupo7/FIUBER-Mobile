@@ -15,7 +15,7 @@ import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { Container } from '../../layouts';
 import { googleLogin, login } from '../../redux/slices/auth';
-import { getMyProfile } from '../../redux/slices/profile';
+import { isValidEmail } from '../../utils';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, ROUTES.LOGIN_SCREEN>;
@@ -31,7 +31,7 @@ export const isValidPassword = (password: string) => {
 function Login({ navigation }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { logedIn, user } = useSelector((state: ReduxState) => state.auth);
+  const { logedIn } = useSelector((state: ReduxState) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -51,6 +51,10 @@ function Login({ navigation }: Props) {
   ) => {
     setLoading(true);
     setDisableInput(true);
+    if (!isValidEmail(submittedEmail)) {
+      onError('validations.invalidEmail');
+      return;
+    }
     await dispatch(
       login({ email: submittedEmail, password: submittedPassword, onError })
     );
@@ -61,12 +65,11 @@ function Login({ navigation }: Props) {
   };
 
   useEffect(() => {
-    const goHome = async () => {
-      user && (await dispatch(getMyProfile({ uid: user?.uid })));
-      navigation.navigate(ROUTES.TAB_SCREEN);
-    };
     if (logedIn) {
-      goHome();
+      setEmail('');
+      setPassword('');
+      setDisableInput(false);
+      navigation.navigate(ROUTES.TAB_SCREEN);
     }
   }, [logedIn]);
 
@@ -80,6 +83,8 @@ function Login({ navigation }: Props) {
           <TextInput
             value={email}
             onChangeText={setEmail}
+            keyboardType={'email-address'}
+            autoCapitalize={'none'}
             contentContainerStyle={styles.emailInput}
             placeholder={t('common.enterEmail')}
             inputStyle={styles.emailTextInput}

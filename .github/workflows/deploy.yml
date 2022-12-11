@@ -2,18 +2,18 @@ name: Deploy FIUBER mobile app
 on:
   push:
     tags:
-      - "*.*.*"
+      - '*.*.*'
 jobs:
   apk:
     name: Build APK
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
       - name: 'Get Previous tag'
         id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: 'WyriHaximus/github-action-get-previous-tag@v1'
         with:
           fallback: 1.0.0
       - name: Install yarn dependencies
@@ -23,11 +23,14 @@ jobs:
         uses: SpicyPizza/create-envfile@v1.3
         with:
           MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
-      - name: Build Android Release
-        run: |
-          cd android && ./gradlew assembleRelease
-        env:    
-            MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+      - name: Setup and Execute Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 7.5.1
+          arguments: assembleRelease
+          build-root-directory: ./android
+        env:
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
       - name: Upload APK
         uses: actions/upload-artifact@v1
         with:
@@ -43,7 +46,7 @@ jobs:
           fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
       - name: 'Get Previous tag'
         id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: 'WyriHaximus/github-action-get-previous-tag@v1'
         with:
           fallback: 1.0.0
       - name: Download APK from build

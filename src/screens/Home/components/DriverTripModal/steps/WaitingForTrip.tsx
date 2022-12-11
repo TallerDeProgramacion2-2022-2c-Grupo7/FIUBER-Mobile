@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import messaging from '@react-native-firebase/messaging';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -21,6 +22,9 @@ const WaitingForTrip = ({
   useWaitingForTrip();
 
   useEffect(() => {
+    messaging()
+      .subscribeToTopic('availableTrips')
+      .then(() => console.log('Subscribed to topic availableTrips!'));
     setAllwaysOpen(undefined);
     setOnClosed(() => () => {});
     setTimeout(() => {

@@ -11,8 +11,8 @@ export type RootStackParamList = {
   [ROUTES.SET_DRIVER_PROFILE_SCREEN]: { commonProfile: CommonsProfile };
   [ROUTES.PHONE_VERIFICATION_SCREEN]: undefined;
   [ROUTES.DRIVER_TRIP]: undefined;
-  [ROUTES.PASSENGER_TRIP_GUIDE]: { trip: Trip };
   [ROUTES.NOTIFICATIONS_SCREEN]: undefined;
   [ROUTES.MY_PROFILE_SCREEN]: undefined;
   [ROUTES.TAB_SCREEN]: undefined;
+  [ROUTES.WALLET]: undefined;
 };

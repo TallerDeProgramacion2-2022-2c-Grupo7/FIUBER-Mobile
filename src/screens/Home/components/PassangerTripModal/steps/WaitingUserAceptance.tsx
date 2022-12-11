@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { IHandles } from 'react-native-modalize/lib/options';
 import { useDispatch, useSelector } from 'react-redux';
 

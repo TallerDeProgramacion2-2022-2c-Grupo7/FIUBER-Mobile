@@ -22,8 +22,8 @@ export const login = createAsyncThunk<any, AuthLoginParams>(
       createEvent('login', uid, token);
       return auth().currentUser?.toJSON();
     } catch (error: any) {
-      console.error(error);
-      onError(error.message);
+      console.log(error.message);
+      onError("validations.logInError");
       throw error;
     }
   }
@@ -49,8 +49,8 @@ export const googleLogin = createAsyncThunk<any, void>(
       const token = await response.user.getIdToken();
       createEvent('federatedLogin', uid, token);
       return auth().currentUser?.toJSON();
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error(error.message);
       throw error;
     }
   }
@@ -60,14 +60,17 @@ export const signup = createAsyncThunk<any, AuthLoginParams>(
   'auth/signup',
   async ({ email, password, onError }, {}) => {
     try {
-      const response = await auth().createUserWithEmailAndPassword(email, password);
+      const response = await auth().createUserWithEmailAndPassword(
+        email,
+        password
+      );
       const uid = response.user.uid;
       const token = await response.user.getIdToken();
       createEvent('signup', uid, token);
       return auth().currentUser?.toJSON();
     } catch (error: any) {
-      console.error(error);
-      onError(error.message);
+      console.log(error.message);
+      onError("validations.emailAlreadyInUse");
       throw error;
     }
   }

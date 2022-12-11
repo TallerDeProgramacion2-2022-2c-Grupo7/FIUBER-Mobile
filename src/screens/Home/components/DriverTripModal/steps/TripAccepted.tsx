@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import messaging from '@react-native-firebase/messaging';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -29,6 +30,10 @@ const TripAccepted = ({
   );
 
   useEffect(() => {
+    messaging()
+      .unsubscribeFromTopic('availableTrips')
+      .then(() => console.log('Unsubscribed fom the topic availableTrips'));
+
     setAllwaysOpen(150);
     setOnClose(() => () => {});
     setOnClosed(() => () => {});
@@ -104,7 +109,7 @@ const TripAccepted = ({
             {passsanger?.firstName} {passsanger?.lastName}{' '}
           </Text>
         </View>
-        {passsanger?.rating && (
+        {passsanger?.rating && (passsanger?.rating != -1) && (
           <View style={styles.ModalTextContainer}>
             <Text type="subtitle2">{t('driverTrip.tripAccepted.rating')}</Text>
             <Rating

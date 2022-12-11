@@ -8,6 +8,10 @@ import {
   UserLocationChangeEventCoordinate,
 } from './trip';
 
+type DeepPartial<T> = T extends object
+  ? { [P in keyof T]?: DeepPartial<T[P]> }
+  : T;
+
 export interface TripState {
   id: string | null;
   from: MapPoint | null;
@@ -31,14 +35,22 @@ export interface AuthState {
 }
 
 export interface ProfileState {
-  obtained: boolean;
+  savedProfile: boolean | null;
   profile: Profile | null;
   error: string | null;
+}
+
+export interface WalletState {
+  init: boolean;
+  balance?: number;
+  locked?: number;
+  publicKey: string;
 }
 export interface ReduxState {
   auth: AuthState;
   profile: ProfileState;
   trip: TripState;
+  wallet: WalletState;
 }
 
 export interface AuthLoginParams {
@@ -53,7 +65,7 @@ export interface ProfileGetParams {
 
 export interface ProfileUpdateParams {
   uid: string;
-  profile: Profile;
+  profile: DeepPartial<Profile>;
 }
 
 export type AppDispatch = typeof store.dispatch;

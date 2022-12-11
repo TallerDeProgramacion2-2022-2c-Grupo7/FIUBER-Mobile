@@ -11,7 +11,7 @@ import {
 } from '../../interfaces/redux';
 
 const INITIAL_STATE: ProfileState = {
-  obtained: false,
+  savedProfile: null,
   profile: null,
   error: null,
 };
@@ -42,14 +42,28 @@ export const update = createAsyncThunk<any, ProfileUpdateParams>(
   async ({ uid, profile }, {}) => {
     const privateProfile = pick(profile, PRIVATE_ATTRS);
     const publicProfile = pick(profile, PUBILC_ATTRS);
-    await firestore().doc(`publicProfiles/${uid}`).set(publicProfile);
 
-    const privateProfiles = await firestore()
+    const savedPublicProfile = await firestore()
+      .doc(`publicProfiles/${uid}`)
+      .get();
+
+    const publicProfileToUpdate = {
+      ...savedPublicProfile.data(),
+      ...publicProfile,
+      car: {
+        ...savedPublicProfile.data()?.car,
+        ...(publicProfile.isDriver ? publicProfile.car : {}),
+      },
+    };
+
+    await firestore().doc(`publicProfiles/${uid}`).set(publicProfileToUpdate);
+
+    const savedPrivateProfile = await firestore()
       .doc(`privateProfiles/${uid}`)
       .get();
 
     const privateProfileToUpdate = {
-      ...privateProfiles.data(),
+      ...savedPrivateProfile.data(),
       ...privateProfile,
     };
 
@@ -114,33 +128,33 @@ export const setPhoneNumber = createAsyncThunk<any, { phoneNumber: string }>(
 const profileSlice = createSlice({
   name: 'profile',
   initialState: INITIAL_STATE,
-  reducers: {},
+  reducers: {
+    clear: () => INITIAL_STATE,
+  },
   extraReducers: builder => {
     builder.addCase(getMyProfile.fulfilled, (state, action) => {
-      state.obtained = true;
+      state.savedProfile = true;
       state.profile = action.payload;
       state.error = null;
     });
     builder.addCase(getMyProfile.rejected, (state, action) => {
       state.error = action.error.message || null;
-      state.obtained = false;
+      state.savedProfile = false;
       state.profile = null;
     });
     builder.addCase(update.fulfilled, (state, action) => {
-      state.obtained = true;
+      state.savedProfile = true;
       state.profile = action.payload;
       state.error = null;
     });
     builder.addCase(update.rejected, (state, action) => {
       state.error = action.error.message || null;
-      state.obtained = false;
-      state.profile = null;
     });
   },
 });
 
 export const {
-  actions: {},
+  actions: { clear: clearProfile },
 } = profileSlice;
 
 export default profileSlice.reducer;
