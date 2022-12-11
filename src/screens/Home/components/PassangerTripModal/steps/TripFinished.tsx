@@ -67,27 +67,37 @@ const TripFinished = ({ setOnClose, modalRef }: IModalComponentArgs) => {
             startingValue={driver?.rating || 0}
             onFinishRating={ratingDriver}
           />
-          <Button
-            buttonStyle={{
+          <View
+            style={{
+              flexDirection: 'row',
               alignSelf: 'center',
-              paddingHorizontal: '10%',
-              marginRight: 10,
-              backgroundColor: 'red',
+              alignContent: 'center',
+              alignItems: 'center',
+              marginTop: 20,
             }}
-            text="Cancel"
-            onPress={cancelRating}
-          />
-          <Button
-            buttonStyle={{
-              alignSelf: 'center',
-              paddingHorizontal: '10%',
-              marginLeft: 10,
-              backgroundColor: 'green',
-            }}
-            disabled={confirm}
-            text="Confirm"
-            onPress={confirmRating}
-          />
+          >
+            <Button
+              buttonStyle={{
+                alignSelf: 'center',
+                paddingHorizontal: '10%',
+                marginRight: 10,
+                backgroundColor: 'red',
+              }}
+              text="Cancel"
+              onPress={cancelRating}
+            />
+            <Button
+              buttonStyle={{
+                alignSelf: 'center',
+                paddingHorizontal: '10%',
+                marginLeft: 10,
+                backgroundColor: 'green',
+              }}
+              disabled={!confirm}
+              text="Confirm"
+              onPress={confirmRating}
+            />
+          </View>
         </View>
       </View>
     </>
