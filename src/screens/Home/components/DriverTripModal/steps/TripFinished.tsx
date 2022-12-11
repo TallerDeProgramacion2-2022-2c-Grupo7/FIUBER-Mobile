@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -21,7 +21,9 @@ const TripFinished = ({
 }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
-  const { cost, passangerId, id, driverId} = useSelector((state: ReduxState) => state.trip);
+  const { cost, passangerId, id, driverId } = useSelector(
+    (state: ReduxState) => state.trip
+  );
 
   useEffect(() => {
     setAllwaysOpen(undefined);

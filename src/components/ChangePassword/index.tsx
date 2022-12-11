@@ -39,29 +39,37 @@ const ChangePassword = () => {
 
   const reauthenticate = (currentPassword: string) => {
     const currentUser = auth().currentUser;
-    var cred = auth.EmailAuthProvider.credential(currentUser?.email || "", currentPassword);
+    const cred = auth.EmailAuthProvider.credential(
+      currentUser?.email || '',
+      currentPassword
+    );
     return currentUser?.reauthenticateWithCredential(cred);
-  }
+  };
 
   const onSaveEdit = () => {
-    reauthenticate(password)?.then(() => {
-      const user = auth().currentUser;
-      user?.updatePassword(newPassword).then(() => {
-        Alert.alert("Password was changed");
-        setCanSave(true);
-        setPassword('');
-        setNewPassword('');
-        setShowPassword(false);
-        setShowNewPassword(false);
-        modalRef.current?.close();
-      }).catch((error) => { 
-        console.log(error.message); 
-        Alert.alert("An error occurred, please try again");
+    reauthenticate(password)
+      ?.then(() => {
+        const user = auth().currentUser;
+        user
+          ?.updatePassword(newPassword)
+          .then(() => {
+            Alert.alert('Password was changed');
+            setCanSave(true);
+            setPassword('');
+            setNewPassword('');
+            setShowPassword(false);
+            setShowNewPassword(false);
+            modalRef.current?.close();
+          })
+          .catch(error => {
+            console.log(error.message);
+            Alert.alert('An error occurred, please try again');
+          });
+      })
+      .catch(error => {
+        console.log(error.message);
+        Alert.alert('An error occurred, please try again');
       });
-    }).catch((error) => { 
-      console.log(error.message);
-      Alert.alert("An error occurred, please try again");
-     });
   };
 
   const toggleShowPassowrd = () => {

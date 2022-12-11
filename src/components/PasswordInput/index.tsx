@@ -72,9 +72,7 @@ function PasswordInput({
         }
         {...inputProps}
       />
-      {error && (
-        <Text style={styles.errorText}>{t(`${error}`)}</Text>
-      )}
+      {error && <Text style={styles.errorText}>{t(`${error}`)}</Text>}
     </View>
   );
 }

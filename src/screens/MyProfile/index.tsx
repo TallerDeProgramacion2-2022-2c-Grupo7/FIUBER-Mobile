@@ -13,6 +13,7 @@ import { ROUTES } from '../../constants/routes';
 import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { logout } from '../../redux/slices/auth';
+import { clearProfile } from '../../redux/slices/profile';
 import { carProfilePropList, userProfilePropList } from './data';
 import EditProfileModal from './EditProfileModal';
 import styles from './styles';
@@ -43,11 +44,12 @@ function MyProfile({ navigation }: Props) {
   const isDriver = profile?.isDriver;
 
   //devuelve password si no es log in con google
-  const providerId = auth().currentUser?.providerData[0]["providerId"];
+  const providerId = auth().currentUser?.providerData[0].providerId;
 
   const handleLogOut = async () => {
     navigation.navigate(ROUTES.HOME_SCREEN);
     await dispatch(logout());
+    await dispatch(clearProfile());
   };
 
   const handleEditProfile = (key: string) => {
@@ -121,8 +123,7 @@ function MyProfile({ navigation }: Props) {
               onPress={() => handleLogOut()}>
               <Text style={styles.textLogOut}>Logout</Text>
             </TouchableOpacity>
-            {providerId !== 'password'?
-            null : <ChangePassword />}
+            {providerId !== 'password' ? null : <ChangePassword />}
           </View>
         </ScrollView>
       </View>

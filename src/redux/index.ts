@@ -12,6 +12,7 @@ import {
 import authReducer from './slices/auth';
 import profileReducer from './slices/profile';
 import tripReducer from './slices/trip';
+import walletReducer from './slices/wallet';
 
 // const authPersistConfig = {
 //   key: 'auth',
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   profile: profileReducer,
   trip: tripReducer,
+  wallet: walletReducer,
 });
 
 export const store = configureStore({

@@ -12,4 +12,5 @@ export enum ROUTES {
   NOTIFICATIONS_SCREEN = 'NotificationsScreen',
   MY_PROFILE_SCREEN = 'MyProfileScreen',
   TAB_SCREEN = 'TabScreen',
+  WALLET = 'Wallet',
 }
