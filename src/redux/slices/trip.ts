@@ -7,7 +7,12 @@ import { ReduxState, TripState } from '../../interfaces/redux';
 import { MapPoint } from '../../interfaces/trip';
 import { getPublicProfile } from '../../services/profile';
 import { getRating } from '../../services/rating';
-import { calculateCost, createTrip, getTrip } from '../../services/trips';
+import {
+  calculateCost,
+  createTrip,
+  getTrip,
+  getUnfinishedTrip,
+} from '../../services/trips';
 
 const INITIAL_STATE: TripState = {
   id: null,
@@ -24,6 +29,7 @@ const INITIAL_STATE: TripState = {
   currentPosition: null,
   onTheMove: false,
   nearToDestination: false,
+  isUnfinishedTrip: false,
 };
 
 export const obtainCalculatedCost = createAsyncThunk(
@@ -108,6 +114,16 @@ export const fetchDriverProfile = createAsyncThunk<
   return {};
 });
 
+export const fetchUnfinished = createAsyncThunk<
+  any,
+  void,
+  { state: ReduxState }
+>('trip/fetchUnfinished', async () => {
+  const unfinishedTrip = await getUnfinishedTrip();
+
+  return unfinishedTrip;
+});
+
 const tripSlice = createSlice({
   name: 'trip',
   initialState: INITIAL_STATE,
@@ -145,6 +161,7 @@ const tripSlice = createSlice({
       state.passangerId = action.payload.passengerId;
     },
     clearTrip: state => {
+      state.isUnfinishedTrip = false;
       state.id = null;
       state.from = null;
       state.to = null;
@@ -156,6 +173,7 @@ const tripSlice = createSlice({
       state.distance = null;
       state.duration = null;
       state.status = null;
+      state.nearToDestination = false;
     },
     setCurrentPosition: (state, action) => {
       state.currentPosition = action.payload;
@@ -214,6 +232,19 @@ const tripSlice = createSlice({
       state.status = action.payload.status;
       state.passangerId = action.payload.passengerId;
       state.driverId = action.payload.driverId;
+    });
+    builder.addCase(fetchUnfinished.fulfilled, (state, action) => {
+      if (!action.payload) {
+        return;
+      }
+      state.from = action.payload.from;
+      state.to = action.payload.to;
+      state.cost = action.payload.cost;
+      state.id = action.payload._id;
+      state.status = action.payload.status;
+      state.passangerId = action.payload.passengerId;
+      state.driverId = action.payload.driverId;
+      state.isUnfinishedTrip = true;
     });
   },
 });

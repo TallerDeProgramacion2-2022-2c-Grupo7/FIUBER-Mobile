@@ -9,7 +9,7 @@ import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import { Colors } from '../../../../../constants/theme';
 import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
-import { clearTrip, setOnTheMove } from '../../../../../redux/slices/trip';
+import { clearTrip, setNearToDestination, setOnTheMove } from '../../../../../redux/slices/trip';
 import { addRating } from '../../../../../services/rating';
 import styles from '../../../styles';
 import { IModalComponentArgs } from '..';
@@ -28,6 +28,7 @@ const TripFinished = ({
   );
 
   useEffect(() => {
+    dispatch(setNearToDestination(false));
     setAllwaysOpen(undefined);
     setTimeout(() => {
       modalRef.current?.open();

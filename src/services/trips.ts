@@ -175,3 +175,14 @@ export const cancelTrip = async (id: string) => {
   );
   return data.result;
 };
+
+export const getUnfinishedTrip = async () => {
+  const token = await getFirebaseToken();
+
+  const { data } = await axios.get(`${ENDPOINT}/trips/unfinished`, {
+    headers: {
+      Authorization: `${token}`,
+    },
+  });
+  return data.result;
+};

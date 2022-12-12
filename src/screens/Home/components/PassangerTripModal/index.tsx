@@ -60,11 +60,15 @@ const TripModal = ({ modalRef }: TripModalArgs) => {
     }
   }, [status]);
 
-  const modalOnOpended = useCallback(() => {
+  const modalOnOpended = () => {
+    if (isOpen) {
+      return;
+    }
     const statusInterval = keepStatusUpdated(dispatch, getState);
+
     setIdInterval(statusInterval);
     setIsOpen(true);
-  }, []);
+  };
 
   const modalOnClosed = useCallback(() => {
     componentOnClosed?.();

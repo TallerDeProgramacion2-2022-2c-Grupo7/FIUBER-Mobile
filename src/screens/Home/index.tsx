@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import Config from 'react-native-config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -17,6 +17,10 @@ import { RootStackParamList } from '../../interfaces/navigation';
 import { AppDispatch, ReduxState } from '../../interfaces/redux';
 import { TripStatus } from '../../interfaces/trip';
 import {
+  fetchDriverProfile,
+  fetchPassangerProfile,
+  fetchUnfinished,
+  goToTripFrom,
   obtainCalculatedCost,
   setCurrentPositionAsFrom,
   setStatus,
@@ -33,11 +37,44 @@ const { MAPS_API_KEY } = Config;
 function Home({}: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const [driverMode, setDriverMode] = useState(false);
-  const { to, from } = useSelector((state: ReduxState) => state.trip);
+  const { user } = useSelector((state: ReduxState) => state.auth);
+  const { to, from, isUnfinishedTrip, driverId, passangerId, status } =
+    useSelector((state: ReduxState) => state.trip);
   const { profile } = useSelector((state: ReduxState) => state.profile);
 
   const driverModalRef = useRef<Modalize>(null);
   const passangerModalRef = useRef<Modalize>(null);
+
+  useEffect(() => {
+    dispatch(fetchUnfinished());
+  }, []);
+
+  useEffect(() => {
+    if (!isUnfinishedTrip) {
+      return;
+    }
+
+    dispatch(fetchDriverProfile());
+    dispatch(fetchPassangerProfile());
+
+    if (driverId === user?.uid) {
+      driverModalRef.current?.open();
+    } else if (passangerId === user?.uid) {
+      passangerModalRef.current?.open();
+    }
+  }, [isUnfinishedTrip]);
+
+  useEffect(() => {
+    if (!isUnfinishedTrip) {
+      return;
+    }
+
+    if (driverId === user?.uid) {
+      driverModalRef.current?.open();
+    } else if (passangerId === user?.uid) {
+      passangerModalRef.current?.open();
+    }
+  }, [user?.uid]);
 
   const onDestinationSelected = async (
     data: GooglePlaceData,

@@ -27,6 +27,7 @@ export interface TripState {
   currentPosition: UserLocationChangeEventCoordinate | null;
   onTheMove: boolean;
   nearToDestination: boolean;
+  isUnfinishedTrip: boolean;
 }
 export interface AuthState {
   logedIn: boolean;
