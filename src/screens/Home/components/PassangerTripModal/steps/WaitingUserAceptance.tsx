@@ -12,7 +12,6 @@ import {
   clearTrip,
   createNewTrip,
   obtainCalculatedCost,
-  setTo,
 } from '../../../../../redux/slices/trip';
 import styles from '../../../styles';
 

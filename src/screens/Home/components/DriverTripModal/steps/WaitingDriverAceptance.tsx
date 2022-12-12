@@ -53,7 +53,6 @@ const WaitingDriverAceptance = ({
 
   const onAcceptTrip = async () => {
     if (id) {
-      await dispatch(goToTripFrom({}));
       accept(id);
     }
   };

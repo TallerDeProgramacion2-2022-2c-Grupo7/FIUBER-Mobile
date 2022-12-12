@@ -12,7 +12,8 @@ import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import { Colors } from '../../../../../constants/theme';
 import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
-import { setOnTheMove } from '../../../../../redux/slices/trip';
+import { goToTripFrom, setOnTheMove } from '../../../../../redux/slices/trip';
+import { unsubscribeFromAvailableTrips } from '../../../../../services/notification';
 import { start } from '../../../../../services/trips';
 import styles from '../../../styles';
 import { IModalComponentArgs } from '..';
@@ -29,9 +30,7 @@ const TripAccepted = ({
   );
 
   useEffect(() => {
-    messaging()
-      .unsubscribeFromTopic('availableTrips')
-      .then(() => console.log('Unsubscribed fom the topic availableTrips'));
+    unsubscribeFromAvailableTrips();
 
     setAllwaysOpen(150);
     setOnClosed(() => () => {});
@@ -39,6 +38,7 @@ const TripAccepted = ({
   }, []);
 
   useEffect(() => {
+    dispatch(goToTripFrom({}));
     dispatch(setOnTheMove(true));
   }, []);
 

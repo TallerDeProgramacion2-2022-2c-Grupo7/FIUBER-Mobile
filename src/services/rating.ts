@@ -7,7 +7,6 @@ const ENDPOINT = 'https://fiuber-ratings-guidobergman.cloud.okteto.net';
 export const getRating = async (userId: string) => {
   const token = await getFirebaseToken();
   try {
-    console.log('Will get rating ');
     const { data } = await axios.get(`${ENDPOINT}/${userId}/average`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -33,10 +32,8 @@ export const addRating = async (
   idUserScorer: string
 ) => {
   const token = await getFirebaseToken();
-  console.log('Token: ', token);
 
   try {
-    console.log('WILL POST RATING ');
     const { data } = await axios.post(
       `${ENDPOINT}/`,
       {
@@ -52,7 +49,6 @@ export const addRating = async (
       }
     );
 
-    console.log('POST RATING: ', data.result);
     return data.result;
   } catch (e) {
     if (e.response) {

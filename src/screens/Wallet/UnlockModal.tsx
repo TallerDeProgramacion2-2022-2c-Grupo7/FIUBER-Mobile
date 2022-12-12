@@ -27,7 +27,6 @@ function UnlockModal({ modalRef, paramOnClose }: Props) {
       return;
     }
     const tx = await unlockWalletFunds(user.uid, locked);
-    console.log(tx);
 
     return tx.hash;
   };
