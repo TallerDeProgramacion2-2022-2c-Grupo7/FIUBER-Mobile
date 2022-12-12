@@ -2,6 +2,7 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import styles from './styles';
@@ -46,43 +47,45 @@ function Modal({
 
   const { bottom } = useSafeAreaInsets();
   return (
-    <Modalize
-      {...props}
-      ref={modalRef}
-      handlePosition="inside"
-      modalStyle={[
-        styles.modal,
-        !adjustToContentHeight && styles.flex,
-        modalStyle,
-      ]}
-      handleStyle={styles.handle}
-      scrollViewProps={{
-        bounces: true,
-        keyboardShouldPersistTaps: 'always',
-        keyboardDismissMode: 'none',
-        showsVerticalScrollIndicator: true,
-        overScrollMode: 'always',
-        style: fullHeight && styles.scrollView,
-        contentContainerStyle: [
-          fullHeight && styles.scrollviewContent,
-          !!bottom && styles.extraBottom,
-        ],
-        ...scrollViewProps,
-      }}
-      closeOnOverlayTap
-      onOverlayPress={handleOnClose}
-      onClose={handleOnClose}
-      onClosed={onClosed}
-      adjustToContentHeight={adjustToContentHeight}
-      HeaderComponent={HeaderComponent}
-      FooterComponent={FooterComponent}
-      FloatingComponent={FloatingComponent}
-      disableScrollIfPossible={disableScrollIfPossible}
-      threshold={15}
-      alwaysOpen={alwaysOpen}
-      onBackButtonPress={onBackButtonPress}>
-      {children}
-    </Modalize>
+    <Portal>
+      <Modalize
+        {...props}
+        ref={modalRef}
+        handlePosition="inside"
+        modalStyle={[
+          styles.modal,
+          !adjustToContentHeight && styles.flex,
+          modalStyle,
+        ]}
+        handleStyle={styles.handle}
+        scrollViewProps={{
+          bounces: true,
+          keyboardShouldPersistTaps: 'always',
+          keyboardDismissMode: 'none',
+          showsVerticalScrollIndicator: true,
+          overScrollMode: 'always',
+          style: fullHeight && styles.scrollView,
+          contentContainerStyle: [
+            fullHeight && styles.scrollviewContent,
+            !!bottom && styles.extraBottom,
+          ],
+          ...scrollViewProps,
+        }}
+        closeOnOverlayTap
+        onOverlayPress={handleOnClose}
+        onClose={handleOnClose}
+        onClosed={onClosed}
+        adjustToContentHeight={adjustToContentHeight}
+        HeaderComponent={HeaderComponent}
+        FooterComponent={FooterComponent}
+        FloatingComponent={FloatingComponent}
+        disableScrollIfPossible={disableScrollIfPossible}
+        threshold={15}
+        alwaysOpen={alwaysOpen}
+        onBackButtonPress={onBackButtonPress}>
+        {children}
+      </Modalize>
+    </Portal>
   );
 }
 

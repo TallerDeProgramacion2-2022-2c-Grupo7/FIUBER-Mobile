@@ -1,9 +1,9 @@
 import { random } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import { useDispatch } from 'react-redux';
-import { View } from 'react-native';
 
 import Button from '../../../components/Button';
 import Text from '../../../components/Text';
@@ -29,7 +29,7 @@ const PhoneInputScreen = ({
 
   const isValid = (number: string) => {
     return number.length === DIGITS_WITH_CODE_AREA;
-  }
+  };
 
   return (
     <>
@@ -58,10 +58,12 @@ const PhoneInputScreen = ({
         }}
       />
       <View style={styles.styleError}>
-          {isError === true ? (
-            <Text style={styles.errorText}>{t('validations.phoneNumberLengthIncorrect')}</Text>
-          ) : null}
-        </View>
+        {isError === true ? (
+          <Text style={styles.errorText}>
+            {t('validations.phoneNumberLengthIncorrect')}
+          </Text>
+        ) : null}
+      </View>
       <Button
         text="Validate"
         buttonStyle={[styles.componentMargin, styles.buttonStyling]}

@@ -19,7 +19,6 @@ import { IModalComponentArgs } from '..';
 
 const TripAccepted = ({
   setAllwaysOpen,
-  setOnClose,
   setOnClosed,
   modalRef,
 }: IModalComponentArgs) => {
@@ -35,7 +34,6 @@ const TripAccepted = ({
       .then(() => console.log('Unsubscribed fom the topic availableTrips'));
 
     setAllwaysOpen(150);
-    setOnClose(() => () => {});
     setOnClosed(() => () => {});
     modalRef.current?.open();
   }, []);
@@ -109,7 +107,7 @@ const TripAccepted = ({
             {passsanger?.firstName} {passsanger?.lastName}{' '}
           </Text>
         </View>
-        {passsanger?.rating && (passsanger?.rating != -1) && (
+        {passsanger?.rating && passsanger?.rating != -1 && (
           <View style={styles.ModalTextContainer}>
             <Text type="subtitle2">{t('driverTrip.tripAccepted.rating')}</Text>
             <Rating

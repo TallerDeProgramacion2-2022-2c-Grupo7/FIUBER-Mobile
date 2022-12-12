@@ -16,11 +16,7 @@ import { finishTrip } from '../../../../../services/trips';
 import styles from '../../../styles';
 import { IModalComponentArgs } from '..';
 
-const TripInCourse = ({
-  setAllwaysOpen,
-  setOnClose,
-  setOnClosed,
-}: IModalComponentArgs) => {
+const TripInCourse = ({ setAllwaysOpen, setOnClosed }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
   const { to, id, passsanger, cost, nearToDestination } = useSelector(
@@ -29,7 +25,6 @@ const TripInCourse = ({
 
   useEffect(() => {
     setAllwaysOpen(130);
-    setOnClose(() => () => {});
     setOnClosed(() => () => {});
   }, []);
 
@@ -100,7 +95,7 @@ const TripInCourse = ({
             {passsanger?.firstName} {passsanger?.lastName}{' '}
           </Text>
         </View>
-        {passsanger?.rating && (passsanger?.rating != -1) && (
+        {passsanger?.rating && passsanger?.rating != -1 && (
           <View style={styles.ModalTextContainer}>
             <Text type="subtitle2">{t('driverTrip.tripAccepted.rating')}</Text>
             <Rating

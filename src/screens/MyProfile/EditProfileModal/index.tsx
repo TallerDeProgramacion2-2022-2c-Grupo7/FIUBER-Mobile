@@ -63,79 +63,77 @@ const EditProfileModal = ({
   };
 
   return (
-    <Portal>
-      <Modal
-        modalRef={modalRef}
-        adjustToContentHeight
-        onBackButtonPress={() => {
-          return true;
-        }}>
-        <Header
-          center={
-            <Text style={styles.textHeader} type="subtitle1">
-              {t(description)}
-            </Text>
-          }
-        />
-        <View style={styles.modalContainer}>
-          <TextInput
-            value={data}
-            onChangeText={value => {
-              if (value.length > 0) {
-                setCanSave(true);
-              } else {
-                setCanSave(false);
-              }
-
-              setData(value);
-            }}
-            keyboardType="default"
-            onSubmitEditing={event => {
-              if (event.nativeEvent.text.length < 1) {
-                //dataFront.length < 1
-                setIsError(true);
-                return;
-              }
-
-              setIsError(false);
+    <Modal
+      modalRef={modalRef}
+      adjustToContentHeight
+      onBackButtonPress={() => {
+        return true;
+      }}>
+      <Header
+        center={
+          <Text style={styles.textHeader} type="subtitle1">
+            {t(description)}
+          </Text>
+        }
+      />
+      <View style={styles.modalContainer}>
+        <TextInput
+          value={data}
+          onChangeText={value => {
+            if (value.length > 0) {
               setCanSave(true);
-            }}
-            returnKeyType="done"
-            contentContainerStyle={styles.textInput}
-            placeholder={t(placeholder || '')}
-            inputStyle={styles.text}
-          />
-        </View>
-        <View style={styles.styleError}>
-          {isError === true ? (
-            <Text style={styles.errorText}>{t('validations.dataNoEmpty')}</Text>
-          ) : null}
-        </View>
-        <View style={styles.styleActions}>
-          <Button
-            buttonStyle={{
-              alignSelf: 'center',
-              paddingHorizontal: '10%',
-              marginRight: 10,
-              backgroundColor: 'red',
-            }}
-            text="Cancel"
-            onPress={onCancelEdit}
-          />
-          <Button
-            buttonStyle={{
-              alignSelf: 'center',
-              paddingHorizontal: '10%',
-              marginLeft: 10,
-              backgroundColor: 'green',
-            }}
-            text="Save"
-            onPress={onSaveEdit}
-            disabled={!canSave}
-          />
-        </View>
-      </Modal>
-    </Portal>
+            } else {
+              setCanSave(false);
+            }
+
+            setData(value);
+          }}
+          keyboardType="default"
+          onSubmitEditing={event => {
+            if (event.nativeEvent.text.length < 1) {
+              //dataFront.length < 1
+              setIsError(true);
+              return;
+            }
+
+            setIsError(false);
+            setCanSave(true);
+          }}
+          returnKeyType="done"
+          contentContainerStyle={styles.textInput}
+          placeholder={t(placeholder || '')}
+          inputStyle={styles.text}
+        />
+      </View>
+      <View style={styles.styleError}>
+        {isError === true ? (
+          <Text style={styles.errorText}>{t('validations.dataNoEmpty')}</Text>
+        ) : null}
+      </View>
+      <View style={styles.styleActions}>
+        <Button
+          buttonStyle={{
+            alignSelf: 'center',
+            paddingHorizontal: '10%',
+            marginRight: 10,
+            backgroundColor: 'red',
+          }}
+          text="Cancel"
+          onPress={onCancelEdit}
+        />
+        <Button
+          buttonStyle={{
+            alignSelf: 'center',
+            paddingHorizontal: '10%',
+            marginLeft: 10,
+            backgroundColor: 'green',
+          }}
+          text="Save"
+          onPress={onSaveEdit}
+          disabled={!canSave}
+        />
+      </View>
+    </Modal>
   );
 };
 

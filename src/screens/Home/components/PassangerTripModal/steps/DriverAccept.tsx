@@ -9,23 +9,33 @@ import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import { Colors } from '../../../../../constants/theme';
-import useTripStatus from '../../../../../hooks/useTripStatus';
 import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
 import {
   fetchDriverProfile,
   reloadTrip,
 } from '../../../../../redux/slices/trip';
 import styles from '../../../styles';
+import { IModalComponentArgs } from '..';
 
-const DriverAccept = ({}: { modalRef: React.RefObject<IHandles> }) => {
+const DriverAccept = ({ setOnClosed, modalRef }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
   const { driver, driverId } = useSelector((state: ReduxState) => state.trip);
   const { t } = useTranslation();
 
-  useTripStatus();
-
   useEffect(() => {
     dispatch(reloadTrip());
+  }, []);
+
+  useEffect(() => {
+    setOnClosed(() => () => {
+      setTimeout(() => {
+        modalRef?.current?.open();
+      }, 100);
+    });
+
+    return () => {
+      setOnClosed(undefined);
+    };
   }, []);
 
   useEffect(() => {
@@ -48,7 +58,7 @@ const DriverAccept = ({}: { modalRef: React.RefObject<IHandles> }) => {
           </Text>
           <Text type="subtitle2">{driver?.firstName}</Text>
         </View>
-        {driver?.rating && (driver?.rating != -1) &&(
+        {driver?.rating && driver?.rating != -1 && (
           <View style={styles.ModalRating}>
             <Text type="subtitle2">
               {t('passangerTrip.driverAccept.driverRating')}

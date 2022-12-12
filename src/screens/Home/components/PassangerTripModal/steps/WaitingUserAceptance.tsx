@@ -9,6 +9,7 @@ import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import { AppDispatch, ReduxState } from '../../../../../interfaces/redux';
 import {
+  clearTrip,
   createNewTrip,
   obtainCalculatedCost,
   setTo,
@@ -36,12 +37,6 @@ const WaitingUserAceptance = ({
     );
   }, [from, to]);
 
-  useEffect(() => {
-    if (cost) {
-      modalRef.current?.open();
-    }
-  }, [cost]);
-
   const onAcceptTrip = async () => {
     if (from && to) {
       dispatch(createNewTrip({ from, to }));
@@ -49,7 +44,7 @@ const WaitingUserAceptance = ({
   };
 
   const onCancelTrip = async () => {
-    dispatch(setTo(null));
+    dispatch(clearTrip());
     modalRef.current?.close();
   };
 
