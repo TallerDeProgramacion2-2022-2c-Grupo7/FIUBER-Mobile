@@ -18,7 +18,7 @@ export default () => {
       if (status) {
         dispatch(setStatus(status));
       }
-    }, 100);
+    }, 1000);
     return () => {
       clearInterval(interval);
     };

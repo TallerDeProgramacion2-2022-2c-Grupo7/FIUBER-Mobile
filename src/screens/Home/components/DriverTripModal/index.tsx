@@ -1,18 +1,12 @@
 /* eslint-disable no-spaced-func */
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Modalize } from 'react-native-modalize';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import Modal from '../../../../components/Modal';
-import useTripStatus from '../../../../hooks/useTripStatus';
-import { ReduxState } from '../../../../interfaces/redux';
+import { AppDispatch, ReduxState } from '../../../../interfaces/redux';
 import { TripStatus } from '../../../../interfaces/trip';
+import { keepStatusUpdated } from '../../../../utils/intervals';
 import TripAccepted from './steps/TripAccepted';
 import TripFinished from './steps/TripFinished';
 import TripInCourse from './steps/TripInCourse';
@@ -21,7 +15,6 @@ import WaitingForTrip from './steps/WaitingForTrip';
 
 export type IModalComponentArgs = {
   modalRef: React.RefObject<Modalize>;
-  setOnClose: (cb: () => void) => void;
   setOnClosed: (cb: () => void) => void;
   setAllwaysOpen: (height: number | undefined) => void;
   setDriverMode: (driverMode: boolean) => void;
@@ -32,19 +25,19 @@ export type IModalComponent = React.FC<IModalComponentArgs>;
 interface TripModalArgs {
   driverMode: boolean;
   setDriverMode: (driverMode: boolean) => void;
+  modalRef: React.RefObject<Modalize>;
 }
 
-const TripModal = ({ setDriverMode }: TripModalArgs) => {
-  const modalRef = useRef<Modalize>(null);
-  const { status } = useSelector((state: ReduxState) => state.trip);
+const TripModal = ({ setDriverMode, modalRef }: TripModalArgs) => {
+  const { status, id } = useSelector((state: ReduxState) => state.trip);
   const [alwaysOpen, setAllwaysOpen] = useState<number | undefined>(undefined);
-  const [componentOnClose, setComponentOnClose] = useState<
-    (() => void) | undefined
-  >(undefined);
   const [componentOnClosed, setComponentOnClosed] = useState<
     (() => void) | undefined
   >(undefined);
   const [isOpen, setIsOpen] = useState(false);
+  const [idInterval, setIdInterval] = useState<number | undefined>(undefined);
+  const dispatch = useDispatch<AppDispatch>();
+  const { getState } = useStore<ReduxState>();
 
   const ModalComponent = useMemo<IModalComponent | null>(() => {
     switch (status) {
@@ -62,24 +55,21 @@ const TripModal = ({ setDriverMode }: TripModalArgs) => {
     }
   }, [status]);
 
-  useTripStatus();
-
-  useEffect(() => {
-    if (!isOpen) {
-      modalRef.current?.open();
-    }
-  }, [modalRef.current, ModalComponent]);
-
   const modalOnOpended = useCallback(() => {
+    const statusInterval = keepStatusUpdated(dispatch, getState);
+
+    setIdInterval(statusInterval);
+
     setIsOpen(true);
   }, []);
 
-  const modalOnClose = useCallback(() => {
-    componentOnClose?.();
-  }, [componentOnClose]);
-
   const modalOnClosed = useCallback(() => {
     componentOnClosed?.();
+
+    if (idInterval) {
+      clearInterval(idInterval);
+    }
+
     setIsOpen(false);
   }, [componentOnClosed]);
 
@@ -89,7 +79,6 @@ const TripModal = ({ setDriverMode }: TripModalArgs) => {
       adjustToContentHeight={!alwaysOpen}
       alwaysOpen={alwaysOpen}
       onOpened={modalOnOpended}
-      onClose={modalOnClose}
       onClosed={modalOnClosed}
       onBackButtonPress={() => {
         return true;
@@ -98,7 +87,6 @@ const TripModal = ({ setDriverMode }: TripModalArgs) => {
         <ModalComponent
           modalRef={modalRef}
           setAllwaysOpen={setAllwaysOpen}
-          setOnClose={setComponentOnClose}
           setOnClosed={setComponentOnClosed}
           setDriverMode={setDriverMode}
         />

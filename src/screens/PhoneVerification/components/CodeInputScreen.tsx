@@ -1,5 +1,5 @@
-import { random } from 'lodash';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import { random } from 'lodash';
 import React, { useState } from 'react';
 import { SafeAreaView, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,8 +7,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../components/Button';
 import { ROUTES } from '../../../constants/routes';
 import { AppDispatch, ReduxState } from '../../../interfaces/redux';
-import { setPhoneNumber as setPhoneNumberToFirebase, setPhoneVerificationCode } from '../../../redux/slices/profile';
-import { checkPhoneVerification, sendPhoneVerification } from '../../../services/phone-verification';
+import {
+  setPhoneNumber as setPhoneNumberToFirebase,
+  setPhoneVerificationCode,
+} from '../../../redux/slices/profile';
+import {
+  checkPhoneVerification,
+  sendPhoneVerification,
+} from '../../../services/phone-verification';
 import styles from './styles';
 
 const CodeInputScreen = ({

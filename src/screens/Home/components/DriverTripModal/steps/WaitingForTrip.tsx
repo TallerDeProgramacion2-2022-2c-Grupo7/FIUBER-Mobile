@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import messaging from '@react-native-firebase/messaging';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -8,11 +7,11 @@ import { Bar as ProgressBarr } from 'react-native-progress';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import useWaitingForTrip from '../../../../../hooks/useWaitingForTrip';
+import { subscribeToAvailableTrips } from '../../../../../services/notification';
 import styles from '../../../styles';
 import { IModalComponentArgs } from '../../DriverTripModal';
 
 const WaitingForTrip = ({
-  setOnClose,
   setOnClosed,
   setDriverMode,
   setAllwaysOpen,
@@ -22,18 +21,15 @@ const WaitingForTrip = ({
   useWaitingForTrip();
 
   useEffect(() => {
-    messaging()
-      .subscribeToTopic('availableTrips')
-      .then(() => console.log('Subscribed to topic availableTrips!'));
+    subscribeToAvailableTrips();
     setAllwaysOpen(undefined);
-    setOnClosed(() => () => {});
     setTimeout(() => {
       modalRef.current?.open();
     }, 100);
   }, []);
 
   useEffect(() => {
-    setOnClose(() => () => {
+    setOnClosed(() => () => {
       setDriverMode(false);
     });
   }, []);

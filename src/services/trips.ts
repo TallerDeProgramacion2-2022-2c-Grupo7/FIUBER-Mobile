@@ -160,3 +160,18 @@ export const finishTrip = async (id: string) => {
   );
   return data.result;
 };
+
+export const cancelTrip = async (id: string) => {
+  const token = await getFirebaseToken();
+
+  const { data } = await axios.post(
+    `${ENDPOINT}/trips/${id}/cancel`,
+    {},
+    {
+      headers: {
+        Authorization: `${token}`,
+      },
+    }
+  );
+  return data.result;
+};

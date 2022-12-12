@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Text from '../../../../../components/Text';
 import { Colors } from '../../../../../constants/theme';
@@ -12,9 +13,8 @@ import { clearTrip } from '../../../../../redux/slices/trip';
 import { addRating } from '../../../../../services/rating';
 import styles from '../../../styles';
 import { IModalComponentArgs } from '../index';
-import Button  from '../../../../../components/Button'
 
-const TripFinished = ({ setOnClose, modalRef }: IModalComponentArgs) => {
+const TripFinished = ({ setOnClosed, modalRef }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
   const { cost, driver, driverId, id, passangerId } = useSelector(
     (state: ReduxState) => state.trip
@@ -24,7 +24,7 @@ const TripFinished = ({ setOnClose, modalRef }: IModalComponentArgs) => {
   const [confirm, setConfirm] = useState(false);
 
   useEffect(() => {
-    setOnClose(() => () => {
+    setOnClosed(() => () => {
       dispatch(clearTrip());
     });
   }, []);
@@ -34,15 +34,15 @@ const TripFinished = ({ setOnClose, modalRef }: IModalComponentArgs) => {
     setConfirm(true);
   };
 
-  const confirmRating =(): void => {
+  const confirmRating = (): void => {
     addRating(id, driverId, rating, passangerId);
     setConfirm(false);
     modalRef.current?.close();
-  }
+  };
 
-  const cancelRating =(): void => {
+  const cancelRating = (): void => {
     modalRef.current?.close();
-  }
+  };
 
   return (
     <>
@@ -74,8 +74,7 @@ const TripFinished = ({ setOnClose, modalRef }: IModalComponentArgs) => {
               alignContent: 'center',
               alignItems: 'center',
               marginTop: 20,
-            }}
-          >
+            }}>
             <Button
               buttonStyle={{
                 alignSelf: 'center',

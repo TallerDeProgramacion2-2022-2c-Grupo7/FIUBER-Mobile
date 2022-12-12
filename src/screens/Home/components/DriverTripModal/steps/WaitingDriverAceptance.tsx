@@ -20,7 +20,6 @@ import { IModalComponentArgs } from '../../DriverTripModal';
 
 const WaitingDriverAceptance = ({
   setAllwaysOpen,
-  setOnClose,
   setOnClosed,
   modalRef,
 }: IModalComponentArgs) => {
@@ -35,16 +34,11 @@ const WaitingDriverAceptance = ({
   }, []);
 
   useEffect(() => {
-    setOnClose(() => () => {
+    setOnClosed(() => () => {
       if (id) {
         reject(id);
       }
       dispatch(clearTrip());
-    });
-  }, []);
-
-  useEffect(() => {
-    setOnClosed(() => () => {
       setTimeout(() => {
         modalRef.current?.open();
       }, 100);
@@ -109,7 +103,7 @@ const WaitingDriverAceptance = ({
             {passsanger?.firstName} {passsanger?.lastName}{' '}
           </Text>
         </View>
-        {passsanger?.rating && (passsanger?.rating != -1) && (
+        {passsanger?.rating && passsanger?.rating != -1 && (
           <View style={styles.ModalTextContainer}>
             <Text type="subtitle2">{t('driverTrip.tripAccepted.rating')}</Text>
             <Rating
