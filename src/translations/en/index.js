@@ -60,6 +60,7 @@ const translations = {
     waitingDriver: {
       title: 'New Trip',
       price: 'Price of the trip: ',
+      duration: 'Estimated duration: ',
       from: 'From: ',
       to: 'To: ',
       passanger: 'Passanger: ',

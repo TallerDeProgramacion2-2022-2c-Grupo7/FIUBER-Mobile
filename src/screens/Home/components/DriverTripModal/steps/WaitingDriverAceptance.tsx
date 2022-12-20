@@ -25,7 +25,7 @@ const WaitingDriverAceptance = ({
 }: IModalComponentArgs) => {
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
-  const { cost, id, from, to, passsanger } = useSelector(
+  const { cost, duration, id, from, to, passsanger } = useSelector(
     (state: ReduxState) => state.trip
   );
 
@@ -74,6 +74,10 @@ const WaitingDriverAceptance = ({
         <View style={styles.ModalTextContainer}>
           <Text type="subtitle2">{t('driverTrip.waitingDriver.price')}</Text>
           <Text type="subtitle2">$ {cost?.toFixed(2)}</Text>
+        </View>
+        <View style={styles.ModalTextContainer}>
+          <Text type="subtitle2">{t('driverTrip.waitingDriver.duration')}</Text>
+          <Text type="subtitle2">{duration} minutes</Text>
         </View>
         <View style={styles.ModalTextContainer}>
           <Text type="subtitle2">{t('driverTrip.waitingDriver.from')}</Text>

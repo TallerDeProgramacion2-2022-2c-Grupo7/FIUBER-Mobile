@@ -156,6 +156,7 @@ const tripSlice = createSlice({
       state.from = action.payload.from;
       state.to = action.payload.to;
       state.cost = action.payload.cost;
+      state.duration = action.payload.duration;
       state.id = action.payload._id;
       state.status = action.payload.status;
       state.passangerId = action.payload.passengerId;
